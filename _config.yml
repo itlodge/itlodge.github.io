@@ -64,9 +64,9 @@ default_asides: [asides/recent_posts.html, asides/github.html, asides/delicious.
 
 # Github repositories
 github_user: itlodge
-github_repo_count: 1
+# github_repo_count: 0
 github_show_profile_link: true
-github_skip_forks: true
+# github_skip_forks: true
 
 # Twitter
 twitter_user: itlodge
@@ -78,7 +78,7 @@ google_plus_one_size: medium
 
 # Google Plus Profile
 # Hidden: No visible button, just add author information to search results
-googleplus_user: zhengyhn@gmail.com
+googleplus_user: 107688243765597180052
 googleplus_hidden: false
 
 # Pinboard

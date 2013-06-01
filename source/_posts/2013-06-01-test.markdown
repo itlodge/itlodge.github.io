@@ -1,0 +1,9 @@
+---
+layout: post
+title: "test"
+date: 2013-06-01 20:46
+comments: true
+categories: 
+---
+
+Just a test
