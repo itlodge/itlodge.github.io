@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | Yuanhang]]></title>
   <link href="http://itlodge.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://itlodge.github.io/"/>
-  <updated>2013-06-30T22:44:34+08:00</updated>
+  <updated>2013-06-30T22:55:34+08:00</updated>
   <id>http://itlodge.github.io/</id>
   <author>
     <name><![CDATA[Yuanhang]]></name>
@@ -14,10 +14,10 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Ruby, getting started!]]></title>
-    <link href="http://itlodge.github.io/blog/2013/06/01/test/"/>
-    <updated>2013-06-01T20:46:00+08:00</updated>
-    <id>http://itlodge.github.io/blog/2013/06/01/test</id>
+    <title type="html"><![CDATA[Ruby-getting started]]></title>
+    <link href="http://itlodge.github.io/blog/2013/06/30/ruby-getting-started/"/>
+    <updated>2013-06-30T22:54:00+08:00</updated>
+    <id>http://itlodge.github.io/blog/2013/06/30/ruby-getting-started</id>
     <content type="html"><![CDATA[<h1>Running ruby</h1>
 
 <h2>Interactive</h2>
