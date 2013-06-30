@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Yuanhang]]></title>
-  <link href="http://itlodge.github.io/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Ruby | Yuanhang]]></title>
+  <link href="http://itlodge.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://itlodge.github.io/"/>
   <updated>2013-06-30T22:44:34+08:00</updated>
   <id>http://itlodge.github.io/</id>
