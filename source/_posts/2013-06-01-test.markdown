@@ -1,9 +1,26 @@
 ---
 layout: post
-title: "test"
+title: "Ruby, getting started!"
 date: 2013-06-01 20:46
 comments: true
-categories: 
+categories: Ruby
 ---
 
-Just a test
+Running ruby
+===============
+
+Interactive
+------------
+In the past, I always tested some ruby statements with ``irb``. Now I can
+test a small ruby program in the following way.
+    
+    [monkey@itlodge octopress]$ ruby
+    str = "abc"
+    puts str
+	Ctrl+d
+    abc
+
+After hit ``ruby``, it allows me to type as many code as possible.Finally,
+press ``Ctrl+d`` will end the input and it will evaluate the code.
+
+
