@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "Ruby, getting started!"
-date: 2013-06-01 20:46
+title: "Ruby-getting started"
+date: 2013-06-30 22:54
 comments: true
 categories: Ruby
 ---
@@ -22,5 +22,3 @@ test a small ruby program in the following way.
 
 After hit ``ruby``, it allows me to type as many code as possible.Finally,
 press ``Ctrl+d`` will end the input and it will evaluate the code.
-
-
