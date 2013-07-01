@@ -23,4 +23,4 @@ test a small ruby program in the following way.
 After hit ``ruby``, it allows me to type as many code as possible.Finally,
 press ``Ctrl+d`` will end the input and it will evaluate the code.
 
-testt
+
