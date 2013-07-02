@@ -112,4 +112,3 @@ will show only the documentation of the corresponding class's.
 
 More contributions, more reputations.If a class or module hasn't yet documented
 in RDoc, send an email to ``suggestions@ruby-doc.org`` to ask them to add.
-
