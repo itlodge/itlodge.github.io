@@ -9,6 +9,8 @@ footer: true
 
 My name is Yuanhang Zheng.
 
+First, I am an Emacser.
+
 My chinese blog: [IT足迹](http://www.zhengyuanhang.com)
 
 
