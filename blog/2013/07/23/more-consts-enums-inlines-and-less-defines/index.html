@@ -1,0 +1,328 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>More consts enums inlines and less #defines - Yuanhang Zheng</title>
+    <meta name="author" content="Yuanhang Zheng">
+    
+	<meta name="description" content="This is an old topic. For constants Consider a macro below. #define PI 3.14 There are several drawbacks when using a macro. It&#8217;s hard to debug. &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Yuanhang Zheng" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='http://fonts.googleapis.com/css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Amethysta' rel='stylesheet' type='text/css'>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <script src="/javascripts/ajaxify.js"></script>
+   
+    
+    
+
+</head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Yuanhang Zheng
+    </div>
+</h1>
+<br>
+
+<ul id="social-links" style="text-align:center">
+  
+  <!-- GitHub -->
+  <li>
+  <a href="https://github.com/itlodge" class="github" title="Github"></a>
+  </li>
+  
+  
+  <!-- Google Plus -->
+  <li>
+  <a href="http://plus.google.com/107688243765597180052?rel=author" class="google" title="Google+"></a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a href="http://www.twitter.com/itlodge" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  
+  
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/blog/archives/index.html">Archives</a></li>
+	<li id="ajax"><a href="/me/index.html">Me</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    
+    <li>
+    <div id="dark">
+        <form method="get" action="/search.html" id="search">
+            <input name="query" type="text" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+<div id="toload">
+<!-- begin toload --> 
+    <div id="content" class="inner">
+        <article class="post">
+	<h2 class="title">More Consts Enums Inlines and Less #defines</h2>
+	<div class="entry-content"><p>This is an old topic.</p>
+
+<h1>For constants</h1>
+
+<p>Consider a macro below.</p>
+
+<pre><code>#define PI 3.14
+</code></pre>
+
+<p>There are several drawbacks when using a macro.</p>
+
+<ul>
+<li><p>It&#8217;s hard to debug.As we all know, the macros are resolved by the
+preprocessor and the compiler know nothing about them.When you get an error
+when compiling the program, the error message may refer to <code>3.14</code> but not
+<code>PI</code> because <code>PI</code> is not in the symbol table.</p></li>
+<li><p>It will result in more object codes.When the preprocessor replace <code>PI</code>
+with <code>3.14</code>, there will be several copy of 3.14 in the object code.</p></li>
+</ul>
+
+
+<p>If we use the <strong>constant</strong> instead of the macro,</p>
+
+<pre><code>const double Pi = 3.14;
+</code></pre>
+
+<p>it has the following advantages, respectively.</p>
+
+<ul>
+<li><p>It&#8217;s easy to debug, since the constant is in the symble table.</p></li>
+<li><p>It has only one copy in the object code.The other place it appears is just
+its references.</p></li>
+</ul>
+
+
+<p>But I think it has disadvantages too.</p>
+
+<p>When replacing lots of <strong>macros</strong> with <strong>constant</strong>, there will be
+lots of entries in the symbol table.And it will make the object files or
+executable files larger.</p>
+
+<p>When defining a constant string, we may want to do this.</p>
+
+<pre><code>const char *Name = "Tom";
+</code></pre>
+
+<p>But this is not effecient.</p>
+
+<p>If defined above, the value &#8220;Tom&#8221; cannot be changed, but what the pointer
+<code>Name</code> points to can be changed.So the compiler will allocate a piece of
+memory for the pointer <code>Name</code> in the normal data segment.Moreover, when
+the linker starts working, it need to perform some relocations for <code>Name</code>.</p>
+
+<p>So, it&#8217;s better to be defined as follows.</p>
+
+<pre><code>const char * const Name = "Tom";
+</code></pre>
+
+<p>or</p>
+
+<pre><code>const char Name[] = "Tom";
+</code></pre>
+
+<p>Now the compiler will put <code>Name</code> in the read only data segment and the linker
+needn&#8217;t performing relocations.</p>
+
+<p>Alternatively, we can use this.</p>
+
+<pre><code>const std::string Name("Tom");
+</code></pre>
+
+<h1>For class-specific constants</h1>
+
+<p>Sometimes we need a constant member in the class, for example.</p>
+
+<pre><code>class Hand {
+private:
+    static const int NumFingers = 5;
+    int fingers[NumFingers];
+};
+</code></pre>
+
+<p>In order to ensure there is only one copy of the constant, it must be
+<code>static</code>.</p>
+
+<p>However, <code>static const int NumFingers = 5;</code> is just a <strong>declaration</strong> for
+<code>NumFinger</code>.Why this can be compiled with no error message?Everything
+should have its definition, does it?However, the class-specific constants
+that are static and with integral type(<code>int</code>, <code>char</code>, <code>bool</code>,&#8230;) is
+an exception.</p>
+
+<p>You can even use the constant.</p>
+
+<pre><code>#include &lt;cstdio&gt;
+
+class Hand {
+ public:
+    static const int NumFingers = 5;
+    int fingers[NumFingers];
+};
+
+int main(int argc, char *argv[])
+{
+    printf("%d\n", Hand::NumFingers);
+
+    return 0;
+}
+</code></pre>
+
+<p>But when you want to use the address of <code>NumFingers</code>, you must put the
+definition of <code>NumFingers</code> in the implemetation file of the class.</p>
+
+<pre><code>#include &lt;cstdio&gt;
+
+class Hand {
+ public:
+    static const int NumFingers = 5;
+    int fingers[NumFingers];
+};
+
+const int Hand::NumFingers;
+
+int main(int argc, char *argv[])
+{
+    printf("%p\n", &amp;Hand::NumFingers);
+
+    return 0;
+}
+</code></pre>
+
+<p>Remember, there is no need to put <code>static</code> at the begining of the definition.</p>
+
+<p>We know that the size of the array <code>finger</code> is just the value of the static
+constant <code>NumFingers</code>.But there is another way to do that.</p>
+
+<pre><code>class Hand {
+ public:
+    enum {NumFingers = 5};
+    int fingers[NumFingers];
+};
+</code></pre>
+
+<p>That is fine, too.</p>
+
+<h1>For functions</h1>
+</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2013/07/23/more-consts-enums-inlines-and-less-defines/#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2013
+
+    Yuanhang Zheng
+. Powered by <a href="http://octopress.org">Octopress</a> | 
+    Theme <a href="http://github.com/panks/fabric">fabric</a> by <a href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'itlodge';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://itlodge.github.io/blog/2013/07/23/more-consts-enums-inlines-and-less-defines/';
+        var disqus_url = 'http://itlodge.github.io/blog/2013/07/23/more-consts-enums-inlines-and-less-defines/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+</body>
+</html>
