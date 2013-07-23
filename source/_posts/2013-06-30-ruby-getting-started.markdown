@@ -3,6 +3,7 @@ layout: post
 title: "Ruby-getting started"
 date: 2013-06-30 22:54
 comments: true
+sharing: true
 categories: Ruby
 ---
 

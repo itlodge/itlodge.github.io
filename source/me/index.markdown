@@ -9,4 +9,6 @@ footer: true
 
 My name is Yuanhang Zheng.
 
-My chinese blog: 
+My chinese blog: [IT足迹](http://www.zhengyuanhang.com)
+
+

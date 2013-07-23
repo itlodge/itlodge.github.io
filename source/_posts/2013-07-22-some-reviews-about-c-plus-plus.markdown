@@ -3,6 +3,7 @@ layout: post
 title: "Some reviews about C plus plus"
 date: 2013-07-22 19:33
 comments: true
+sharing: true
 categories: C++
 ---
 
