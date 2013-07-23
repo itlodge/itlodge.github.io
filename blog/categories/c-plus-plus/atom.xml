@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: C++ | Yuanhang]]></title>
+  <title><![CDATA[Category: C++ | Yuanhang Zheng]]></title>
   <link href="http://itlodge.github.io/blog/categories/c-plus-plus/atom.xml" rel="self"/>
   <link href="http://itlodge.github.io/"/>
-  <updated>2013-07-23T20:54:56+08:00</updated>
+  <updated>2013-07-23T21:16:01+08:00</updated>
   <id>http://itlodge.github.io/</id>
   <author>
-    <name><![CDATA[Yuanhang]]></name>
+    <name><![CDATA[Yuanhang Zheng]]></name>
     
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
