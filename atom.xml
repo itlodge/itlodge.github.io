@@ -4,7 +4,7 @@
   <title><![CDATA[Yuanhang Zheng]]></title>
   <link href="http://itlodge.github.io/atom.xml" rel="self"/>
   <link href="http://itlodge.github.io/"/>
-  <updated>2013-07-23T23:13:02+08:00</updated>
+  <updated>2013-07-24T19:55:13+08:00</updated>
   <id>http://itlodge.github.io/</id>
   <author>
     <name><![CDATA[Yuanhang Zheng]]></name>
@@ -163,6 +163,49 @@ constant <code>NumFingers</code>.But there is another way to do that.</p>
 <p>That is fine, too.</p>
 
 <h1>For functions</h1>
+
+<p>Macros like this</p>
+
+<pre><code>#define MAX(a, b) ((a) &gt; (b) ? (a) : (b))
+</code></pre>
+
+<p>can result in many painful problems.</p>
+
+<ul>
+<li><p>First, you have to remember parenthesizing all the arguments(We all know
+why).</p></li>
+<li><p>There are problems when calling it like this <code>MAX(++a, b)</code>(It&#8217;s easy to
+think about it).</p></li>
+</ul>
+
+
+<p>If using <code>inline</code> and <code>template</code>, we can solve all this problems.</p>
+
+<pre><code>#include &lt;cstdio&gt;
+
+template&lt;typename T&gt;
+inline T
+max(const T&amp; a, const T&amp; b)
+{
+    return a &gt; b ? a : b;
+}
+
+int
+main(int argc, char *argv[])
+{
+    char a = 'a', b = 'b';
+    int c = 1, d = 2;
+
+    printf("%c\n", max(a, b));
+    printf("%d\n", max(c, d));
+
+    return 0;
+}
+</code></pre>
+
+<p>However, I don&#8217;t think macros are useless and should be replaced by const,
+enum and inline.In a way, macro can decrease the time of compiling and
+linking.And there are still lots of code that using macros.</p>
 ]]></content>
   </entry>
   
