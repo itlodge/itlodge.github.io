@@ -3,10 +3,11 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>Blog Archives - Yuanhang Zheng</title>
+	<title>Const anyway! - Yuanhang Zheng</title>
     <meta name="author" content="Yuanhang Zheng">
     
-	<meta name="description" content="2013 Const anyway! Jul 24 C++ Comments More consts enums inlines and less #defines Jul 23 C++ Comments Some reviews about C plus plus Jul 22 C++ &hellip;">
+	<meta name="description" content="const is versatile.I am always confused by the following syntax. const char *str = "Hello"; // const data, non-const pointer
+char * const str = " &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -94,90 +95,63 @@
 <div id="toload">
 <!-- begin toload --> 
     <div id="content" class="inner">
-        
+        <article class="post">
+	<h2 class="title">Const Anyway!</h2>
+	<div class="entry-content"><p><code>const</code> is versatile.I am always confused by the following syntax.</p>
+
+<pre><code>const char *str = "Hello";    // const data, non-const pointer
+char * const str = "Hello";    // const pointer, non-const data
+</code></pre>
+
+<p>Now there is a tip to remember it.</p>
+
+<p>If <code>const</code> appears to the right of the asterisk, the pointer is
+constant.If <code>const</code> appears to the left of the asterisk, the data
+is constant.</p>
+
+<p>So the following two statements are the same.</p>
+
+<pre><code>const char *str = "Hello";
+char const *str = "Hello";
+</code></pre>
+
+<p>In STL, <code>iterator</code> is just like a <code>T *</code> pointer.
+* <code>const std::vector&lt;int&gt;::iterator iter</code> is just like <code>T * const iter</code>.
+* <code>std::vector&lt;int&gt;::const_iterator cIter</code> is just like <code>const T *iter</code>.</p>
+
+<p>So, in a loop, if we don&#8217;t want to modify the data, use <code>const_iterator</code>.</p>
+</div>
+
+<div class="meta">
 	
-
-
+		<span class="comments"><a href="/blog/2013/07/24/const-anyway/#disqus_thread">Comments</a></span>
 	
-	
-	<section class="archives"><h1 class="year">2013</h1>
-
-<article>
-	<h2 class="title"><a href="/blog/2013/07/24/const-anyway/">Const anyway!</a></h2>
-	<div class="meta">
-		<span class="date">Jul 24</span>
-		<span class="tags">
-
-
-	<a class='category' href='/blog/categories/c-plus-plus/'>C++</a>
-
-
-</span>
-	    
-	    <span class="comments"><a href="/blog/2013/07/24/const-anyway/#disqus_thread">Comments</a></span>
-	    
-	</div>
+</div>
 </article>
 
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
 	
-
-
-<article>
-	<h2 class="title"><a href="/blog/2013/07/23/more-consts-enums-inlines-and-less-defines/">More consts enums inlines and less #defines</a></h2>
-	<div class="meta">
-		<span class="date">Jul 23</span>
-		<span class="tags">
-
-
-	<a class='category' href='/blog/categories/c-plus-plus/'>C++</a>
-
-
-</span>
-	    
-	    <span class="comments"><a href="/blog/2013/07/23/more-consts-enums-inlines-and-less-defines/#disqus_thread">Comments</a></span>
-	    
-	</div>
-</article>
-
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
 	
-
-
-<article>
-	<h2 class="title"><a href="/blog/2013/07/22/some-reviews-about-c-plus-plus/">Some reviews about C plus plus</a></h2>
-	<div class="meta">
-		<span class="date">Jul 22</span>
-		<span class="tags">
-
-
-	<a class='category' href='/blog/categories/c-plus-plus/'>C++</a>
-
-
-</span>
-	    
-	    <span class="comments"><a href="/blog/2013/07/22/some-reviews-about-c-plus-plus/#disqus_thread">Comments</a></span>
-	    
-	</div>
-</article>
-
 	
-
-
-<article>
-	<h2 class="title"><a href="/blog/2013/06/30/ruby-getting-started/">Ruby-getting started</a></h2>
-	<div class="meta">
-		<span class="date">Jun 30</span>
-		<span class="tags">
-
-
-	<a class='category' href='/blog/categories/ruby/'>Ruby</a>
-
-
-</span>
-	    
-	    <span class="comments"><a href="/blog/2013/06/30/ruby-getting-started/#disqus_thread">Comments</a></span>
-	    
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+	<a class="addthis_counter addthis_pill_style"></a>
 	</div>
-</article>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
 
     </div>
     <footer id="footer">
@@ -204,7 +178,10 @@
       var disqus_shortname = 'itlodge';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://itlodge.github.io/blog/2013/07/24/const-anyway/';
+        var disqus_url = 'http://itlodge.github.io/blog/2013/07/24/const-anyway/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

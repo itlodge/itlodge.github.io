@@ -6,7 +6,7 @@
 	<title>Yuanhang Zheng</title>
     <meta name="author" content="Yuanhang Zheng">
     
-	<meta name="description" content="Published on: Jul 23rd, 2013 Tags: C++ This is an old topic. For constants Consider a macro below. #define PI 3.14 There are several drawbacks when &hellip;">
+	<meta name="description" content="Published on: Jul 24th, 2013 Tags: C++ const is versatile.I am always confused by the following syntax. const char *str = "Hello"; // const data, &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -95,6 +95,72 @@
 <!-- begin toload --> 
     <div id="content" class="inner">
         
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2013/07/24/const-anyway/">
+		
+			Const Anyway!</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-24T20:01:00+08:00" pubdate data-updated="true">Jul 24<span>th</span>, 2013</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/c-plus-plus/'>C++</a>
+
+
+</div>
+    </div>
+		<p><code>const</code> is versatile.I am always confused by the following syntax.</p>
+
+<pre><code>const char *str = "Hello";    // const data, non-const pointer
+char * const str = "Hello";    // const pointer, non-const data
+</code></pre>
+
+<p>Now there is a tip to remember it.</p>
+
+<p>If <code>const</code> appears to the right of the asterisk, the pointer is
+constant.If <code>const</code> appears to the left of the asterisk, the data
+is constant.</p>
+
+<p>So the following two statements are the same.</p>
+
+<pre><code>const char *str = "Hello";
+char const *str = "Hello";
+</code></pre>
+
+<p>In STL, <code>iterator</code> is just like a <code>T *</code> pointer.
+* <code>const std::vector&lt;int&gt;::iterator iter</code> is just like <code>T * const iter</code>.
+* <code>std::vector&lt;int&gt;::const_iterator cIter</code> is just like <code>const T *iter</code>.</p>
+
+<p>So, in a loop, if we don&#8217;t want to modify the data, use <code>const_iterator</code>.</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2013/07/24/const-anyway//index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
 
 
     <article class="post">

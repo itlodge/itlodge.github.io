@@ -4,7 +4,7 @@
   <title><![CDATA[Yuanhang Zheng]]></title>
   <link href="http://itlodge.github.io/atom.xml" rel="self"/>
   <link href="http://itlodge.github.io/"/>
-  <updated>2013-07-24T19:55:13+08:00</updated>
+  <updated>2013-07-24T21:29:59+08:00</updated>
   <id>http://itlodge.github.io/</id>
   <author>
     <name><![CDATA[Yuanhang Zheng]]></name>
@@ -12,6 +12,37 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Const anyway!]]></title>
+    <link href="http://itlodge.github.io/blog/2013/07/24/const-anyway/"/>
+    <updated>2013-07-24T20:01:00+08:00</updated>
+    <id>http://itlodge.github.io/blog/2013/07/24/const-anyway</id>
+    <content type="html"><![CDATA[<p><code>const</code> is versatile.I am always confused by the following syntax.</p>
+
+<pre><code>const char *str = "Hello";    // const data, non-const pointer
+char * const str = "Hello";    // const pointer, non-const data
+</code></pre>
+
+<p>Now there is a tip to remember it.</p>
+
+<p>If <code>const</code> appears to the right of the asterisk, the pointer is
+constant.If <code>const</code> appears to the left of the asterisk, the data
+is constant.</p>
+
+<p>So the following two statements are the same.</p>
+
+<pre><code>const char *str = "Hello";
+char const *str = "Hello";
+</code></pre>
+
+<p>In STL, <code>iterator</code> is just like a <code>T *</code> pointer.
+* <code>const std::vector&lt;int&gt;::iterator iter</code> is just like <code>T * const iter</code>.
+* <code>std::vector&lt;int&gt;::const_iterator cIter</code> is just like <code>const T *iter</code>.</p>
+
+<p>So, in a loop, if we don&#8217;t want to modify the data, use <code>const_iterator</code>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[More consts enums inlines and less #defines]]></title>
