@@ -3,7 +3,7 @@ layout: post
 title: "More consts enums inlines and less #defines"
 date: 2013-07-23 21:33
 comments: true
-shareing: true
+sharing: true
 categories: C++
 ---
 
@@ -138,5 +138,45 @@ That is fine, too.
 
 For functions
 ==============
+Macros like this
+
+    #define MAX(a, b) ((a) > (b) ? (a) : (b))
+
+can result in many painful problems.
+
+* First, you have to remember parenthesizing all the arguments(We all know
+why).
+
+* There are problems when calling it like this ``MAX(++a, b)``(It's easy to
+think about it).
+
+If using ``inline`` and ``template``, we can solve all this problems.
+
+    #include <cstdio>
+    
+    template<typename T>
+    inline T
+    max(const T& a, const T& b)
+    {
+        return a > b ? a : b;
+    }
+    
+    int
+	main(int argc, char *argv[])
+    {
+        char a = 'a', b = 'b';
+        int c = 1, d = 2;
+        
+        printf("%c\n", max(a, b));
+        printf("%d\n", max(c, d));
+        
+        return 0;
+    }
+
+However, I don't think macros are useless and should be replaced by const,
+enum and inline.In a way, macro can decrease the time of compiling and
+linking.And there are still lots of code that using macros.
+
+
 
 
