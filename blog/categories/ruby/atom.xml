@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | Yuanhang Zheng]]></title>
   <link href="http://itlodge.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://itlodge.github.io/"/>
-  <updated>2013-07-24T21:29:59+08:00</updated>
+  <updated>2013-07-25T21:00:18+08:00</updated>
   <id>http://itlodge.github.io/</id>
   <author>
     <name><![CDATA[Yuanhang Zheng]]></name>
@@ -12,6 +12,184 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Some basic Ruby]]></title>
+    <link href="http://itlodge.github.io/blog/2013/07/25/some-basic-ruby/"/>
+    <updated>2013-07-25T20:07:00+08:00</updated>
+    <id>http://itlodge.github.io/blog/2013/07/25/some-basic-ruby</id>
+    <content type="html"><![CDATA[<h2>String and name</h2>
+
+<p>When defining a function, the parentheses are not necessary.So this one</p>
+
+<pre><code>def say_hello name
+  "Hello " + name
+end
+
+puts say_hello "man"
+</code></pre>
+
+<p>is the same as this.</p>
+
+<pre><code>def say_hello(name)
+  "Hello " + name
+end
+
+puts(say_hello("man"))
+</code></pre>
+
+<p>However, when there are more than one parameters, it will be difficult to
+know which argument goes with which method invocation.So it's recommended
+using parentheses in all but the simplest cases.</p>
+
+<p>We can use single-quote or double-quote to create a string.What's the
+difference?</p>
+
+<p>First, single-quoted string can't represent the escape character, and
+double-quoted string can.</p>
+
+<pre><code>puts '\nabc'
+puts "\nabc"
+</code></pre>
+
+<p>The above code will output this.</p>
+
+<pre><code>\nabc
+
+abc
+</code></pre>
+
+<p>Second, double-quoted string can be expression interpolated.</p>
+
+<pre><code>name = 'Tom'
+
+puts 'Hello #{name}'
+puts "Hello #{name}"
+</code></pre>
+
+<p>The above code will output this.</p>
+
+<pre><code>ruby test.rb
+Hello #{name}
+Hello Tom
+</code></pre>
+
+<p>And we can even invoke methods.</p>
+
+<pre><code>name = 'Tom'
+puts "Hello #{name.upcase}"
+</code></pre>
+
+<p>This will generate the following.</p>
+
+<pre><code>Hello TOM
+</code></pre>
+
+<p>When the expression is a global, instance or class variable, there is no need
+to use the braces.</p>
+
+<pre><code>@h = "Hello"    # @ means instance
+$name = 'Tom'    # $ means global
+
+puts "#@h #$name"
+</code></pre>
+
+<p>This will generate the same output.</p>
+
+<p>There are some conventions for the <strong>name</strong> in Ruby.</p>
+
+<ul>
+<li><p>Local variables, method parameters and method names <em>should</em> all start
+with a lowercase letter or an underscore.</p></li>
+<li><p>Class names, module names and constants <em>must</em> start with an uppercase
+letter.</p></li>
+<li><p>Global variables start with <code>$</code>.</p></li>
+<li><p>Instance variables begin with <code>@</code>.</p></li>
+<li><p>Class variables are prefixed with <code>@@</code>.</p></li>
+</ul>
+
+
+<h2>Arrays and Hashes</h2>
+
+<p>In ruby, arrays and hashes can hold objects of different types.</p>
+
+<pre><code>a = [1, 'abc', :sym]
+puts a
+</code></pre>
+
+<p>It will generate the following output.</p>
+
+<pre><code>1
+abc
+sym
+</code></pre>
+
+<p>By the way, <code>nil</code> is an object, represent <strong>nothing</strong>.</p>
+
+<p>If we want to create an array of string, we have to list all the strings.
+And we have to type lots of quotes and commas.However, <code>%w</code> can do it
+more easily.</p>
+
+<pre><code>a = ['a', 'b', 'c']
+b = %w{a b c}
+
+puts a
+puts b
+</code></pre>
+
+<p>It will generate the following output.</p>
+
+<pre><code>a
+b
+c
+a
+b
+c
+</code></pre>
+
+<p>The index of Array is integer, but the index of Hash is anything.</p>
+
+<p>It has the following form.</p>
+
+<pre><code>var = {
+  key1 =&gt; value1
+  key2 =&gt; value2
+  ...
+}
+</code></pre>
+
+<p>For example:</p>
+
+<pre><code>girl = {
+  :name =&gt; 'Mary',
+  :age =&gt; 20
+}
+
+puts "#{girl[:name]} is #{girl[:age]} years old."
+</code></pre>
+
+<p>Output:</p>
+
+<pre><code>Mary is 20 years old.
+</code></pre>
+
+<p>A new Hash can also be created in this way.</p>
+
+<pre><code>decimal = Hash.new(0)
+puts decimal[:first]
+decimal[:first] = 1
+puts decimal[:first]
+</code></pre>
+
+<p>Ouput:</p>
+
+<pre><code>0
+1
+</code></pre>
+
+<p>0 is the default value for all keys.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Ruby-getting started]]></title>
