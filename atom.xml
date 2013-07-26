@@ -4,7 +4,7 @@
   <title><![CDATA[Yuanhang Zheng]]></title>
   <link href="http://itlodge.github.io/atom.xml" rel="self"/>
   <link href="http://itlodge.github.io/"/>
-  <updated>2013-07-25T22:53:21+08:00</updated>
+  <updated>2013-07-26T22:17:00+08:00</updated>
   <id>http://itlodge.github.io/</id>
   <author>
     <name><![CDATA[Yuanhang Zheng]]></name>
@@ -196,7 +196,9 @@ puts decimal[:first]
     <link href="http://itlodge.github.io/blog/2013/07/24/const-anyway/"/>
     <updated>2013-07-24T20:01:00+08:00</updated>
     <id>http://itlodge.github.io/blog/2013/07/24/const-anyway</id>
-    <content type="html"><![CDATA[<p><code>const</code> is versatile.I am always confused by the following syntax.</p>
+    <content type="html"><![CDATA[<h2>Const pointer</h2>
+
+<p><code>const</code> is versatile.I am always confused by the following syntax.</p>
 
 <pre><code>const char *str = "Hello";    // const data, non-const pointer
 char * const str = "Hello";    // const pointer, non-const data
@@ -219,6 +221,123 @@ char const *str = "Hello";
 * <code>std::vector&lt;int&gt;::const_iterator cIter</code> is just like <code>const T *iter</code>.</p>
 
 <p>So, in a loop, if we don&#8217;t want to modify the data, use <code>const_iterator</code>.</p>
+
+<h2>Const member function</h2>
+
+<p>Sometimes, we have two version member functions.One is const and the other is
+not.</p>
+
+<pre><code>#include &lt;string&gt;
+#include &lt;iostream&gt;
+
+class Str {
+public:
+    Str(std::string str)
+    :data(str)
+    { }
+
+    const char&amp;
+    operator[](std::size_t pos) const    // Const objects use this
+    {
+        return data[pos];
+    }
+
+    char&amp;
+    operator[](std::size_t pos)    // Non-const objects use this
+    {
+        return data[pos];
+    }
+
+private:
+    std::string data;
+};
+
+void
+print(const Str&amp; const_str)
+{
+    std::cout &lt;&lt; const_str[1] &lt;&lt; std::endl;
+}
+
+int
+main(int argc, char **argv)
+{
+    Str nonconst_str("abc");
+    std::cout &lt;&lt; nonconst_str[1] &lt;&lt; std::endl;
+    nonconst_str[1] = 'a';
+
+    print(nonconst_str);
+
+    return 0;
+}
+</code></pre>
+
+<p>In <code>main</code>, <code>nonconst_str</code> is a non-const object and it can be modified
+by <code>[]</code>.In <code>print</code>, <code>const Str&amp; const_str</code> means
+<strong>pass parameters by reference-to-const</strong>, so <code>const_str</code> is a const object.</p>
+
+<p>We observe that the <code>const</code> keyword is after the closing parenthesis of the
+argument list.This means the function is a const member function.</p>
+
+<p>Reference to <a href="http://msdn.microsoft.com/en-us/library/6ke686zh.aspx">MSDN</a>,
+<strong>A constant member function cannot modify any non-static members or call any</strong>
+<strong>member functions that aren&#8217;t constant.</strong>That is, the cons member function
+can&#8217;t modify the object that it is called.</p>
+
+<p>The above philosophy is called <strong>bitwise constness</strong> or <strong>physical constness</strong>.
+There are another philosophy called <strong>logical constness</strong>.Adherents to this
+philosophy argue that <strong>a const member function might modify some of the bits</strong>
+<strong>in the object on which it&#8217;s invoked, but only in ways that clients cannot</strong>
+<strong>detect</strong>.</p>
+
+<p>For example, if we add a new member function <code>length()</code> to the above class.</p>
+
+<pre><code>    std::size_t
+    length() const
+    {
+        len = data.length();
+
+        return len;
+    }
+
+private:
+    std::string data;
+    std::size_t len;
+</code></pre>
+
+<p>This will generate the following compiled error.</p>
+
+<pre><code>test.cpp:25:6: error: assignment of member ‘Str::len’ in read-only object
+  len = data.length();
+      ^
+</code></pre>
+
+<p>Since member variable <code>len</code> has been modified and the compiler use the
+<strong>bitwise const</strong>, error produces.However, return and object&#8217;s length seems
+not modify the object it is called.</p>
+
+<p>To solved this problem, use the <strong>mutable</strong> keyword.It can free non-static
+data members from bitwise constness constraints.</p>
+
+<pre><code>mutable std::size_t len;
+</code></pre>
+
+<p>I beleive in code reusing forever!In the above example, the duplicate code
+in the two <code>operator[]</code> functions can be merged into one.</p>
+
+<p>Only then non-const function should be modified.</p>
+
+<pre><code>char&amp;
+operator[](std::size_t pos)    // Non-const objects use this
+{
+    return const_cast&lt;char&amp;&gt;(static_cast&lt;const Str&amp;&gt;(*this)[pos]);
+}
+</code></pre>
+
+<p><code>static_cast&lt;const Str&amp;&gt;</code>will make <code>*this</code>const and then it can call
+<code>operator[]</code>.Finally, <code>const_cast</code> is used the free the const constraint.</p>
+
+<p>This is all about <code>const</code>, it&#8217;s an amazing keyword.For readable and efficient
+code, use it anyway.</p>
 ]]></content>
   </entry>
   
