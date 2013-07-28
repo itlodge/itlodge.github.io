@@ -4,7 +4,7 @@
   <title><![CDATA[Category: C++ | Yuanhang Zheng]]></title>
   <link href="http://itlodge.github.io/blog/categories/c-plus-plus/atom.xml" rel="self"/>
   <link href="http://itlodge.github.io/"/>
-  <updated>2013-07-26T23:52:19+08:00</updated>
+  <updated>2013-07-28T18:49:34+08:00</updated>
   <id>http://itlodge.github.io/</id>
   <author>
     <name><![CDATA[Yuanhang Zheng]]></name>
@@ -12,6 +12,85 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[About Constructors Destructors and Assignment Operators]]></title>
+    <link href="http://itlodge.github.io/blog/2013/07/28/about-constructors-destructors-and-assignment-operators/"/>
+    <updated>2013-07-28T18:32:00+08:00</updated>
+    <id>http://itlodge.github.io/blog/2013/07/28/about-constructors-destructors-and-assignment-operators</id>
+    <content type="html"><![CDATA[<h2>What functions C++ will silently write and call?</h2>
+
+<p>If we declare an empty class, the compiler will declare a constructor,
+a copy constructor, a copy assignment operator and a destructor for us.</p>
+
+<pre><code>class Girl {
+
+};
+</code></pre>
+
+<p>But the compiler is not foolish, it will only generate them when needed.</p>
+
+<p>What do the generated functions do?</p>
+
+<ul>
+<li><p>For construtor, it will invoke the corresponding constructor and non-static
+members of its base class.</p></li>
+<li><p>For destructor, it will invoke the corresponding destructor of its base class.
+If its base class's destructor is virtual, the destructor will declare as
+virtual.</p></li>
+<li><p>For copy constructor and copy assignment operator, they will copy each
+non-static data member from the source object to the target object.</p></li>
+</ul>
+
+
+<p>If the class has some members that are pointer, reference or constant, there
+will be some trouble with the compiler.Therefore, always define the four
+functions when we define our own class.</p>
+
+<h2>Disallow the use of generated functions you don't want</h2>
+
+<p>Sometimes, we may not want the copy constructor or the copy assignment
+operator because every member may be different with the other object's
+members.Preventing the generation of these functions will make the
+program more effecient.</p>
+
+<p>If we don't declare these two functions, the compiler will generate them
+for us.</p>
+
+<p>So how can we do?</p>
+
+<p>The prefer solution is <strong>declare the copy constructor and copy assignment</strong>
+<strong>operator as private and never implement them</strong>.</p>
+
+<p>If we implement them, the members and friends of the class can call them.But
+if we don't implement them, the linker will complain at it.</p>
+
+<p>In order to move the link-time error to the compile time, we should let the
+members and the friends of the class cannot call them.One method is to define
+a base class that can't be copied and inherited by the class that you don't
+want it to be copyable.</p>
+
+<pre><code>class Uncopyable {
+protected:
+    Uncopyable()
+    { }
+    ~Uncopyable()
+    { }
+private:
+    Uncopyable(const Uncopyable&amp;);
+    Uncopyable&amp; operator=(const Uncopyable&amp;);
+};
+
+class Person: private Uncopyable {
+
+};
+</code></pre>
+
+<p>The copy constructor and copy assignment operator of the class <code>Uncopyable</code>
+are declared as private, so the members and friends of class <code>Person</code> can't
+call them.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Initialized before used]]></title>
