@@ -4,7 +4,7 @@
   <title><![CDATA[Category: C++ | Yuanhang Zheng]]></title>
   <link href="http://itlodge.github.io/blog/categories/c-plus-plus/atom.xml" rel="self"/>
   <link href="http://itlodge.github.io/"/>
-  <updated>2013-07-29T22:12:08+08:00</updated>
+  <updated>2013-08-01T20:22:48+08:00</updated>
   <id>http://itlodge.github.io/</id>
   <author>
     <name><![CDATA[Yuanhang Zheng]]></name>
@@ -194,6 +194,112 @@ always make the destructor virtual.</p>
 <p>However, not every destructor of any class should be virtual.Making it
 virtual will occupy some additional information(virtual table pointer)
 that can increase the size of an object of that class.</p>
+
+<p><strong>Prevent exceptions from leaving destructors</strong></p>
+
+<p><strong>Never call virtual functions during construction or destruction</strong></p>
+
+<p>I have seen the assignment operator in this form many times.</p>
+
+<pre><code>Person&amp; operator=(const Person&amp; p)
+{
+    ...
+    return *this;
+}
+</code></pre>
+
+<p>First, the parameter is passed by const-reference, which is more effecient.
+Second, the function returns a reference of the object.This is more effecient
+when doing this.</p>
+
+<pre><code>p3 = p2 = p1;
+</code></pre>
+
+<p>Remember that always write assignment operator in this form.</p>
+
+<p>This is also appropriate with <code>+=</code>, <code>*=</code> and so on.</p>
+
+<p>Sometimes we may assignment to the object itself.</p>
+
+<pre><code>Person p;
+p = p;
+</code></pre>
+
+<p>It seems impossible, but how about this.</p>
+
+<pre><code>persons[i] = persons[j];
+*p1 = *p2;
+</code></pre>
+
+<p><code>persons[i]</code> and <code>persons[j]</code> may be the same.<code>p1</code> and <code>p2</code> may point
+to the same object.</p>
+
+<p>Some assignment operator may be like this one.</p>
+
+<pre><code>Disk&amp;
+Disk::operator=(const Disk&amp; d)
+{
+    delete data;
+    data = new Disk(*(d.data));
+
+    return *this;
+}
+</code></pre>
+
+<p>It seems reasonable that delete the original data and then allocate a
+new one using the data of <code>d</code>.</p>
+
+<p>However, this is very dangerous.What if <code>this</code> is the same as <code>d</code>?
+If that happened, the content of <code>data</code> and <code>d.data</code> is the same
+thing.So the content of <code>d.data</code> have been delete before call the
+copy constructor.</p>
+
+<p>A direct solution to this problem is obvious.That is, just check if they
+are the same.</p>
+
+<pre><code>Disk&amp;
+Disk::operator=(const Disk&amp; d)
+{
+    if (this == &amp;d) {
+        return *this;
+    }
+    delete data;
+    data = new Disk(*(d.data));
+
+    return *this;
+}
+</code></pre>
+
+<p>I prefer the above solution.But there are another solution.</p>
+
+<pre><code>Disk&amp;
+Disk::operator=(const Disk&amp; d)
+{
+    Disk *origin = data;
+    data = new Disk(*(d.data));
+    delete origin;
+
+    return *this;
+}
+</code></pre>
+
+<p>This code just change the order of some statement, but it make great
+difference.</p>
+
+<p><strong>When adding a member to a class, remember to update the constructors,</strong>
+<strong>destructor, copy constructor, copy assignment operator</strong>.</p>
+
+<p><strong>Don't miss anyone!</strong></p>
+
+<p>When a class is a derived class, make sure to call the constructors,
+copy constructor and copy assignment operator of the base class, respectively
+when writing my own constructors, copy constructor, assignment operator.</p>
+
+<p><strong>Do not call copy constructor in the copy assignment operator.</strong>
+<strong>Do not call copy assignment operator in the copy constructor.</strong></p>
+
+<p>That is all about constructors, copy constructor and copy assignment operator.
+It really helps.</p>
 ]]></content>
   </entry>
   
