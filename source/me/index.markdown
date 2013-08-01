@@ -25,6 +25,11 @@ Books I read.
     <td>2013......................</td>
   </tr>
   <tr>
+    <td>How To Ask Questions The Smart Way</td>
+    <td>Eric Steven Raymond</td>
+    <td>2013.8.1</td>
+  </tr>
+  <tr>
     <td>How To Become A Hacker</td>
     <td>Eric Raymond</td>
     <td>2013</td>
