@@ -178,3 +178,106 @@ However, not every destructor of any class should be virtual.Making it
 virtual will occupy some additional information(virtual table pointer)
 that can increase the size of an object of that class.
 
+**Prevent exceptions from leaving destructors**
+
+**Never call virtual functions during construction or destruction**
+
+I have seen the assignment operator in this form many times.
+
+    Person& operator=(const Person& p)
+	{
+	    ...
+		return *this;
+	}
+
+First, the parameter is passed by const-reference, which is more effecient.
+Second, the function returns a reference of the object.This is more effecient
+when doing this.
+
+    p3 = p2 = p1;
+
+Remember that always write assignment operator in this form.
+
+This is also appropriate with ``+=``, ``*=`` and so on.
+
+Sometimes we may assignment to the object itself.
+
+    Person p;
+	p = p;
+
+It seems impossible, but how about this.
+
+    persons[i] = persons[j];
+	*p1 = *p2;
+
+``persons[i]`` and ``persons[j]`` may be the same.``p1`` and ``p2`` may point
+to the same object.
+
+Some assignment operator may be like this one.
+
+    Disk&
+	Disk::operator=(const Disk& d)
+	{
+	    delete data;
+		data = new Disk(*(d.data));
+
+        return *this;
+	}
+
+It seems reasonable that delete the original data and then allocate a
+new one using the data of ``d``.
+
+However, this is very dangerous.What if ``this`` is the same as ``d``?
+If that happened, the content of ``data`` and ``d.data`` is the same
+thing.So the content of ``d.data`` have been delete before call the
+copy constructor.
+
+A direct solution to this problem is obvious.That is, just check if they
+are the same.
+
+    Disk&
+	Disk::operator=(const Disk& d)
+	{
+	    if (this == &d) {
+		    return *this;
+		}
+	    delete data;
+		data = new Disk(*(d.data));
+
+        return *this;
+	}
+    
+I prefer the above solution.But there are another solution.
+
+    Disk&
+	Disk::operator=(const Disk& d)
+	{
+	    Disk *origin = data;
+		data = new Disk(*(d.data));
+		delete origin;
+		
+        return *this;
+	}
+    
+This code just change the order of some statement, but it make great
+difference.
+
+**When adding a member to a class, remember to update the constructors,**
+**destructor, copy constructor, copy assignment operator**.
+
+**Don't miss anyone!**
+
+When a class is a derived class, make sure to call the constructors,
+copy constructor and copy assignment operator of the base class, respectively
+when writing my own constructors, copy constructor, assignment operator.
+
+**Do not call copy constructor in the copy assignment operator.**
+**Do not call copy assignment operator in the copy constructor.**
+
+That is all about constructors, copy constructor and copy assignment operator.
+It really helps.
+
+
+
+
+
