@@ -6,7 +6,8 @@
 	<title>Yuanhang Zheng</title>
     <meta name="author" content="Yuanhang Zheng">
     
-	<meta name="description" content="Published on: Jul 28th, 2013 Tags: C++ What functions C++ will silently write and call? If we declare an empty class, the compiler will declare a &hellip;">
+	<meta name="description" content="Published on: Aug 1st, 2013 Tags: C++ I always forget freeing a memory that allocated from the heap.And I always
+forget closing the file handler. &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -95,6 +96,205 @@
 <!-- begin toload --> 
     <div id="content" class="inner">
         
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2013/08/01/cpp-resource-management/">
+		
+			Cpp Resource Management</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-01T22:16:00+08:00" pubdate data-updated="true">Aug 1<span>st</span>, 2013</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/c-plus-plus/'>C++</a>
+
+
+</div>
+    </div>
+		<p>I always forget freeing a memory that allocated from the heap.And I always
+forget closing the file handler.</p>
+
+<p>Resources include file descriptors, mutex locks, fonts, brushes, database
+connections and network sockets.</p>
+
+<p>I think less programmers can remember closing a file handler, especially
+in a large project.</p>
+
+<p>Nowadays, many programming languages have the garbage collection function.
+In C++, since the destructor will be automatically called, we can release
+the resources automatically if we put the resource into an object.</p>
+
+<p>How can do that?Use the <em>smart pointer</em>:<code>std::auto_ptr</code>.</p>
+
+<pre><code>#include &lt;cstdio&gt;
+#include &lt;memory&gt;
+
+int
+main(int argc, char **argv)
+{
+    int *num = NULL;
+    {
+        num = new int();
+        std::auto_ptr&lt;int&gt; ap(num);
+    }
+    // delete num;
+
+    return 0;
+}
+</code></pre>
+
+<p>If trying to delete num after the block, that will be a double free error.</p>
+
+<p>Reference from <a href="http://www.cplusplus.com/reference/memory/auto_ptr/">cplusplus.com</a>, <code>auto_ptr</code> is deprecated in C++11 and is replaced by <code>unique_ptr</code>.
+But they are similar.</p>
+
+<p>However, multiple <code>auto_ptr</code> cannot contain the same object.</p>
+
+<p>Here is the test program.</p>
+
+<pre><code>#include &lt;cstdio&gt;
+#include &lt;memory&gt;
+
+int
+main(int argc, char **argv)
+{
+    int *num = NULL;
+    {
+        num = new int();
+        std::auto_ptr&lt;int&gt; ap1(num);
+        std::auto_ptr&lt;int&gt; ap2(ap1);
+
+        printf("%p\n", &amp;ap1);
+        ap1 = ap2;
+        printf("%p\n", &amp;ap2);
+    }
+    // delete num;
+
+    return 0;
+}
+</code></pre>
+
+<p>And here is the gdb debug output information.</p>
+
+<pre><code>Temporary breakpoint 1, main (argc=1, argv=0x7fffffffe6e8) at test.cpp:7
+7       int *num = NULL;
+(gdb) n
+9       num = new int();
+(gdb) n
+10      std::auto_ptr&lt;int&gt; ap1(num);
+(gdb) n
+11      std::auto_ptr&lt;int&gt; ap2(ap1);
+(gdb) p ap1
+$1 = {_M_ptr = 0x601010}
+(gdb) p ap2
+$2 = {_M_ptr = 0x7fff00000001}
+(gdb) n
+13      printf("%p\n", &amp;ap1);
+(gdb) p ap1
+$3 = {_M_ptr = 0x0}
+(gdb) p ap2
+$4 = {_M_ptr = 0x601010}
+(gdb) n
+0x7fffffffe5e0
+14      ap1 = ap2;
+(gdb) p ap1
+$5 = {_M_ptr = 0x0}
+(gdb) p ap2
+$6 = {_M_ptr = 0x601010}
+(gdb) n
+15      printf("%p\n", &amp;ap2);
+(gdb) p ap1
+$7 = {_M_ptr = 0x601010}
+(gdb) p ap2
+$8 = {_M_ptr = 0x0}
+(gdb) 
+</code></pre>
+
+<p>But there are another smart pointer that can do this.It&#8217;s the
+<code>std::tr1::shared_ptr</code>.Mutiple shared_ptr can contain the same object.</p>
+
+<p>The testing program is as follow.</p>
+
+<pre><code>#include &lt;cstdio&gt;
+#include &lt;tr1/memory&gt;
+
+int
+main(int argc, char **argv)
+{
+    int *num = NULL;
+    {
+        num = new int();
+        std::tr1::shared_ptr&lt;int&gt; ap1(num);
+        std::tr1::shared_ptr&lt;int&gt; ap2(ap1);
+
+        printf("%p\n", &amp;ap1);
+        ap1 = ap2;
+        printf("%p\n", &amp;ap2);
+    }
+
+    return 0;
+}
+</code></pre>
+
+<p>And the gdb debug information is:</p>
+
+<pre><code>Temporary breakpoint 1, main (argc=1, argv=0x7fffffffe6e8) at test.cpp:7
+7       int *num = NULL;
+(gdb) n
+9       num = new int();
+(gdb) n
+10      std::tr1::shared_ptr&lt;int&gt; ap1(num);
+(gdb) n
+11      std::tr1::shared_ptr&lt;int&gt; ap2(ap1);
+(gdb) n
+13      printf("%p\n", &amp;ap1);
+(gdb) p ap1
+$1 = std::tr1::shared_ptr (count 2, weak 0) 0x602010
+(gdb) p ap2
+$2 = std::tr1::shared_ptr (count 2, weak 0) 0x602010
+(gdb) n
+0x7fffffffe5d0
+14      ap1 = ap2;
+(gdb) n
+15      printf("%p\n", &amp;ap2);
+(gdb) p ap1
+$3 = std::tr1::shared_ptr (count 2, weak 0) 0x602010
+(gdb) p ap2
+$4 = std::tr1::shared_ptr (count 2, weak 0) 0x602010
+</code></pre>
+
+<p>We can see that both of <code>ap1</code> and <code>ap2</code> point to the same object.</p>
+
+<p>The <code>auto_ptr</code> and <code>shared_ptr</code> use <code>delete</code> but not <code>delete[]</code>,
+so they don&#8217;t support array.But the <code>unique_ptr</code> support.</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2013/08/01/cpp-resource-management//index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
 
 
     <article class="post">
