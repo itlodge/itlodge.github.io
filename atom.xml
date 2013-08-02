@@ -4,7 +4,7 @@
   <title><![CDATA[Yuanhang Zheng]]></title>
   <link href="http://itlodge.github.io/atom.xml" rel="self"/>
   <link href="http://itlodge.github.io/"/>
-  <updated>2013-08-01T23:23:42+08:00</updated>
+  <updated>2013-08-02T21:04:42+08:00</updated>
   <id>http://itlodge.github.io/</id>
   <author>
     <name><![CDATA[Yuanhang Zheng]]></name>
@@ -174,6 +174,91 @@ $4 = std::tr1::shared_ptr (count 2, weak 0) 0x602010
 
 <p>The <code>auto_ptr</code> and <code>shared_ptr</code> use <code>delete</code> but not <code>delete[]</code>,
 so they don&#8217;t support array.But the <code>unique_ptr</code> support.</p>
+
+<p>Sometimes, the resource may be a mutex, and we don&#8217;t want to remember
+unlocking the mutex every time we lock it.So a resource management object
+may be:</p>
+
+<pre><code>#include &lt;cstdio&gt;
+
+typedef int Mutex;
+
+void
+lock(Mutex *p)
+{
+    printf("Locking...\n");
+}
+
+void
+unlock(Mutex *p)
+{
+    printf("Unlocked\n");
+}
+
+class Lock {
+public:
+    explicit Lock(Mutex *p)
+        :pMutex(p)
+    {
+        lock(pMutex);
+    }
+    ~Lock()
+    {
+        unlock(pMutex);
+    }
+private:
+    Mutex *pMutex;
+};
+
+int
+main(int argc, char **argv)
+{
+    Mutex m;
+    {
+        Lock ml(&amp;m);
+    }
+
+    return 0;
+}
+</code></pre>
+
+<p>However, when we copy the <code>Lock</code> object, problems appear.</p>
+
+<pre><code>Lock ml2(ml);
+</code></pre>
+
+<p>The default copy constructor will directly copy the pointer <code>pMutex</code> to
+the target object.So we should let the object uncopyable.</p>
+
+<pre><code>private:
+Lock(const Lock&amp;);
+Lock&amp;
+operator=(const Lock&amp;);
+
+Mutex *pMutex;
+</code></pre>
+
+<p>Multiple objects can use the same resource, so the resource may be existed
+until the last object has been destroyed.The <code>tr1::shared_ptr</code> provide a
+<code>deleter</code> and its <strong>shared ability</strong> to solve this problem.</p>
+
+<pre><code>class Lock {
+public:
+    explicit Lock(Mutex *p)
+        :pMutex(p, unlock)
+    {
+        lock(pMutex.get());
+    }
+private:
+    Lock(const Lock&amp;);
+    Lock&amp;
+    operator=(const Lock&amp;);
+
+    std::tr1::shared_ptr&lt;Mutex&gt; pMutex;
+};
+</code></pre>
+
+<p>More tomorrow.</p>
 ]]></content>
   </entry>
   
