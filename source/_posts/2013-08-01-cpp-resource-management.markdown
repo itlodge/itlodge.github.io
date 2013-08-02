@@ -159,3 +159,85 @@ We can see that both of ``ap1`` and ``ap2`` point to the same object.
 The ``auto_ptr`` and ``shared_ptr`` use ``delete`` but not ``delete[]``,
 so they don't support array.But the ``unique_ptr`` support.
 
+Sometimes, the resource may be a mutex, and we don't want to remember
+unlocking the mutex every time we lock it.So a resource management object
+may be:
+
+    #include <cstdio>
+    
+    typedef int Mutex;
+    
+    void
+    lock(Mutex *p)
+    {
+        printf("Locking...\n");
+    }
+    
+    void
+    unlock(Mutex *p)
+    {
+        printf("Unlocked\n");
+    }
+    
+    class Lock {
+    public:
+        explicit Lock(Mutex *p)
+    	    :pMutex(p)
+        {
+    	    lock(pMutex);
+        }
+        ~Lock()
+        {
+    	    unlock(pMutex);
+        }
+    private:
+        Mutex *pMutex;
+    };
+    
+    int
+    main(int argc, char **argv)
+    {
+        Mutex m;
+        {
+    	    Lock ml(&m);
+        }
+        
+        return 0;
+    }
+
+However, when we copy the ``Lock`` object, problems appear.
+
+    Lock ml2(ml);
+
+The default copy constructor will directly copy the pointer ``pMutex`` to
+the target object.So we should let the object uncopyable.
+
+    private:
+    Lock(const Lock&);
+    Lock&
+    operator=(const Lock&);
+    
+    Mutex *pMutex;
+
+Multiple objects can use the same resource, so the resource may be existed
+until the last object has been destroyed.The ``tr1::shared_ptr`` provide a
+``deleter`` and its **shared ability** to solve this problem.
+
+    class Lock {
+    public:
+        explicit Lock(Mutex *p)
+    	    :pMutex(p, unlock)
+        {
+    	    lock(pMutex.get());
+        }
+    private:
+        Lock(const Lock&);
+        Lock&
+        operator=(const Lock&);
+        
+        std::tr1::shared_ptr<Mutex> pMutex;
+    };
+    
+More tomorrow.
+
+	    
