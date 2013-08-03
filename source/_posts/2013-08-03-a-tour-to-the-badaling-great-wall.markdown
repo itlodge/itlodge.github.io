@@ -18,7 +18,7 @@ never been to the Great Wall util today.
 I got up at 7:00am and began my tour at about 7:40am after the breakfast.
 It took me 30 minutes to arrive at *Xi zhi men station* from where I live.
 
-{% img right ../pictures/13.8.3.Great-Wall-too-many-people.png 300 350 'Too many people' %}
+{% img right ../pictures/13.8.3.Great-Wall-too-many-people.jpg 300 350 'Too many people' %}
 
 I planed to take the *Shi jiao yan qing s2 line* train to the Great Wall
 directly at *Beijing bei station*, which is near the *Xi zhi men station*.
