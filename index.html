@@ -1248,7 +1248,31 @@ puts decimal[:first]
 1
 </code></pre>
 
-<p>0 is the default value for all keys.</p>
+<p><code>0</code> is the default value for all keys.</p>
+
+<h2>Control Structures</h2>
+
+<p>In Ruby, there is a <code>elsif</code> keyword instead of <code>else if</code>.</p>
+
+<p>The method <code>gets</code> return the next line from the standard input stream and
+return nil when get the <code>EOF</code>, so the following code can let all the inputs
+be upcase.</p>
+
+<pre><code>while line = gets
+  puts line.upcase
+end
+</code></pre>
+
+<p>If the <code>if</code> and <code>while</code> statement is just a single expression, we usually
+write them in this way.</p>
+
+<pre><code>puts 'Hey' if 2 &gt; 1
+
+i = 1
+puts i while (i += 1) &lt; 10
+</code></pre>
+
+<p>Someone say that this style is similar with <code>Perl</code>.</p>
 
 		
 		
