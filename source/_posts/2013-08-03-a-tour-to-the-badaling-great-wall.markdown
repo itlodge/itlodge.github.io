@@ -18,7 +18,7 @@ never been to the Great Wall util today.
 I got up at 7:00am and began my tour at about 7:40am after the breakfast.
 It took me 30 minutes to arrive at *Xi zhi men station* from where I live.
 
-{% img right ../pictures/13.8.3.Great-Wall-too-many-people.jpg 300 350 'Too many people' %}
+{% img right /pictures/13.8.3.Great-Wall-too-many-people.jpg 300 350 'Too many people' %}
 
 I planed to take the *Shi jiao yan qing s2 line* train to the Great Wall
 directly at *Beijing bei station*, which is near the *Xi zhi men station*.
@@ -38,7 +38,7 @@ there for another 20 minutes.This time, I almost wanted to go back home because
 I looked for 10 minutes to find some bus that can go to the Great Wall and I
 failed.
 
-{% img left ../pictures/13.8.3.south-wall.jpg 300 350 'South Wall' %}
+{% img left /pictures/13.8.3.south-wall.jpg 300 350 'South Wall' %}
 
 I was still stubborn so that I found another way to go to the Great Wall from
 *Baidu Map*.This time I went back to the *Xi er qi station*, take the
@@ -66,22 +66,22 @@ Finally I arrived at the Great Wall.
 
 First, I have a lunch at *Yong he da wang restaurant*.
 
-{% img ../pictures/13.8.3.have-a-lunch.jpg 'Have a lunch' 'Have a lunch' %}
+{% img /pictures/13.8.3.have-a-lunch.jpg 'Have a lunch' 'Have a lunch' %}
 
 There were lots of people.But I thought there will be more in Spring and Autumn.
 The photo below shows the *North Wall*.
 
-{% img ../pictures/13.8.3.north-wall.jpg 'North Wall' 'North Wall' %}
+{% img /pictures/13.8.3.north-wall.jpg 'North Wall' 'North Wall' %}
 
 It's obvious that I was on the south wall, and the photo below is a bird's-eye
 view of the north wall.
 
-{% img ../pictures/13.8.3.north-wall-bird-view.jpg 'North Wall bird view' 'North Wall bird view' %}
+{% img /pictures/13.8.3.north-wall-bird-view.jpg 'North Wall bird view' 'North Wall bird view' %}
 
 There is no doubt that I must have someone take a photo for myself.The photo
 below is it, I'm not very handsome as you imaged, though.
 
-{% img ../pictures/13.8.3.Great-Wall-me.jpg 'Me' 'Me' %}
+{% img /pictures/13.8.3.Great-Wall-me.jpg 'Me' 'Me' %}
 
 The return tour was so relax because I could take the *877 bus* to
 *De sheng men xi station* directly!And it const me only 4.8 yuan.
