@@ -161,5 +161,31 @@ Ouput:
     0
     1
 
-0 is the default value for all keys.
+``0`` is the default value for all keys.
+
+Control Structures
+----------------------
+
+In Ruby, there is a ``elsif`` keyword instead of ``else if``.
+
+The method ``gets`` return the next line from the standard input stream and
+return nil when get the ``EOF``, so the following code can let all the inputs
+be upcase.
+
+    while line = gets
+      puts line.upcase
+    end
+
+If the ``if`` and ``while`` statement is just a single expression, we usually
+write them in this way.
+
+    puts 'Hey' if 2 > 1
+    
+    i = 1
+    puts i while (i += 1) < 10
+
+Someone say that this style is similar with ``Perl``.
+
+
+
 
