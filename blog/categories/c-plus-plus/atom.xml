@@ -4,7 +4,7 @@
   <title><![CDATA[Category: C++ | Yuanhang Zheng]]></title>
   <link href="http://itlodge.github.io/blog/categories/c-plus-plus/atom.xml" rel="self"/>
   <link href="http://itlodge.github.io/"/>
-  <updated>2013-08-04T21:37:18+08:00</updated>
+  <updated>2013-08-05T20:29:16+08:00</updated>
   <id>http://itlodge.github.io/</id>
   <author>
     <name><![CDATA[Yuanhang Zheng]]></name>
@@ -258,7 +258,142 @@ private:
 };
 </code></pre>
 
-<p>More tomorrow.</p>
+<h2>Provide access to raw resources</h2>
+
+<p>Sometimes we may only want to access the raw resource but the object that
+contains the resource.For example:</p>
+
+<pre><code>#include &lt;cstdio&gt;
+#include &lt;tr1/memory&gt;
+
+typedef int Mutex;
+
+static Mutex *
+createMutex()
+{
+    static Mutex *p = new Mutex();
+
+    return p;
+}
+
+int
+main(int argc, char **argv)
+{
+    std::tr1::shared_ptr&lt;Mutex&gt; pMutex;
+
+    printf("%d\n", pMutex);
+
+    return 0;
+}
+</code></pre>
+
+<p>Therefore, we must provide a method to access the raw resource.Like this.</p>
+
+<pre><code>    printf("%d\n", pMutex.get());
+</code></pre>
+
+<p>There are two ways, one is explicit and the other is implicit.</p>
+
+<pre><code>class MutexManager {
+public:
+    explicit MutexManager(Mutex* p)
+        :p_(p)
+    { }
+    ~MutexManager()
+    {
+        delete p_;
+    }
+    Mutex
+    get() const
+    {
+        return *p_;
+    }
+private:
+    Mutex *p_;
+};
+
+int
+main(int argc, char **argv)
+{
+    MutexManager mm(createMutex());
+
+    printf("%d\n", mm.get());
+
+    return 0;
+}
+</code></pre>
+
+<p>This one above is exciplit conversion.And this one below is implicit.</p>
+
+<pre><code>class MutexManager {
+public:
+    explicit MutexManager(Mutex* p)
+        :p_(p)
+    { }
+    ~MutexManager()
+    {
+        delete p_;
+    }
+    operator Mutex() const
+    {
+        return *p_;
+    }
+private:
+    Mutex *p_;
+};
+
+void
+print(Mutex m)
+{
+    printf("%d\n", m);
+}
+
+int
+main(int argc, char **argv)
+{
+    MutexManager mm(createMutex());
+
+    print(mm);
+
+    return 0;
+}
+</code></pre>
+
+<p>It's obviously that the explicit method is safer and the implicit method is
+more convenient for clients.</p>
+
+<h2>Keep new and delete in the same form</h2>
+
+<p>We all know that the following code is wrong.</p>
+
+<pre><code>std::string *str = new std::string[10];
+delete str;
+</code></pre>
+
+<p>We should use <code>delete []str;</code> instead of <code>delete str;</code>.</p>
+
+<p>But how about this?</p>
+
+<pre><code>#include &lt;iostream&gt;
+
+typedef std::string Lines[4];
+
+int
+main(int argc, char **argv)
+{
+    std::string *p = new Lines;
+    delete p;
+
+    return 0;
+}
+</code></pre>
+
+<p>If let me delete the pointer p, I will use this <code>delete p;</code>.But I am wrong.
+I shouldn't look at the left of the pointer, that is, <code>std::string</code>.I should
+look at the right of the <code>new</code>, that is, <code>Lines</code>.So, in this case, we
+should use <code>delete []p;</code>.</p>
+
+<p>Avoid typedef for array types, use <code>vector</code> instead.</p>
 ]]></content>
   </entry>
   
