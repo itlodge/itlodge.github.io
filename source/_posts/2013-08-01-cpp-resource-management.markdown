@@ -238,6 +238,139 @@ until the last object has been destroyed.The ``tr1::shared_ptr`` provide a
         std::tr1::shared_ptr<Mutex> pMutex;
     };
     
-More tomorrow.
+Provide access to raw resources
+---------------------------------
 
-	    
+Sometimes we may only want to access the raw resource but the object that
+contains the resource.For example:
+
+    #include <cstdio>
+    #include <tr1/memory>
+    
+    typedef int Mutex;
+    
+    static Mutex *
+    createMutex()
+    {
+        static Mutex *p = new Mutex();
+    
+        return p;
+    }
+    
+    int
+    main(int argc, char **argv)
+    {
+        std::tr1::shared_ptr<Mutex> pMutex;
+    
+        printf("%d\n", pMutex);
+        
+        return 0;
+    }
+        
+Therefore, we must provide a method to access the raw resource.Like this.
+
+        printf("%d\n", pMutex.get());
+
+There are two ways, one is explicit and the other is implicit.
+
+    class MutexManager {
+    public:
+        explicit MutexManager(Mutex* p)
+    	    :p_(p)
+        { }
+        ~MutexManager()
+        {
+    	    delete p_;
+        }
+        Mutex
+        get() const
+        {
+    	    return *p_;
+        }
+    private:
+        Mutex *p_;
+    };
+    
+    int
+    main(int argc, char **argv)
+    {
+        MutexManager mm(createMutex());
+        
+        printf("%d\n", mm.get());
+        
+        return 0;
+    }
+        
+This one above is exciplit conversion.And this one below is implicit.
+
+    class MutexManager {
+    public:
+        explicit MutexManager(Mutex* p)
+    	    :p_(p)
+        { }
+        ~MutexManager()
+        {
+    	    delete p_;
+        }
+        operator Mutex() const
+        {
+    	    return *p_;
+        }
+    private:
+        Mutex *p_;
+    };
+    
+    void
+    print(Mutex m)
+    {
+        printf("%d\n", m);
+    }
+    
+    int
+    main(int argc, char **argv)
+    {
+        MutexManager mm(createMutex());
+        
+        print(mm);
+        
+        return 0;
+    }
+        
+It's obviously that the explicit method is safer and the implicit method is
+more convenient for clients.
+
+Keep new and delete in the same form
+----------------------------------------
+
+We all know that the following code is wrong.
+
+    std::string *str = new std::string[10];
+	delete str;
+
+We should use ``delete []str;`` instead of ``delete str;``.
+
+But how about this?
+
+    #include <iostream>
+    
+    typedef std::string Lines[4];
+    
+    int
+    main(int argc, char **argv)
+    {
+        std::string *p = new Lines;
+        delete p;
+    
+        return 0;
+    }
+    
+If let me delete the pointer p, I will use this ``delete p;``.But I am wrong.
+I shouldn't look at the left of the pointer, that is, ``std::string``.I should
+look at the right of the ``new``, that is, ``Lines``.So, in this case, we
+should use ``delete []p;``.
+
+Avoid typedef for array types, use ``vector`` instead.
+
+
+
+
