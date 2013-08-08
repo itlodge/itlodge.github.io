@@ -25,6 +25,11 @@ Books I read.
     <td>2013......................</td>
   </tr>
   <tr>
+    <td>每天学点经济学</td>
+    <td>张立娟，王彩霞</td>
+    <td>2013.8.8</td>
+  </tr>
+  <tr>
     <td>How To Ask Questions The Smart Way</td>
     <td>Eric Steven Raymond</td>
     <td>2013.8.1</td>
