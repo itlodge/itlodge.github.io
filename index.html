@@ -6,7 +6,8 @@
 	<title>Yuanhang Zheng</title>
     <meta name="author" content="Yuanhang Zheng">
     
-	<meta name="description" content="Published on: Aug 3rd, 2013 Tags: Travel Today, I went to the Badaling Great Wall alone. There is a saying that He who has never been to the Great &hellip;">
+	<meta name="description" content="Published on: Aug 9th, 2013 Tags: C++ We all know that pass by value is not effecient.So we use pass by pointer
+in C.However, in C++, we prefer pass &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -95,6 +96,144 @@
 <!-- begin toload --> 
     <div id="content" class="inner">
         
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2013/08/09/always-pass-parameters-by-reference-to-const/">
+		
+			Always Pass Parameters by Reference-to-const</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-09T03:42:00+08:00" pubdate data-updated="true">Aug 9<span>th</span>, 2013</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/c-plus-plus/'>C++</a>
+
+
+</div>
+    </div>
+		<p>We all know that <em>pass by value</em> is not effecient.So we use <em>pass by pointer</em>
+in C.However, in C++, we prefer <strong>pass by referece-to-const</strong>.</p>
+
+<p>Here is an example.</p>
+
+<pre><code>#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+
+class Dog {
+public:
+    Dog()
+    {
+        printf("Calling Dog's constructor\n");
+    }
+    Dog(const Dog&amp; d)
+    {
+        printf("Calling Dog's copy constructor\n");
+        this-&gt;name = d.name;
+    }
+    virtual ~Dog()
+    {
+        printf("Calling Dog's destructor\n");
+    }
+private:
+    std::string name;
+};
+
+void
+walk_the_dog(Dog d)
+{
+
+}
+
+int
+main(int argc, char **argv)
+{
+    Dog dog;
+    walk_the_dog(dog);
+
+    return 0;
+}
+</code></pre>
+
+<p>The running result is as follows:</p>
+
+<pre><code>Calling Dog's constructor
+Calling Dog's copy constructor
+Calling Dog's destructor
+Calling Dog's destructor
+</code></pre>
+
+<p>Now, let&#8217;s analysis this <em>passing by value</em> process.
+First, <code>Dog dog;</code> will call the constructor. Then, since the function
+<code>walk_the_dog</code> pass the parameter <code>d</code> by value, it will call the copy
+constructor. Before exiting the function, it will call the destructor of <code>Dog</code>
+to destroy the parameter <code>d</code>. In the end, before exiting the main function,
+the destructor of <code>Dog</code> will be called again to destroy the <code>dog</code> object.</p>
+
+<p>Now, it seems that <em>passing by value</em> will result in a call to copy constructor
+and a call to destructor. But, in fact, it will result in two call to copy
+constructor and two call to destructor. Note that there are a <code>string</code> object
+as the member of the class <code>Dog</code>, so there will be an extra call the copy
+constructor and destructor of the <code>string</code> object.</p>
+
+<p>Obviously, the cost of <em>passing by value</em> is very expensive.
+How is <em>passing by reference-to-const</em>?</p>
+
+<pre><code>void
+walk_the_dog(const Dog&amp; d)
+{
+
+}
+</code></pre>
+
+<p>Just modify a bit and the result will be:</p>
+
+<pre><code>Calling Dog's constructor
+Calling Dog's destructor
+</code></pre>
+
+<p>Note that the <code>const</code> is very important. If there is not a <code>const</code>, the
+compiler will put the object in the writable part of the memory so that it
+cannot be shared by other functions. If declared as <code>const</code>, the object
+will be put into the readonly part of the memory and can be shared by lots
+of functions so that the program need less memory.</p>
+
+<p>The implementation of reference is using the pointer in C. Therefore, it may
+be more effecient to pass the built-in type parameters by value than referece.
+It&#8217;s true. If the parameter is an object of type <code>char</code>, which occupies
+1 byte. But a pointer ocuppies 4 bytes in a 32-bit machine. So we should prefer
+passing by value when the parameter is of built-in type? No, we should always
+pass the parameters by reference-to-const, since <strong>the compiler will always</strong>
+<strong>put the pointer in the register!</strong></p>
+
+<p>Finally, just remember, <strong>always pass the parameters by reference-to-const</strong>.</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2013/08/09/always-pass-parameters-by-reference-to-const//index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -1183,1008 +1322,10 @@ main(int argc, char **argv)
 </div>
 </article>
 
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2013/07/25/some-basic-ruby/">
-		
-			Some Basic Ruby</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-25T20:07:00+08:00" pubdate data-updated="true">Jul 25<span>th</span>, 2013</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/ruby/'>Ruby</a>
-
-
-</div>
-    </div>
-		<h2>String and name</h2>
-
-<p>When defining a function, the parentheses are not necessary.So this one</p>
-
-<pre><code>def say_hello name
-  "Hello " + name
-end
-
-puts say_hello "man"
-</code></pre>
-
-<p>is the same as this.</p>
-
-<pre><code>def say_hello(name)
-  "Hello " + name
-end
-
-puts(say_hello("man"))
-</code></pre>
-
-<p>However, when there are more than one parameters, it will be difficult to
-know which argument goes with which method invocation.So it&#8217;s recommended
-using parentheses in all but the simplest cases.</p>
-
-<p>We can use single-quote or double-quote to create a string.What&#8217;s the
-difference?</p>
-
-<p>First, single-quoted string can&#8217;t represent the escape character, and
-double-quoted string can.</p>
-
-<pre><code>puts '\nabc'
-puts "\nabc"
-</code></pre>
-
-<p>The above code will output this.</p>
-
-<pre><code>\nabc
-
-abc
-</code></pre>
-
-<p>Second, double-quoted string can be expression interpolated.</p>
-
-<pre><code>name = 'Tom'
-
-puts 'Hello #{name}'
-puts "Hello #{name}"
-</code></pre>
-
-<p>The above code will output this.</p>
-
-<pre><code>ruby test.rb
-Hello #{name}
-Hello Tom
-</code></pre>
-
-<p>And we can even invoke methods.</p>
-
-<pre><code>name = 'Tom'
-puts "Hello #{name.upcase}"
-</code></pre>
-
-<p>This will generate the following.</p>
-
-<pre><code>Hello TOM
-</code></pre>
-
-<p>When the expression is a global, instance or class variable, there is no need
-to use the braces.</p>
-
-<pre><code>@h = "Hello"    # @ means instance
-$name = 'Tom'    # $ means global
-
-puts "#@h #$name"
-</code></pre>
-
-<p>This will generate the same output.</p>
-
-<p>There are some conventions for the <strong>name</strong> in Ruby.</p>
-
-<ul>
-<li><p>Local variables, method parameters and method names <em>should</em> all start
-with a lowercase letter or an underscore.</p></li>
-<li><p>Class names, module names and constants <em>must</em> start with an uppercase
-letter.</p></li>
-<li><p>Global variables start with <code>$</code>.</p></li>
-<li><p>Instance variables begin with <code>@</code>.</p></li>
-<li><p>Class variables are prefixed with <code>@@</code>.</p></li>
-</ul>
-
-
-<h2>Arrays and Hashes</h2>
-
-<p>In ruby, arrays and hashes can hold objects of different types.</p>
-
-<pre><code>a = [1, 'abc', :sym]
-puts a
-</code></pre>
-
-<p>It will generate the following output.</p>
-
-<pre><code>1
-abc
-sym
-</code></pre>
-
-<p>By the way, <code>nil</code> is an object, represent <strong>nothing</strong>.</p>
-
-<p>If we want to create an array of string, we have to list all the strings.
-And we have to type lots of quotes and commas.However, <code>%w</code> can do it
-more easily.</p>
-
-<pre><code>a = ['a', 'b', 'c']
-b = %w{a b c}
-
-puts a
-puts b
-</code></pre>
-
-<p>It will generate the following output.</p>
-
-<pre><code>a
-b
-c
-a
-b
-c
-</code></pre>
-
-<p>The index of Array is integer, but the index of Hash is anything.</p>
-
-<p>It has the following form.</p>
-
-<pre><code>var = {
-  key1 =&gt; value1
-  key2 =&gt; value2
-  ...
-}
-</code></pre>
-
-<p>For example:</p>
-
-<pre><code>girl = {
-  :name =&gt; 'Mary',
-  :age =&gt; 20
-}
-
-puts "#{girl[:name]} is #{girl[:age]} years old."
-</code></pre>
-
-<p>Output:</p>
-
-<pre><code>Mary is 20 years old.
-</code></pre>
-
-<p>A new Hash can also be created in this way.</p>
-
-<pre><code>decimal = Hash.new(0)
-puts decimal[:first]
-decimal[:first] = 1
-puts decimal[:first]
-</code></pre>
-
-<p>Ouput:</p>
-
-<pre><code>0
-1
-</code></pre>
-
-<p><code>0</code> is the default value for all keys.</p>
-
-<h2>Control Structures</h2>
-
-<p>In Ruby, there is a <code>elsif</code> keyword instead of <code>else if</code>.</p>
-
-<p>The method <code>gets</code> return the next line from the standard input stream and
-return nil when get the <code>EOF</code>, so the following code can let all the inputs
-be upcase.</p>
-
-<pre><code>while line = gets
-  puts line.upcase
-end
-</code></pre>
-
-<p>If the <code>if</code> and <code>while</code> statement is just a single expression, we usually
-write them in this way.</p>
-
-<pre><code>puts 'Hey' if 2 &gt; 1
-
-i = 1
-puts i while (i += 1) &lt; 10
-</code></pre>
-
-<p>Someone say that this style is similar with <code>Perl</code>.</p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2013/07/25/some-basic-ruby//index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2013/07/24/const-anyway/">
-		
-			Const Anyway!</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-24T20:01:00+08:00" pubdate data-updated="true">Jul 24<span>th</span>, 2013</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/c-plus-plus/'>C++</a>
-
-
-</div>
-    </div>
-		<h2>Const pointer</h2>
-
-<p><code>const</code> is versatile.I am always confused by the following syntax.</p>
-
-<pre><code>const char *str = "Hello";    // const data, non-const pointer
-char * const str = "Hello";    // const pointer, non-const data
-</code></pre>
-
-<p>Now there is a tip to remember it.</p>
-
-<p>If <code>const</code> appears to the right of the asterisk, the pointer is
-constant.If <code>const</code> appears to the left of the asterisk, the data
-is constant.</p>
-
-<p>So the following two statements are the same.</p>
-
-<pre><code>const char *str = "Hello";
-char const *str = "Hello";
-</code></pre>
-
-<p>In STL, <code>iterator</code> is just like a <code>T *</code> pointer.
-* <code>const std::vector&lt;int&gt;::iterator iter</code> is just like <code>T * const iter</code>.
-* <code>std::vector&lt;int&gt;::const_iterator cIter</code> is just like <code>const T *iter</code>.</p>
-
-<p>So, in a loop, if we don&#8217;t want to modify the data, use <code>const_iterator</code>.</p>
-
-<h2>Const member function</h2>
-
-<p>Sometimes, we have two version member functions.One is const and the other is
-not.</p>
-
-<pre><code>#include &lt;string&gt;
-#include &lt;iostream&gt;
-
-class Str {
-public:
-    Str(std::string str)
-    :data(str)
-    { }
-
-    const char&amp;
-    operator[](std::size_t pos) const    // Const objects use this
-    {
-        return data[pos];
-    }
-
-    char&amp;
-    operator[](std::size_t pos)    // Non-const objects use this
-    {
-        return data[pos];
-    }
-
-private:
-    std::string data;
-};
-
-void
-print(const Str&amp; const_str)
-{
-    std::cout &lt;&lt; const_str[1] &lt;&lt; std::endl;
-}
-
-int
-main(int argc, char **argv)
-{
-    Str nonconst_str("abc");
-    std::cout &lt;&lt; nonconst_str[1] &lt;&lt; std::endl;
-    nonconst_str[1] = 'a';
-
-    print(nonconst_str);
-
-    return 0;
-}
-</code></pre>
-
-<p>In <code>main</code>, <code>nonconst_str</code> is a non-const object and it can be modified
-by <code>[]</code>.In <code>print</code>, <code>const Str&amp; const_str</code> means
-<strong>pass parameters by reference-to-const</strong>, so <code>const_str</code> is a const object.</p>
-
-<p>We observe that the <code>const</code> keyword is after the closing parenthesis of the
-argument list.This means the function is a const member function.</p>
-
-<p>Reference to <a href="http://msdn.microsoft.com/en-us/library/6ke686zh.aspx">MSDN</a>,
-<strong>A constant member function cannot modify any non-static members or call any</strong>
-<strong>member functions that aren&#8217;t constant.</strong>That is, the cons member function
-can&#8217;t modify the object that it is called.</p>
-
-<p>The above philosophy is called <strong>bitwise constness</strong> or <strong>physical constness</strong>.
-There are another philosophy called <strong>logical constness</strong>.Adherents to this
-philosophy argue that <strong>a const member function might modify some of the bits</strong>
-<strong>in the object on which it&#8217;s invoked, but only in ways that clients cannot</strong>
-<strong>detect</strong>.</p>
-
-<p>For example, if we add a new member function <code>length()</code> to the above class.</p>
-
-<pre><code>    std::size_t
-    length() const
-    {
-        len = data.length();
-
-        return len;
-    }
-
-private:
-    std::string data;
-    std::size_t len;
-</code></pre>
-
-<p>This will generate the following compiled error.</p>
-
-<pre><code>test.cpp:25:6: error: assignment of member ‘Str::len’ in read-only object
-  len = data.length();
-      ^
-</code></pre>
-
-<p>Since member variable <code>len</code> has been modified and the compiler use the
-<strong>bitwise const</strong>, error produces.However, return and object&#8217;s length seems
-not modify the object it is called.</p>
-
-<p>To solved this problem, use the <strong>mutable</strong> keyword.It can free non-static
-data members from bitwise constness constraints.</p>
-
-<pre><code>mutable std::size_t len;
-</code></pre>
-
-<p>I beleive in code reusing forever!In the above example, the duplicate code
-in the two <code>operator[]</code> functions can be merged into one.</p>
-
-<p>Only then non-const function should be modified.</p>
-
-<pre><code>char&amp;
-operator[](std::size_t pos)    // Non-const objects use this
-{
-    return const_cast&lt;char&amp;&gt;(static_cast&lt;const Str&amp;&gt;(*this)[pos]);
-}
-</code></pre>
-
-<p><code>static_cast&lt;const Str&amp;&gt;</code>will make <code>*this</code>const and then it can call
-<code>operator[]</code>.Finally, <code>const_cast</code> is used the free the const constraint.</p>
-
-<p>This is all about <code>const</code>, it&#8217;s an amazing keyword.For readable and efficient
-code, use it anyway.</p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2013/07/24/const-anyway//index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2013/07/23/more-consts-enums-inlines-and-less-defines/">
-		
-			More Consts Enums Inlines and Less #defines</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-23T21:33:00+08:00" pubdate data-updated="true">Jul 23<span>rd</span>, 2013</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/c-plus-plus/'>C++</a>
-
-
-</div>
-    </div>
-		<p>This is an old topic.</p>
-
-<h1>For constants</h1>
-
-<p>Consider a macro below.</p>
-
-<pre><code>#define PI 3.14
-</code></pre>
-
-<p>There are several drawbacks when using a macro.</p>
-
-<ul>
-<li><p>It&#8217;s hard to debug.As we all know, the macros are resolved by the
-preprocessor and the compiler know nothing about them.When you get an error
-when compiling the program, the error message may refer to <code>3.14</code> but not
-<code>PI</code> because <code>PI</code> is not in the symbol table.</p></li>
-<li><p>It will result in more object codes.When the preprocessor replace <code>PI</code>
-with <code>3.14</code>, there will be several copy of 3.14 in the object code.</p></li>
-</ul>
-
-
-<p>If we use the <strong>constant</strong> instead of the macro,</p>
-
-<pre><code>const double Pi = 3.14;
-</code></pre>
-
-<p>it has the following advantages, respectively.</p>
-
-<ul>
-<li><p>It&#8217;s easy to debug, since the constant is in the symble table.</p></li>
-<li><p>It has only one copy in the object code.The other place it appears is just
-its references.</p></li>
-</ul>
-
-
-<p>But I think it has disadvantages too.</p>
-
-<p>When replacing lots of <strong>macros</strong> with <strong>constant</strong>, there will be
-lots of entries in the symbol table.And it will make the object files or
-executable files larger.</p>
-
-<p>When defining a constant string, we may want to do this.</p>
-
-<pre><code>const char *Name = "Tom";
-</code></pre>
-
-<p>But this is not effecient.</p>
-
-<p>If defined above, the value &#8220;Tom&#8221; cannot be changed, but what the pointer
-<code>Name</code> points to can be changed.So the compiler will allocate a piece of
-memory for the pointer <code>Name</code> in the normal data segment.Moreover, when
-the linker starts working, it need to perform some relocations for <code>Name</code>.</p>
-
-<p>So, it&#8217;s better to be defined as follows.</p>
-
-<pre><code>const char * const Name = "Tom";
-</code></pre>
-
-<p>or</p>
-
-<pre><code>const char Name[] = "Tom";
-</code></pre>
-
-<p>Now the compiler will put <code>Name</code> in the read only data segment and the linker
-needn&#8217;t performing relocations.</p>
-
-<p>Alternatively, we can use this.</p>
-
-<pre><code>const std::string Name("Tom");
-</code></pre>
-
-<h1>For class-specific constants</h1>
-
-<p>Sometimes we need a constant member in the class, for example.</p>
-
-<pre><code>class Hand {
-private:
-    static const int NumFingers = 5;
-    int fingers[NumFingers];
-};
-</code></pre>
-
-<p>In order to ensure there is only one copy of the constant, it must be
-<code>static</code>.</p>
-
-<p>However, <code>static const int NumFingers = 5;</code> is just a <strong>declaration</strong> for
-<code>NumFinger</code>.Why this can be compiled with no error message?Everything
-should have its definition, does it?However, the class-specific constants
-that are static and with integral type(<code>int</code>, <code>char</code>, <code>bool</code>,&#8230;) is
-an exception.</p>
-
-<p>You can even use the constant.</p>
-
-<pre><code>#include &lt;cstdio&gt;
-
-class Hand {
- public:
-    static const int NumFingers = 5;
-    int fingers[NumFingers];
-};
-
-int main(int argc, char *argv[])
-{
-    printf("%d\n", Hand::NumFingers);
-
-    return 0;
-}
-</code></pre>
-
-<p>But when you want to use the address of <code>NumFingers</code>, you must put the
-definition of <code>NumFingers</code> in the implemetation file of the class.</p>
-
-<pre><code>#include &lt;cstdio&gt;
-
-class Hand {
- public:
-    static const int NumFingers = 5;
-    int fingers[NumFingers];
-};
-
-const int Hand::NumFingers;
-
-int main(int argc, char *argv[])
-{
-    printf("%p\n", &amp;Hand::NumFingers);
-
-    return 0;
-}
-</code></pre>
-
-<p>Remember, there is no need to put <code>static</code> at the begining of the definition.</p>
-
-<p>We know that the size of the array <code>finger</code> is just the value of the static
-constant <code>NumFingers</code>.But there is another way to do that.</p>
-
-<pre><code>class Hand {
- public:
-    enum {NumFingers = 5};
-    int fingers[NumFingers];
-};
-</code></pre>
-
-<p>That is fine, too.</p>
-
-<h1>For functions</h1>
-
-<p>Macros like this</p>
-
-<pre><code>#define MAX(a, b) ((a) &gt; (b) ? (a) : (b))
-</code></pre>
-
-<p>can result in many painful problems.</p>
-
-<ul>
-<li><p>First, you have to remember parenthesizing all the arguments(We all know
-why).</p></li>
-<li><p>There are problems when calling it like this <code>MAX(++a, b)</code>(It&#8217;s easy to
-think about it).</p></li>
-</ul>
-
-
-<p>If using <code>inline</code> and <code>template</code>, we can solve all this problems.</p>
-
-<pre><code>#include &lt;cstdio&gt;
-
-template&lt;typename T&gt;
-inline T
-max(const T&amp; a, const T&amp; b)
-{
-    return a &gt; b ? a : b;
-}
-
-int
-main(int argc, char *argv[])
-{
-    char a = 'a', b = 'b';
-    int c = 1, d = 2;
-
-    printf("%c\n", max(a, b));
-    printf("%d\n", max(c, d));
-
-    return 0;
-}
-</code></pre>
-
-<p>However, I don&#8217;t think macros are useless and should be replaced by const,
-enum and inline.In a way, macro can decrease the time of compiling and
-linking.And there are still lots of code that using macros.</p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2013/07/23/more-consts-enums-inlines-and-less-defines//index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2013/07/22/some-reviews-about-c-plus-plus/">
-		
-			Some Reviews About C Plus Plus</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-22T19:33:00+08:00" pubdate data-updated="true">Jul 22<span>nd</span>, 2013</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/c-plus-plus/'>C++</a>
-
-
-</div>
-    </div>
-		<h1>Declaration and Definition</h1>
-
-<p>I have already known the difference between <strong>declaration</strong> and <strong>definion</strong>,
-but now I find that my understanding is not complete.</p>
-
-<p><strong>Declaration</strong> just tells the compiler about the name and the type of
-something.It&#8217;s very common about the declaration of <em>objects</em> and <em>functions</em>.</p>
-
-<pre><code>extern int a;
-
-int max(int a, int b);
-</code></pre>
-
-<p>However, I never think about the declaration of <em>class</em>.Recently, I have to
-view some codes in a large project and I have found many of these declarations.</p>
-
-<pre><code>class Option;
-class Parameter;
-</code></pre>
-
-<p>Additionally, there are many declarations of the <em>template class</em>.</p>
-
-<pre><code>template&lt;typename T&gt;
-class Swap;
-</code></pre>
-
-<p>Another interesting thing is that the official C++ definition of
-<em>function signature</em> excludes the return type.I think this is strange and I
-will consider it, anyway.</p>
-
-<p><strong>Definition</strong> gives the details of something to the compiler.In the past, I
-hold the opinion that <em>definition</em> always be related to <em>memory</em>.In fact, it is
-not allways.
-- For object, the definition tell the compiler about the memory asigned for the
-object.
-- For function or function template, the definition provides the function body.
-- For class or class template, the definition lists the members of the class.</p>
-
-<p>For example:</p>
-
-<pre><code>int a;
-
-int max(int a, int b)
-{
-    return a &gt; b ? a : b;
-}
-
-class Option {
-public:
-    Option();
-    ~Option();
-    ...
-};
-</code></pre>
-
-<h1>Defaul constructor</h1>
-
-<p>I found I can&#8217;t tell whether a constructor is a <strong>default constructor</strong> or not.
-But now, I know.A <strong>default constructor</strong> is a constructor that can be called
-without any arguments.That is, either no parameters or every parameter is
-initialized.</p>
-
-<p>The following are default constructors.</p>
-
-<pre><code>Option();
-explicit Option(bool short = true);
-</code></pre>
-
-<p>And this one is not a default constructor.</p>
-
-<pre><code>explicit Option(bool short);
-</code></pre>
-
-<p>What the hell <strong>explicit</strong> is doing here?I have never used this reserved word
-even if I have learned C++ for several years.But this guy, <em>explicit</em>, is of
-great importance.</p>
-
-<p>Placing <em>explicit</em> before the constructor can prevent the objects of the class
-being used to perform implicit type conversions.Obviously, they can be used
-for explicit type conversions.</p>
-
-<p>For example, if we have two classes and a function.</p>
-
-<pre><code>class Dog {
-    explicit Dog();
-    ...
-}
-
-Dog aDog;
-Cat aCat;
-
-void kill(Dog d);
-</code></pre>
-
-<p>Now call the <code>kill</code> function passing <code>aDog</code> as parameter.</p>
-
-<pre><code>kill(aDog);    // No problem.
-</code></pre>
-
-<p>If with the <code>explicit</code> reserved word and call the <code>kill</code> function passing
-<code>aCat</code> as parameter, it will be error since it prevents implicit type
-conversions.</p>
-
-<pre><code>kill(aCat);    // Error, prevent implicit conversion.
-</code></pre>
-
-<p>But if without the <code>explicit</code> reserved word and call the <code>kill</code> function
-passing <code>aCat</code> as parameter, it will lead the compiler to perform unexpected
-type conversions.So the policy is:</p>
-
-<p><strong>Always declare the constructor as explicit.</strong></p>
-
-<h1>Copy constructor and copy assignment operator</h1>
-
-<p>I have already known that this</p>
-
-<pre><code>Parameter p1;
-</code></pre>
-
-<p>will invoke the <em>default constructor</em> and this</p>
-
-<pre><code>Parameter p2(p1);
-</code></pre>
-
-<p>will invoke the <em>copy constructor</em> and this</p>
-
-<pre><code>p1 = p2;
-</code></pre>
-
-<p>will invoke the <em>copy assignment operator</em>, but I have never known that this</p>
-
-<pre><code>Parameter p3 = p2;
-</code></pre>
-
-<p>will not invoke the <em>copy assignment operator</em> but the <em>copy constructor</em>.</p>
-
-<p>This amazes me very much.But now I can distinguish it easily.</p>
-
-<p>If a new object is being defined, invoke the <em>copy constructor</em>.Otherwise,
-invoke the <em>copy assignment operator</em> since it&#8217;s just the <strong>asignment</strong>.</p>
-
-<h1>Some common sense</h1>
-
-<ul>
-<li>TR1, Technical Report 1, is a specification for new functionality in
-C++ standard library.</li>
-</ul>
-
-
-<p>This really deepens my understanding of C plus plus and now I am very
-interested in this great programming language.</p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2013/07/22/some-reviews-about-c-plus-plus//index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2013/06/30/ruby-getting-started/">
-		
-			Ruby-getting Started</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-30T22:54:00+08:00" pubdate data-updated="true">Jun 30<span>th</span>, 2013</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/ruby/'>Ruby</a>
-
-
-</div>
-    </div>
-		<h1>Running ruby</h1>
-
-<h2>Interactive</h2>
-
-<p>In the past, I always tested some ruby statements with <code>irb</code>. Now I can
-test a small ruby program in the following way.</p>
-
-<pre><code>[monkey@itlodge octopress]$ ruby
-str = "abc"
-puts str
-Ctrl+d
-abc
-</code></pre>
-
-<p>After hit <code>ruby</code>, it allows me to type as many code as possible.Finally,
-press <code>Ctrl+d</code> will end the input and it will evaluate the code.</p>
-
-<h2>Programs</h2>
-
-<p>When writing a script, we always use <code>#!</code> and specific which language used
-to run the code.This is the Unix <a href="http://en.wikipedia.org/wiki/Shebang_%28Unix%29">Shebang</a> notation.For example:</p>
-
-<pre><code>#!/usr/bin/ruby -w
-puts "abc"
-</code></pre>
-
-<p>From the man page, I know that the <code>-w</code> option means <em>Enables verbose mode
-without printing version message at the beginning</em>.</p>
-
-<p>But, many guys like this style:</p>
-
-<pre><code>#!/usr/bin/env ruby
-puts "abc"
-</code></pre>
-
-<p>From the man page, I know that the <code>env</code> is a program that <em>run a program in
-a modified environment</em>.So it can search the <code>$PATH</code> and find the <code>ruby</code>
-program to run.</p>
-
-<h1>Ruby documentation</h1>
-
-<p>The site <a href="http://www.ruby-doc.org">ruby-doc.org</a> contains a complete set of the
-RDoc documentation for Ruby.</p>
-
-<p>The <code>ri</code> tool is very useful for looking up documentation.If you want to find
-the documentation for a class, just type <code>ri ClassName</code>. For example:</p>
-
-<pre><code>[monkey@itlodge ~]$ ri Vector
-= Vector &lt; Object
-
-------------------------------------------------------------------------------
-= Includes:
-Enumerable (from ruby core)
-
-(from ruby core)
-------------------------------------------------------------------------------
-The Vector class represents a mathematical vector, which is useful in its own
-right, and also constitutes a row or column of a Matrix.
-
-== Method Catalogue
-
-To create a Vector:
-*   Vector.[](*array)                   
-*   Vector.elements(array, copy = true) 
-
-To access elements:
-*   [](i)                               
-
-To enumerate the elements:
-*  #each2(v)                            
-*  #collect2(v)                         
-:
-</code></pre>
-
-<p>If you want to find the documentation for a method, just type
-<code>ri method's name</code>.For example:</p>
-
-<pre><code>[monkey@itlodge ~]$ ri sleep
-= .sleep
-
-(from ruby core)
-=== Implementation from Kernel
-------------------------------------------------------------------------------
-  sleep([duration])    -&gt; fixnum
-
-
-------------------------------------------------------------------------------
-
-Suspends the current thread for duration seconds (which may be
-any number, including a Float with fractional seconds). Returns the actual
-number of seconds slept (rounded), which may be less than that asked for if
-another thread calls Thread#run. Called without an argument, sleep() will
-sleep forever.
-
-  Time.new    #=&gt; 2008-03-08 19:56:19 +0900
-  sleep 1.2   #=&gt; 1
-  Time.new    #=&gt; 2008-03-08 19:56:20 +0900
-  sleep 1.9   #=&gt; 2
-  Time.new    #=&gt; 2008-03-08 19:56:22 +0900
-
-
-:
-</code></pre>
-
-<p>A method&#8217;s name may be the same in different classes or modules.In this case,
-<code>ri</code> will list all of them.If you type <code>ri ClassName.method's name</code>, it
-will show only the documentation of the corresponding class&#8217;s.</p>
-
-<p>More contributions, more reputations.If a class or module hasn&#8217;t yet documented
-in RDoc, send an email to <code>suggestions@ruby-doc.org</code> to ask them to add.</p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2013/06/30/ruby-getting-started//index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
 <nav id="pagenavi">
     
+    
+        <a href="/blog/page/2/" class="next">Next</a>
     
     <div class="center"><a href="/blog/archives">Blog Archives</a></div>
 </nav>
