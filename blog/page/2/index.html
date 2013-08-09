@@ -6,7 +6,8 @@
 	<title>Yuanhang Zheng</title>
     <meta name="author" content="Yuanhang Zheng">
     
-	<meta name="description" content="Published on: Jul 25th, 2013 Tags: Ruby String and name When defining a function, the parentheses are not necessary.So this one def say_hello name " &hellip;">
+	<meta name="description" content="Published on: Jul 26th, 2013 Tags: C++ For constructor In the constructor, the statements in the body are assignments, not
+initializations. #include &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -95,6 +96,224 @@
 <!-- begin toload --> 
     <div id="content" class="inner">
         
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2013/07/26/initialized-before-used/">
+		
+			Initialized Before Used</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-26T22:29:00+08:00" pubdate data-updated="true">Jul 26<span>th</span>, 2013</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/c-plus-plus/'>C++</a>
+
+
+</div>
+    </div>
+		<h2>For constructor</h2>
+
+<p>In the constructor, the statements in the body are assignments, not
+initializations.</p>
+
+<pre><code>#include &lt;iostream&gt;
+
+class Girl {
+public:
+    Girl(std::string name, int age)
+    {
+        name_ = name;    // These are assignments, not initilizations.
+        age_ = age;
+    }
+private:
+    std::string name_;
+    int age_;
+};
+</code></pre>
+
+<p>If you do this, the program will be very slow.When calling the constructor,
+the program will call the <strong>default construtors</strong> to initialize the members,
+and then enter the body of the constructor.Therefor, all the work performed
+in the default constructors were wasted.</p>
+
+<p>Using the initilization list instead of the assignment will be more efficient.</p>
+
+<pre><code>#include &lt;iostream&gt;
+
+class Girl {
+public:
+    Girl(std::string name, int age)
+        :name_(name), age_(age)
+    { }
+private:
+    std::string name_;
+    int age_;
+};
+</code></pre>
+
+<p>If the member is <strong>const</strong> or <strong>reference</strong>, you must use initialization list.</p>
+
+<h2>For non-local static objects defined in different translation units</h2>
+
+<p>How long the title was!</p>
+
+<p><strong>static objects</strong> include <em>global objects</em>, <em>objects defined at namespace</em>,
+<em>objects defined static inside classes</em>, <em>objects defined static inside
+functions</em> and <em>objects declared static at file scope</em>.</p>
+
+<p><em>objects defined static inside functions</em> are called <strong>non-local static objects</strong>.</p>
+
+<p>A <strong>translation unit</strong> is a single source file plus all of its <code>#include</code>files.</p>
+
+<p>Given an example.</p>
+
+<p>main.h:</p>
+
+<pre><code>#ifndef _MAIN_H_
+#define _MAIN_H_
+
+class Girl {
+public:
+    Girl(std::string name, int age)
+        :name_(name), age_(age)
+    { }
+    std::string
+    get_name() const
+    {
+        return "Mary";
+    }
+private:
+    std::string name_;
+    int age_;
+};
+
+#endif /* _MAIN_H_ */
+</code></pre>
+
+<p>main.c:</p>
+
+<pre><code>#include &lt;iostream&gt;
+#include "main.h"
+
+extern Girl wife;
+
+class Man {
+public:
+    Man(std::string name, std::string wife_name)
+        :name_(name), wife_name_()
+    {
+        wife_name_ = wife.get_name();
+    }
+private:
+    std::string name_;
+    std::string wife_name_;
+};
+
+int
+main(int argc, char **argv)
+{
+    Man m("Tom", "");
+
+    return 0;
+}
+</code></pre>
+
+<p><code>wife</code> is a non-local static object.In the constructor of class <code>Man</code>,
+<code>wife</code> will be used before it is initialized since <strong>the relative order</strong>
+<strong>of initialization of non-local static objects defined in different </strong>
+<strong>translation units is undefined</strong>.</p>
+
+<p>To let <code>wife</code> be initialized before used, change it to <strong>local static</strong>.</p>
+
+<p>main.h:</p>
+
+<pre><code>#ifndef _MAIN_H_
+#define _MAIN_H_
+
+class Girl {
+public:
+    Girl()
+    { }
+
+    Girl(std::string name, int age)
+        :name_(name), age_(age)
+    { }
+
+    std::string
+    get_name() const
+    {
+        return "Mary";
+    }
+private:
+    std::string name_;
+    int age_;
+};
+
+#endif /* _MAIN_H_ */
+</code></pre>
+
+<p>main.cpp</p>
+
+<pre><code>#include &lt;iostream&gt;
+#include "main.h"
+
+class Man {
+public:
+    Man(std::string name, std::string wife_name)
+        :name_(name), wife_name_()
+    {
+        wife_name_ = wife().get_name();
+    }
+    Girl&amp;
+    wife()
+    {
+        static Girl w;
+
+        return w;
+    }
+private:
+    std::string name_;
+    std::string wife_name_;
+};
+
+int
+main(int argc, char **argv)
+{
+    Man m("Tom", "");
+
+    return 0;
+}
+</code></pre>
+
+<p>The so-call <em>Factory pattern</em> is just like the above code.</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2013/07/26/initialized-before-used//blog/page/2/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -943,163 +1162,12 @@ interested in this great programming language.</p>
 </div>
 </article>
 
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2013/06/30/ruby-getting-started/">
-		
-			Ruby-getting Started</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-30T22:54:00+08:00" pubdate data-updated="true">Jun 30<span>th</span>, 2013</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/ruby/'>Ruby</a>
-
-
-</div>
-    </div>
-		<h1>Running ruby</h1>
-
-<h2>Interactive</h2>
-
-<p>In the past, I always tested some ruby statements with <code>irb</code>. Now I can
-test a small ruby program in the following way.</p>
-
-<pre><code>[monkey@itlodge octopress]$ ruby
-str = "abc"
-puts str
-Ctrl+d
-abc
-</code></pre>
-
-<p>After hit <code>ruby</code>, it allows me to type as many code as possible.Finally,
-press <code>Ctrl+d</code> will end the input and it will evaluate the code.</p>
-
-<h2>Programs</h2>
-
-<p>When writing a script, we always use <code>#!</code> and specific which language used
-to run the code.This is the Unix <a href="http://en.wikipedia.org/wiki/Shebang_%28Unix%29">Shebang</a> notation.For example:</p>
-
-<pre><code>#!/usr/bin/ruby -w
-puts "abc"
-</code></pre>
-
-<p>From the man page, I know that the <code>-w</code> option means <em>Enables verbose mode
-without printing version message at the beginning</em>.</p>
-
-<p>But, many guys like this style:</p>
-
-<pre><code>#!/usr/bin/env ruby
-puts "abc"
-</code></pre>
-
-<p>From the man page, I know that the <code>env</code> is a program that <em>run a program in
-a modified environment</em>.So it can search the <code>$PATH</code> and find the <code>ruby</code>
-program to run.</p>
-
-<h1>Ruby documentation</h1>
-
-<p>The site <a href="http://www.ruby-doc.org">ruby-doc.org</a> contains a complete set of the
-RDoc documentation for Ruby.</p>
-
-<p>The <code>ri</code> tool is very useful for looking up documentation.If you want to find
-the documentation for a class, just type <code>ri ClassName</code>. For example:</p>
-
-<pre><code>[monkey@itlodge ~]$ ri Vector
-= Vector &lt; Object
-
-------------------------------------------------------------------------------
-= Includes:
-Enumerable (from ruby core)
-
-(from ruby core)
-------------------------------------------------------------------------------
-The Vector class represents a mathematical vector, which is useful in its own
-right, and also constitutes a row or column of a Matrix.
-
-== Method Catalogue
-
-To create a Vector:
-*   Vector.[](*array)                   
-*   Vector.elements(array, copy = true) 
-
-To access elements:
-*   [](i)                               
-
-To enumerate the elements:
-*  #each2(v)                            
-*  #collect2(v)                         
-:
-</code></pre>
-
-<p>If you want to find the documentation for a method, just type
-<code>ri method's name</code>.For example:</p>
-
-<pre><code>[monkey@itlodge ~]$ ri sleep
-= .sleep
-
-(from ruby core)
-=== Implementation from Kernel
-------------------------------------------------------------------------------
-  sleep([duration])    -&gt; fixnum
-
-
-------------------------------------------------------------------------------
-
-Suspends the current thread for duration seconds (which may be
-any number, including a Float with fractional seconds). Returns the actual
-number of seconds slept (rounded), which may be less than that asked for if
-another thread calls Thread#run. Called without an argument, sleep() will
-sleep forever.
-
-  Time.new    #=&gt; 2008-03-08 19:56:19 +0900
-  sleep 1.2   #=&gt; 1
-  Time.new    #=&gt; 2008-03-08 19:56:20 +0900
-  sleep 1.9   #=&gt; 2
-  Time.new    #=&gt; 2008-03-08 19:56:22 +0900
-
-
-:
-</code></pre>
-
-<p>A method&#8217;s name may be the same in different classes or modules.In this case,
-<code>ri</code> will list all of them.If you type <code>ri ClassName.method's name</code>, it
-will show only the documentation of the corresponding class&#8217;s.</p>
-
-<p>More contributions, more reputations.If a class or module hasn&#8217;t yet documented
-in RDoc, send an email to <code>suggestions@ruby-doc.org</code> to ask them to add.</p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2013/06/30/ruby-getting-started//blog/page/2/index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
 <nav id="pagenavi">
     
         <a href="/" class="prev">Prev</a>
     
+    
+        <a href="/blog/page/3/" class="next">Next</a>
     
     <div class="center"><a href="/blog/archives">Blog Archives</a></div>
 </nav>

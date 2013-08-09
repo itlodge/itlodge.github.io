@@ -6,8 +6,8 @@
 	<title>Yuanhang Zheng</title>
     <meta name="author" content="Yuanhang Zheng">
     
-	<meta name="description" content="Published on: Aug 9th, 2013 Tags: C++ We all know that pass by value is not effecient.So we use pass by pointer
-in C.However, in C++, we prefer pass &hellip;">
+	<meta name="description" content="Published on: Aug 9th, 2013 Tags: C++ Once I loved C very much and I thought it&#8217;s the best programming language
+in the world. I used to argue &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -96,6 +96,163 @@ in C.However, in C++, we prefer pass &hellip;">
 <!-- begin toload --> 
     <div id="content" class="inner">
         
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2013/08/09/understanding-encapsulation/">
+		
+			Understanding Encapsulation</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-09T21:38:00+08:00" pubdate data-updated="true">Aug 9<span>th</span>, 2013</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/c-plus-plus/'>C++</a>
+
+
+</div>
+    </div>
+		<p>Once I loved <em>C</em> very much and I thought it&#8217;s the best programming language
+in the world. I used to argue that <em>C</em> can be used to implement the
+object-oriented design with <code>struct</code>. I used to argue that <code>private</code> and
+<code>public</code> is useless in <em>C++</em>. However, now I know I was wrong.</p>
+
+<h2>Why we need private</h2>
+
+<p>It&#8217;s related to a very important concept in C++, that is, <strong>encapsulation</strong>.</p>
+
+<p><strong>Encapsulation is not invisibility. It&#8217;s maintainability.</strong></p>
+
+<p>Suppose a class is very popular and is used by many projects. For example,
+the <code>string</code> class. If every members in this class is <code>public</code>, the clients
+can use many interfaces to manipulate <code>string</code>. One day, when the <code>string</code>
+class is going to be modified(some members&#8217; name change), then lots of clients
+have to modify there code. This is painful! If we declare some of the members
+<code>private</code> and change the name of the private members, only the implementations
+in the public member functions should be modified. None of the clients need to
+change their codes.</p>
+
+<p>Therefore, <strong>public means unchangable and public means unencapsulated</strong>.</p>
+
+<p>The public member functions should not be changed in the future. Since you don&#8217;t
+know how your clients will use your class, don&#8217;t expose the members that may be
+changed in the future to the clients.</p>
+
+<h2>Prefer non-member non-friend functions to member functions</h2>
+
+<p>Consider the following class.</p>
+
+<pre><code>class Person {
+public:
+    void
+    say_age() const
+    { printf("%d\n", age); }
+    void
+    say_name() const
+    { printf("%s\n", name.c_str()); }
+private:
+    int age;
+    std::string name;
+};
+</code></pre>
+
+<p>Somebody may want to use the functions together, so we add another member
+function.</p>
+
+<pre><code>class Person {
+public:
+    void
+    say_age() const
+    { printf("%d\n", age); }
+    void
+    say_name() const
+    { printf("%s\n", name.c_str()); }
+    void
+    say() const
+    {
+        say_age();
+        say_name();
+    }
+private:
+    int age;
+    std::string name;
+};
+</code></pre>
+
+<p>This is straightforward, especially for those Java and C# programmers. Every
+functions should be in a class and everything is object. It&#8217;s obvious, right?</p>
+
+<p>However, e have another option, that is, using the non-member function.</p>
+
+<pre><code>class Person {
+public:
+    void
+    say_age() const
+    { printf("%d\n", age); }
+    void
+    say_name() const
+    { printf("%s\n", name.c_str()); }
+private:
+    int age;
+    std::string name;
+};
+
+void
+person_say(const Person&amp; p)
+{
+    p.say_age();
+    p.say_name();
+}
+</code></pre>
+
+<p>Which is better? It seems that they are the same.</p>
+
+<p>We should use the non-member function instead of the member function.</p>
+
+<p>As we all know, <strong>the less the public member functions and the friend </strong>
+ <strong>functions, the greater encapsulation is</strong>, since member functions and
+friend functions are the only interface that can access the private members.</p>
+
+<p>In this example, if we add another public member function, we decrease the
+encapsulation of the class since this member function can access the private
+members of the class. But if we use the non-member non-friend function, it
+won&#8217;t have impact with the class because it&#8217;s the function outside.</p>
+
+<p>Does it explain that <em>C++</em> is not so object-oriented? From Java or C#, those
+programmers will say that everything is object and classes are everywhere.
+However, they are wrong. Object-oriented princiles state that <strong>data should be</strong>
+<strong>encapsulated as possible</strong>. Therefore, prefering non-member non-friend
+functions is more <em>object-oriented</em>.</p>
+
+<p>Until now, I can say that I really understand the meaning of encapsulation and
+why it&#8217;s so important in object-oriented programming.</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2013/08/09/understanding-encapsulation//index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -1100,224 +1257,6 @@ It really helps.</p>
 <div class="meta">
 	
 		<span class="comments"><a href="/blog/2013/07/28/about-constructors-destructors-and-assignment-operators//index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2013/07/26/initialized-before-used/">
-		
-			Initialized Before Used</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-26T22:29:00+08:00" pubdate data-updated="true">Jul 26<span>th</span>, 2013</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/c-plus-plus/'>C++</a>
-
-
-</div>
-    </div>
-		<h2>For constructor</h2>
-
-<p>In the constructor, the statements in the body are assignments, not
-initializations.</p>
-
-<pre><code>#include &lt;iostream&gt;
-
-class Girl {
-public:
-    Girl(std::string name, int age)
-    {
-        name_ = name;    // These are assignments, not initilizations.
-        age_ = age;
-    }
-private:
-    std::string name_;
-    int age_;
-};
-</code></pre>
-
-<p>If you do this, the program will be very slow.When calling the constructor,
-the program will call the <strong>default construtors</strong> to initialize the members,
-and then enter the body of the constructor.Therefor, all the work performed
-in the default constructors were wasted.</p>
-
-<p>Using the initilization list instead of the assignment will be more efficient.</p>
-
-<pre><code>#include &lt;iostream&gt;
-
-class Girl {
-public:
-    Girl(std::string name, int age)
-        :name_(name), age_(age)
-    { }
-private:
-    std::string name_;
-    int age_;
-};
-</code></pre>
-
-<p>If the member is <strong>const</strong> or <strong>reference</strong>, you must use initialization list.</p>
-
-<h2>For non-local static objects defined in different translation units</h2>
-
-<p>How long the title was!</p>
-
-<p><strong>static objects</strong> include <em>global objects</em>, <em>objects defined at namespace</em>,
-<em>objects defined static inside classes</em>, <em>objects defined static inside
-functions</em> and <em>objects declared static at file scope</em>.</p>
-
-<p><em>objects defined static inside functions</em> are called <strong>non-local static objects</strong>.</p>
-
-<p>A <strong>translation unit</strong> is a single source file plus all of its <code>#include</code>files.</p>
-
-<p>Given an example.</p>
-
-<p>main.h:</p>
-
-<pre><code>#ifndef _MAIN_H_
-#define _MAIN_H_
-
-class Girl {
-public:
-    Girl(std::string name, int age)
-        :name_(name), age_(age)
-    { }
-    std::string
-    get_name() const
-    {
-        return "Mary";
-    }
-private:
-    std::string name_;
-    int age_;
-};
-
-#endif /* _MAIN_H_ */
-</code></pre>
-
-<p>main.c:</p>
-
-<pre><code>#include &lt;iostream&gt;
-#include "main.h"
-
-extern Girl wife;
-
-class Man {
-public:
-    Man(std::string name, std::string wife_name)
-        :name_(name), wife_name_()
-    {
-        wife_name_ = wife.get_name();
-    }
-private:
-    std::string name_;
-    std::string wife_name_;
-};
-
-int
-main(int argc, char **argv)
-{
-    Man m("Tom", "");
-
-    return 0;
-}
-</code></pre>
-
-<p><code>wife</code> is a non-local static object.In the constructor of class <code>Man</code>,
-<code>wife</code> will be used before it is initialized since <strong>the relative order</strong>
-<strong>of initialization of non-local static objects defined in different </strong>
-<strong>translation units is undefined</strong>.</p>
-
-<p>To let <code>wife</code> be initialized before used, change it to <strong>local static</strong>.</p>
-
-<p>main.h:</p>
-
-<pre><code>#ifndef _MAIN_H_
-#define _MAIN_H_
-
-class Girl {
-public:
-    Girl()
-    { }
-
-    Girl(std::string name, int age)
-        :name_(name), age_(age)
-    { }
-
-    std::string
-    get_name() const
-    {
-        return "Mary";
-    }
-private:
-    std::string name_;
-    int age_;
-};
-
-#endif /* _MAIN_H_ */
-</code></pre>
-
-<p>main.cpp</p>
-
-<pre><code>#include &lt;iostream&gt;
-#include "main.h"
-
-class Man {
-public:
-    Man(std::string name, std::string wife_name)
-        :name_(name), wife_name_()
-    {
-        wife_name_ = wife().get_name();
-    }
-    Girl&amp;
-    wife()
-    {
-        static Girl w;
-
-        return w;
-    }
-private:
-    std::string name_;
-    std::string wife_name_;
-};
-
-int
-main(int argc, char **argv)
-{
-    Man m("Tom", "");
-
-    return 0;
-}
-</code></pre>
-
-<p>The so-call <em>Factory pattern</em> is just like the above code.</p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2013/07/26/initialized-before-used//index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>
