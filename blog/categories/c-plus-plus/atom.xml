@@ -4,7 +4,7 @@
   <title><![CDATA[Category: C++ | Yuanhang Zheng]]></title>
   <link href="http://itlodge.github.io/blog/categories/c-plus-plus/atom.xml" rel="self"/>
   <link href="http://itlodge.github.io/"/>
-  <updated>2013-08-09T23:03:07+08:00</updated>
+  <updated>2013-08-11T15:34:29+08:00</updated>
   <id>http://itlodge.github.io/</id>
   <author>
     <name><![CDATA[Yuanhang Zheng]]></name>
@@ -12,6 +12,158 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Postponing definitions instead of preponing]]></title>
+    <link href="http://itlodge.github.io/blog/2013/08/11/postponing-definitions-instead-of-preponing/"/>
+    <updated>2013-08-11T11:26:00+08:00</updated>
+    <id>http://itlodge.github.io/blog/2013/08/11/postponing-definitions-instead-of-preponing</id>
+    <content type="html"><![CDATA[<h2>Prepone definitions? Wrong!</h2>
+
+<p>Before C99, you must prepone all the variables' definitions before any
+statements. But after C99 was released, you can put a variable's definition
+in any place as long as before being used. I think this new feature is
+introduced by learning from C++.</p>
+
+<p>This makes programer write codes more convenient. But I used to insist the
+old style. I even teach my students that they should use the old style when
+I was a TA of the course <em>Programming with C</em>.</p>
+
+<p>However, now I realize that I was wrong. <strong>We should postpone variables'</strong>
+<strong>definitions as long as possible</strong>. It's not for coding style, but for the
+effeciency of the program.</p>
+
+<p>Consider this program.</p>
+
+<pre><code>#include &lt;cstdio&gt;
+#include &lt;iostream&gt;
+
+void
+save_pwd(const std::string&amp; pwd)
+{
+    std::string salted_pwd("abc");
+
+    if (pwd.size() &lt; 6) {
+        fprintf(stderr, "Password too short.");
+        return;
+    }
+    salted_pwd += pwd;
+    ...
+}
+
+int
+main(int argc, char **argv)
+{
+    save_pwd("ddd");
+
+    return 0;
+}
+</code></pre>
+
+<p>When running this program, it will print an error and exit the function.
+The variable <code>salted_pwd</code> is not used. So, defining <code>salted_pwd</code> above
+the <code>if</code> statement will waste the memory, the time to allocate memory and
+the time to free memory. For the view of C++, you will pay for the cost of
+construction and destruction of the object <code>salted_pwd</code>.</p>
+
+<h2>Define and then assign? Wrong!</h2>
+
+<p>When I first learned programming in C, my teacher says that</p>
+
+<pre><code>int a;
+a = 1;
+</code></pre>
+
+<p>is the same as</p>
+
+<pre><code>int a = 1;
+</code></pre>
+
+<p>Now I realize that they are not the same and the latter is more effecient.</p>
+
+<p>For the former, <code>int a;</code> will allocate memory for the variable <code>a</code> and
+then fill zero bytes in the memory. Then <code>a = 1;</code> will write value <code>1</code>
+in the memory.
+For the latter, <code>int a = 1;</code> will directly allocate memory for the variable
+<code>a</code> and then write value <code>1</code> in the memory.
+In other words, you will pay more cost when using the former style.</p>
+
+<p>It seems that it makes little difference with the built-in type. When the
+type of the variable <code>a</code> is user-defined type, great difference appears.</p>
+
+<p>For example,</p>
+
+<pre><code>std::string str;
+...
+std::string = "abc";
+</code></pre>
+
+<p>This will first call the default constructor of <code>std::string</code> and then call
+the copy assignment operator. So the time and memory used in the default
+constructor is wasted.</p>
+
+<p>If we define an object in this way</p>
+
+<pre><code>std::string str("abc");
+</code></pre>
+
+<p>or</p>
+
+<pre><code>std::string str = "abc";
+</code></pre>
+
+<p>, it will only call the copy constructor. This is more effecient.</p>
+
+<p>So now I prefer this way</p>
+
+<pre><code>for (int i = 0; i &lt; n; i++) {
+    ...
+}
+</code></pre>
+
+<p>instead of</p>
+
+<pre><code>int i;
+
+for (i = 0; i &lt; n; i++) {
+    ...
+}
+</code></pre>
+
+<p>Now there is a special case that is worth thinking.</p>
+
+<pre><code>Person p;
+for (int i = 0; i &lt; n; i++) {
+    p = persons[i];
+    ...
+}
+</code></pre>
+
+<p>and</p>
+
+<pre><code>for (int i = 0; i &lt; n; i++) {
+    Person p = persons[i];
+    ...
+}
+</code></pre>
+
+<p>, which is better?</p>
+
+<p>Let's analysis the performance of them.
+* The former need 1 construction, n assignments and 1 destruction. But it makes
+the object <code>p</code> in a larger scope, which increase the comprehensibility and
+maintainability of the program.
+* The latter need n constructions and n destructions.</p>
+
+<p>Which is more effecient? I think it all depends. If assignment is less expensive
+than the total of construction and destruction, we should use the former style.
+On the contray, we should use the latter style.</p>
+
+<p>The author of <strong>Effective C++</strong> prefers the latter, but I prefer the former,
+since I am sensitive with performance and I think memory allocation and free
+will be more expensive than assignment.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Understanding Encapsulation]]></title>
@@ -909,189 +1061,6 @@ when writing my own constructors, copy constructor, assignment operator.</p>
 
 <p>That is all about constructors, copy constructor and copy assignment operator.
 It really helps.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Initialized before used]]></title>
-    <link href="http://itlodge.github.io/blog/2013/07/26/initialized-before-used/"/>
-    <updated>2013-07-26T22:29:00+08:00</updated>
-    <id>http://itlodge.github.io/blog/2013/07/26/initialized-before-used</id>
-    <content type="html"><![CDATA[<h2>For constructor</h2>
-
-<p>In the constructor, the statements in the body are assignments, not
-initializations.</p>
-
-<pre><code>#include &lt;iostream&gt;
-
-class Girl {
-public:
-    Girl(std::string name, int age)
-    {
-        name_ = name;    // These are assignments, not initilizations.
-        age_ = age;
-    }
-private:
-    std::string name_;
-    int age_;
-};
-</code></pre>
-
-<p>If you do this, the program will be very slow.When calling the constructor,
-the program will call the <strong>default construtors</strong> to initialize the members,
-and then enter the body of the constructor.Therefor, all the work performed
-in the default constructors were wasted.</p>
-
-<p>Using the initilization list instead of the assignment will be more efficient.</p>
-
-<pre><code>#include &lt;iostream&gt;
-
-class Girl {
-public:
-    Girl(std::string name, int age)
-        :name_(name), age_(age)
-    { }
-private:
-    std::string name_;
-    int age_;
-};
-</code></pre>
-
-<p>If the member is <strong>const</strong> or <strong>reference</strong>, you must use initialization list.</p>
-
-<h2>For non-local static objects defined in different translation units</h2>
-
-<p>How long the title was!</p>
-
-<p><strong>static objects</strong> include <em>global objects</em>, <em>objects defined at namespace</em>,
-<em>objects defined static inside classes</em>, <em>objects defined static inside
-functions</em> and <em>objects declared static at file scope</em>.</p>
-
-<p><em>objects defined static inside functions</em> are called <strong>non-local static objects</strong>.</p>
-
-<p>A <strong>translation unit</strong> is a single source file plus all of its <code>#include</code>files.</p>
-
-<p>Given an example.</p>
-
-<p>main.h:</p>
-
-<pre><code>#ifndef _MAIN_H_
-#define _MAIN_H_
-
-class Girl {
-public:
-    Girl(std::string name, int age)
-        :name_(name), age_(age)
-    { }
-    std::string
-    get_name() const
-    {
-        return "Mary";
-    }
-private:
-    std::string name_;
-    int age_;
-};
-
-#endif /* _MAIN_H_ */
-</code></pre>
-
-<p>main.c:</p>
-
-<pre><code>#include &lt;iostream&gt;
-#include "main.h"
-
-extern Girl wife;
-
-class Man {
-public:
-    Man(std::string name, std::string wife_name)
-        :name_(name), wife_name_()
-    {
-        wife_name_ = wife.get_name();
-    }
-private:
-    std::string name_;
-    std::string wife_name_;
-};
-
-int
-main(int argc, char **argv)
-{
-    Man m("Tom", "");
-
-    return 0;
-}
-</code></pre>
-
-<p><code>wife</code> is a non-local static object.In the constructor of class <code>Man</code>,
-<code>wife</code> will be used before it is initialized since <strong>the relative order</strong>
-<strong>of initialization of non-local static objects defined in different </strong>
-<strong>translation units is undefined</strong>.</p>
-
-<p>To let <code>wife</code> be initialized before used, change it to <strong>local static</strong>.</p>
-
-<p>main.h:</p>
-
-<pre><code>#ifndef _MAIN_H_
-#define _MAIN_H_
-
-class Girl {
-public:
-    Girl()
-    { }
-
-    Girl(std::string name, int age)
-        :name_(name), age_(age)
-    { }
-
-    std::string
-    get_name() const
-    {
-        return "Mary";
-    }
-private:
-    std::string name_;
-    int age_;
-};
-
-#endif /* _MAIN_H_ */
-</code></pre>
-
-<p>main.cpp</p>
-
-<pre><code>#include &lt;iostream&gt;
-#include "main.h"
-
-class Man {
-public:
-    Man(std::string name, std::string wife_name)
-        :name_(name), wife_name_()
-    {
-        wife_name_ = wife().get_name();
-    }
-    Girl&amp;
-    wife()
-    {
-        static Girl w;
-
-        return w;
-    }
-private:
-    std::string name_;
-    std::string wife_name_;
-};
-
-int
-main(int argc, char **argv)
-{
-    Man m("Tom", "");
-
-    return 0;
-}
-</code></pre>
-
-<p>The so-call <em>Factory pattern</em> is just like the above code.</p>
 ]]></content>
   </entry>
   

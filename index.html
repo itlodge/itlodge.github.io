@@ -6,8 +6,7 @@
 	<title>Yuanhang Zheng</title>
     <meta name="author" content="Yuanhang Zheng">
     
-	<meta name="description" content="Published on: Aug 9th, 2013 Tags: C++ Once I loved C very much and I thought it&#8217;s the best programming language
-in the world. I used to argue &hellip;">
+	<meta name="description" content="Published on: Aug 11th, 2013 Tags: C++ Prepone definitions? Wrong! Before C99, you must prepone all the variables&#8217; definitions before any &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -96,6 +95,193 @@ in the world. I used to argue &hellip;">
 <!-- begin toload --> 
     <div id="content" class="inner">
         
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2013/08/11/postponing-definitions-instead-of-preponing/">
+		
+			Postponing Definitions Instead of Preponing</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-11T11:26:00+08:00" pubdate data-updated="true">Aug 11<span>th</span>, 2013</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/c-plus-plus/'>C++</a>
+
+
+</div>
+    </div>
+		<h2>Prepone definitions? Wrong!</h2>
+
+<p>Before C99, you must prepone all the variables&#8217; definitions before any
+statements. But after C99 was released, you can put a variable&#8217;s definition
+in any place as long as before being used. I think this new feature is
+introduced by learning from C++.</p>
+
+<p>This makes programer write codes more convenient. But I used to insist the
+old style. I even teach my students that they should use the old style when
+I was a TA of the course <em>Programming with C</em>.</p>
+
+<p>However, now I realize that I was wrong. <strong>We should postpone variables&#8217;</strong>
+<strong>definitions as long as possible</strong>. It&#8217;s not for coding style, but for the
+effeciency of the program.</p>
+
+<p>Consider this program.</p>
+
+<pre><code>#include &lt;cstdio&gt;
+#include &lt;iostream&gt;
+
+void
+save_pwd(const std::string&amp; pwd)
+{
+    std::string salted_pwd("abc");
+
+    if (pwd.size() &lt; 6) {
+        fprintf(stderr, "Password too short.");
+        return;
+    }
+    salted_pwd += pwd;
+    ...
+}
+
+int
+main(int argc, char **argv)
+{
+    save_pwd("ddd");
+
+    return 0;
+}
+</code></pre>
+
+<p>When running this program, it will print an error and exit the function.
+The variable <code>salted_pwd</code> is not used. So, defining <code>salted_pwd</code> above
+the <code>if</code> statement will waste the memory, the time to allocate memory and
+the time to free memory. For the view of C++, you will pay for the cost of
+construction and destruction of the object <code>salted_pwd</code>.</p>
+
+<h2>Define and then assign? Wrong!</h2>
+
+<p>When I first learned programming in C, my teacher says that</p>
+
+<pre><code>int a;
+a = 1;
+</code></pre>
+
+<p>is the same as</p>
+
+<pre><code>int a = 1;
+</code></pre>
+
+<p>Now I realize that they are not the same and the latter is more effecient.</p>
+
+<p>For the former, <code>int a;</code> will allocate memory for the variable <code>a</code> and
+then fill zero bytes in the memory. Then <code>a = 1;</code> will write value <code>1</code>
+in the memory.
+For the latter, <code>int a = 1;</code> will directly allocate memory for the variable
+<code>a</code> and then write value <code>1</code> in the memory.
+In other words, you will pay more cost when using the former style.</p>
+
+<p>It seems that it makes little difference with the built-in type. When the
+type of the variable <code>a</code> is user-defined type, great difference appears.</p>
+
+<p>For example,</p>
+
+<pre><code>std::string str;
+...
+std::string = "abc";
+</code></pre>
+
+<p>This will first call the default constructor of <code>std::string</code> and then call
+the copy assignment operator. So the time and memory used in the default
+constructor is wasted.</p>
+
+<p>If we define an object in this way</p>
+
+<pre><code>std::string str("abc");
+</code></pre>
+
+<p>or</p>
+
+<pre><code>std::string str = "abc";
+</code></pre>
+
+<p>, it will only call the copy constructor. This is more effecient.</p>
+
+<p>So now I prefer this way</p>
+
+<pre><code>for (int i = 0; i &lt; n; i++) {
+    ...
+}
+</code></pre>
+
+<p>instead of</p>
+
+<pre><code>int i;
+
+for (i = 0; i &lt; n; i++) {
+    ...
+}
+</code></pre>
+
+<p>Now there is a special case that is worth thinking.</p>
+
+<pre><code>Person p;
+for (int i = 0; i &lt; n; i++) {
+    p = persons[i];
+    ...
+}
+</code></pre>
+
+<p>and</p>
+
+<pre><code>for (int i = 0; i &lt; n; i++) {
+    Person p = persons[i];
+    ...
+}
+</code></pre>
+
+<p>, which is better?</p>
+
+<p>Let&#8217;s analysis the performance of them.
+* The former need 1 construction, n assignments and 1 destruction. But it makes
+the object <code>p</code> in a larger scope, which increase the comprehensibility and
+maintainability of the program.
+* The latter need n constructions and n destructions.</p>
+
+<p>Which is more effecient? I think it all depends. If assignment is less expensive
+than the total of construction and destruction, we should use the former style.
+On the contray, we should use the latter style.</p>
+
+<p>The author of <strong>Effective C++</strong> prefers the latter, but I prefer the former,
+since I am sensitive with performance and I think memory allocation and free
+will be more expensive than assignment.</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2013/08/11/postponing-definitions-instead-of-preponing//index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -932,331 +1118,6 @@ should use <code>delete []p;</code>.</p>
 <div class="meta">
 	
 		<span class="comments"><a href="/blog/2013/08/01/cpp-resource-management//index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2013/07/28/about-constructors-destructors-and-assignment-operators/">
-		
-			About Constructors Destructors and Assignment Operators</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-28T18:32:00+08:00" pubdate data-updated="true">Jul 28<span>th</span>, 2013</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/c-plus-plus/'>C++</a>
-
-
-</div>
-    </div>
-		<h2>What functions C++ will silently write and call?</h2>
-
-<p>If we declare an empty class, the compiler will declare a constructor,
-a copy constructor, a copy assignment operator and a destructor for us.</p>
-
-<pre><code>class Girl {
-
-};
-</code></pre>
-
-<p>But the compiler is not foolish, it will only generate them when needed.</p>
-
-<p>What do the generated functions do?</p>
-
-<ul>
-<li><p>For construtor, it will invoke the corresponding constructor and non-static
-members of its base class.</p></li>
-<li><p>For destructor, it will invoke the corresponding destructor of its base class.
-If its base class&#8217;s destructor is virtual, the destructor will declare as
-virtual.</p></li>
-<li><p>For copy constructor and copy assignment operator, they will copy each
-non-static data member from the source object to the target object.</p></li>
-</ul>
-
-
-<p>If the class has some members that are pointer, reference or constant, there
-will be some trouble with the compiler.Therefore, always define the four
-functions when we define our own class.</p>
-
-<h2>Disallow the use of generated functions you don&#8217;t want</h2>
-
-<p>Sometimes, we may not want the copy constructor or the copy assignment
-operator because every member may be different with the other object&#8217;s
-members.Preventing the generation of these functions will make the
-program more effecient.</p>
-
-<p>If we don&#8217;t declare these two functions, the compiler will generate them
-for us.</p>
-
-<p>So how can we do?</p>
-
-<p>The prefer solution is <strong>declare the copy constructor and copy assignment</strong>
-<strong>operator as private and never implement them</strong>.</p>
-
-<p>If we implement them, the members and friends of the class can call them.But
-if we don&#8217;t implement them, the linker will complain at it.</p>
-
-<p>In order to move the link-time error to the compile time, we should let the
-members and the friends of the class cannot call them.One method is to define
-a base class that can&#8217;t be copied and inherited by the class that you don&#8217;t
-want it to be copyable.</p>
-
-<pre><code>class Uncopyable {
-protected:
-    Uncopyable()
-    { }
-    ~Uncopyable()
-    { }
-private:
-    Uncopyable(const Uncopyable&amp;);
-    Uncopyable&amp; operator=(const Uncopyable&amp;);
-};
-
-class Person: private Uncopyable {
-
-};
-</code></pre>
-
-<p>The copy constructor and copy assignment operator of the class <code>Uncopyable</code>
-are declared as private, so the members and friends of class <code>Person</code> can&#8217;t
-call them.</p>
-
-<h2>Declare destructors virtual in polymorphic base classes</h2>
-
-<p>I have met this problem in an interview.</p>
-
-<p>Suppose the destructor of the base class is not virtual.</p>
-
-<pre><code>class Dog {
-public:
-    Dog();
-    ~Dog();
-};
-</code></pre>
-
-<p>And there are two class inherited from it.</p>
-
-<pre><code>class Whippet:public Dog {
-
-};
-
-class Spaniel:public Dog {
-
-};
-</code></pre>
-
-<p>We can use a base class pointer to handle the derived classes.</p>
-
-<pre><code>Dog *aDog = new Whippet();
-...
-</code></pre>
-
-<p>Then you should delete the pointer when you want to quit.</p>
-
-<pre><code>delete aDog;
-</code></pre>
-
-<p>Now, the problem appears.The C++ specifies that when a derived class
-object is deleted through a pointer to a base class with a non-virtual
-destructor, results are undefined.</p>
-
-<p>That is, the destructor of the base class will be called typically, but
-the destructor of the derived class may not be called.</p>
-
-<p>I have written a simple program to test it.</p>
-
-<pre><code>#include &lt;cstdio&gt;
-
-class Dog {
-public:
-    Dog()
-    { }
-    ~Dog()
-    {
-        printf("Call Dog's destructor\n");
-    }
-private:
-    Dog(const Dog&amp;);
-    Dog&amp;
-    operator=(const Dog&amp;);
-};
-
-class Whippet:public Dog {
-public:
-    Whippet()
-    { }
-    ~Whippet()
-    {
-        printf("Call Whippet's destructor\n");
-    }
-};
-
-int
-main(int argc, char **argv)
-{
-    Dog *aDog = new Whippet();
-    delete aDog;
-
-    return 0;
-}
-</code></pre>
-
-<p>I run the program several times and the results are the same.</p>
-
-<pre><code>~/test $ ./test 
-Call Dog's destructor
-</code></pre>
-
-<p>Now, if I change the destrutor to <code>virtual</code>, the result is:</p>
-
-<pre><code>virtual ~Dog()
-{
-    printf("Call Dog's destructor\n");
-}
-
-~/test $ ./test 
-Call Whippet's destructor
-Call Dog's destructor
-</code></pre>
-
-<p>Therefore, when the base class have virtual member functions, you should
-always make the destructor virtual.</p>
-
-<p>However, not every destructor of any class should be virtual.Making it
-virtual will occupy some additional information(virtual table pointer)
-that can increase the size of an object of that class.</p>
-
-<p><strong>Prevent exceptions from leaving destructors</strong></p>
-
-<p><strong>Never call virtual functions during construction or destruction</strong></p>
-
-<p>I have seen the assignment operator in this form many times.</p>
-
-<pre><code>Person&amp; operator=(const Person&amp; p)
-{
-    ...
-    return *this;
-}
-</code></pre>
-
-<p>First, the parameter is passed by const-reference, which is more effecient.
-Second, the function returns a reference of the object.This is more effecient
-when doing this.</p>
-
-<pre><code>p3 = p2 = p1;
-</code></pre>
-
-<p>Remember that always write assignment operator in this form.</p>
-
-<p>This is also appropriate with <code>+=</code>, <code>*=</code> and so on.</p>
-
-<p>Sometimes we may assignment to the object itself.</p>
-
-<pre><code>Person p;
-p = p;
-</code></pre>
-
-<p>It seems impossible, but how about this.</p>
-
-<pre><code>persons[i] = persons[j];
-*p1 = *p2;
-</code></pre>
-
-<p><code>persons[i]</code> and <code>persons[j]</code> may be the same.<code>p1</code> and <code>p2</code> may point
-to the same object.</p>
-
-<p>Some assignment operator may be like this one.</p>
-
-<pre><code>Disk&amp;
-Disk::operator=(const Disk&amp; d)
-{
-    delete data;
-    data = new Disk(*(d.data));
-
-    return *this;
-}
-</code></pre>
-
-<p>It seems reasonable that delete the original data and then allocate a
-new one using the data of <code>d</code>.</p>
-
-<p>However, this is very dangerous.What if <code>this</code> is the same as <code>d</code>?
-If that happened, the content of <code>data</code> and <code>d.data</code> is the same
-thing.So the content of <code>d.data</code> have been delete before call the
-copy constructor.</p>
-
-<p>A direct solution to this problem is obvious.That is, just check if they
-are the same.</p>
-
-<pre><code>Disk&amp;
-Disk::operator=(const Disk&amp; d)
-{
-    if (this == &amp;d) {
-        return *this;
-    }
-    delete data;
-    data = new Disk(*(d.data));
-
-    return *this;
-}
-</code></pre>
-
-<p>I prefer the above solution.But there are another solution.</p>
-
-<pre><code>Disk&amp;
-Disk::operator=(const Disk&amp; d)
-{
-    Disk *origin = data;
-    data = new Disk(*(d.data));
-    delete origin;
-
-    return *this;
-}
-</code></pre>
-
-<p>This code just change the order of some statement, but it make great
-difference.</p>
-
-<p><strong>When adding a member to a class, remember to update the constructors,</strong>
-<strong>destructor, copy constructor, copy assignment operator</strong>.</p>
-
-<p><strong>Don&#8217;t miss anyone!</strong></p>
-
-<p>When a class is a derived class, make sure to call the constructors,
-copy constructor and copy assignment operator of the base class, respectively
-when writing my own constructors, copy constructor, assignment operator.</p>
-
-<p><strong>Do not call copy constructor in the copy assignment operator.</strong>
-<strong>Do not call copy assignment operator in the copy constructor.</strong></p>
-
-<p>That is all about constructors, copy constructor and copy assignment operator.
-It really helps.</p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2013/07/28/about-constructors-destructors-and-assignment-operators//index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>
