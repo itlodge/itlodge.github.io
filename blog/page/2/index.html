@@ -6,7 +6,8 @@
 	<title>Yuanhang Zheng</title>
     <meta name="author" content="Yuanhang Zheng">
     
-	<meta name="description" content="Published on: Jul 28th, 2013 Tags: C++ What functions C++ will silently write and call? If we declare an empty class, the compiler will declare a &hellip;">
+	<meta name="description" content="Published on: Aug 1st, 2013 Tags: C++ I always forget freeing a memory that allocated from the heap.And I always
+forget closing the file handler. &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -95,6 +96,425 @@
 <!-- begin toload --> 
     <div id="content" class="inner">
         
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2013/08/01/cpp-resource-management/">
+		
+			Cpp Resource Management</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-01T22:16:00+08:00" pubdate data-updated="true">Aug 1<span>st</span>, 2013</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/c-plus-plus/'>C++</a>
+
+
+</div>
+    </div>
+		<p>I always forget freeing a memory that allocated from the heap.And I always
+forget closing the file handler.</p>
+
+<p>Resources include file descriptors, mutex locks, fonts, brushes, database
+connections and network sockets.</p>
+
+<p>I think less programmers can remember closing a file handler, especially
+in a large project.</p>
+
+<p>Nowadays, many programming languages have the garbage collection function.
+In C++, since the destructor will be automatically called, we can release
+the resources automatically if we put the resource into an object.</p>
+
+<p>How can do that?Use the <em>smart pointer</em>:<code>std::auto_ptr</code>.</p>
+
+<pre><code>#include &lt;cstdio&gt;
+#include &lt;memory&gt;
+
+int
+main(int argc, char **argv)
+{
+    int *num = NULL;
+    {
+        num = new int();
+        std::auto_ptr&lt;int&gt; ap(num);
+    }
+    // delete num;
+
+    return 0;
+}
+</code></pre>
+
+<p>If trying to delete num after the block, that will be a double free error.</p>
+
+<p>Reference from <a href="http://www.cplusplus.com/reference/memory/auto_ptr/">cplusplus.com</a>, <code>auto_ptr</code> is deprecated in C++11 and is replaced by <code>unique_ptr</code>.
+But they are similar.</p>
+
+<p>However, multiple <code>auto_ptr</code> cannot contain the same object.</p>
+
+<p>Here is the test program.</p>
+
+<pre><code>#include &lt;cstdio&gt;
+#include &lt;memory&gt;
+
+int
+main(int argc, char **argv)
+{
+    int *num = NULL;
+    {
+        num = new int();
+        std::auto_ptr&lt;int&gt; ap1(num);
+        std::auto_ptr&lt;int&gt; ap2(ap1);
+
+        printf("%p\n", &amp;ap1);
+        ap1 = ap2;
+        printf("%p\n", &amp;ap2);
+    }
+    // delete num;
+
+    return 0;
+}
+</code></pre>
+
+<p>And here is the gdb debug output information.</p>
+
+<pre><code>Temporary breakpoint 1, main (argc=1, argv=0x7fffffffe6e8) at test.cpp:7
+7       int *num = NULL;
+(gdb) n
+9       num = new int();
+(gdb) n
+10      std::auto_ptr&lt;int&gt; ap1(num);
+(gdb) n
+11      std::auto_ptr&lt;int&gt; ap2(ap1);
+(gdb) p ap1
+$1 = {_M_ptr = 0x601010}
+(gdb) p ap2
+$2 = {_M_ptr = 0x7fff00000001}
+(gdb) n
+13      printf("%p\n", &amp;ap1);
+(gdb) p ap1
+$3 = {_M_ptr = 0x0}
+(gdb) p ap2
+$4 = {_M_ptr = 0x601010}
+(gdb) n
+0x7fffffffe5e0
+14      ap1 = ap2;
+(gdb) p ap1
+$5 = {_M_ptr = 0x0}
+(gdb) p ap2
+$6 = {_M_ptr = 0x601010}
+(gdb) n
+15      printf("%p\n", &amp;ap2);
+(gdb) p ap1
+$7 = {_M_ptr = 0x601010}
+(gdb) p ap2
+$8 = {_M_ptr = 0x0}
+(gdb) 
+</code></pre>
+
+<p>But there are another smart pointer that can do this.It&#8217;s the
+<code>std::tr1::shared_ptr</code>.Mutiple shared_ptr can contain the same object.</p>
+
+<p>The testing program is as follow.</p>
+
+<pre><code>#include &lt;cstdio&gt;
+#include &lt;tr1/memory&gt;
+
+int
+main(int argc, char **argv)
+{
+    int *num = NULL;
+    {
+        num = new int();
+        std::tr1::shared_ptr&lt;int&gt; ap1(num);
+        std::tr1::shared_ptr&lt;int&gt; ap2(ap1);
+
+        printf("%p\n", &amp;ap1);
+        ap1 = ap2;
+        printf("%p\n", &amp;ap2);
+    }
+
+    return 0;
+}
+</code></pre>
+
+<p>And the gdb debug information is:</p>
+
+<pre><code>Temporary breakpoint 1, main (argc=1, argv=0x7fffffffe6e8) at test.cpp:7
+7       int *num = NULL;
+(gdb) n
+9       num = new int();
+(gdb) n
+10      std::tr1::shared_ptr&lt;int&gt; ap1(num);
+(gdb) n
+11      std::tr1::shared_ptr&lt;int&gt; ap2(ap1);
+(gdb) n
+13      printf("%p\n", &amp;ap1);
+(gdb) p ap1
+$1 = std::tr1::shared_ptr (count 2, weak 0) 0x602010
+(gdb) p ap2
+$2 = std::tr1::shared_ptr (count 2, weak 0) 0x602010
+(gdb) n
+0x7fffffffe5d0
+14      ap1 = ap2;
+(gdb) n
+15      printf("%p\n", &amp;ap2);
+(gdb) p ap1
+$3 = std::tr1::shared_ptr (count 2, weak 0) 0x602010
+(gdb) p ap2
+$4 = std::tr1::shared_ptr (count 2, weak 0) 0x602010
+</code></pre>
+
+<p>We can see that both of <code>ap1</code> and <code>ap2</code> point to the same object.</p>
+
+<p>The <code>auto_ptr</code> and <code>shared_ptr</code> use <code>delete</code> but not <code>delete[]</code>,
+so they don&#8217;t support array.But the <code>unique_ptr</code> support.</p>
+
+<p>Sometimes, the resource may be a mutex, and we don&#8217;t want to remember
+unlocking the mutex every time we lock it.So a resource management object
+may be:</p>
+
+<pre><code>#include &lt;cstdio&gt;
+
+typedef int Mutex;
+
+void
+lock(Mutex *p)
+{
+    printf("Locking...\n");
+}
+
+void
+unlock(Mutex *p)
+{
+    printf("Unlocked\n");
+}
+
+class Lock {
+public:
+    explicit Lock(Mutex *p)
+        :pMutex(p)
+    {
+        lock(pMutex);
+    }
+    ~Lock()
+    {
+        unlock(pMutex);
+    }
+private:
+    Mutex *pMutex;
+};
+
+int
+main(int argc, char **argv)
+{
+    Mutex m;
+    {
+        Lock ml(&amp;m);
+    }
+
+    return 0;
+}
+</code></pre>
+
+<p>However, when we copy the <code>Lock</code> object, problems appear.</p>
+
+<pre><code>Lock ml2(ml);
+</code></pre>
+
+<p>The default copy constructor will directly copy the pointer <code>pMutex</code> to
+the target object.So we should let the object uncopyable.</p>
+
+<pre><code>private:
+Lock(const Lock&amp;);
+Lock&amp;
+operator=(const Lock&amp;);
+
+Mutex *pMutex;
+</code></pre>
+
+<p>Multiple objects can use the same resource, so the resource may be existed
+until the last object has been destroyed.The <code>tr1::shared_ptr</code> provide a
+<code>deleter</code> and its <strong>shared ability</strong> to solve this problem.</p>
+
+<pre><code>class Lock {
+public:
+    explicit Lock(Mutex *p)
+        :pMutex(p, unlock)
+    {
+        lock(pMutex.get());
+    }
+private:
+    Lock(const Lock&amp;);
+    Lock&amp;
+    operator=(const Lock&amp;);
+
+    std::tr1::shared_ptr&lt;Mutex&gt; pMutex;
+};
+</code></pre>
+
+<h2>Provide access to raw resources</h2>
+
+<p>Sometimes we may only want to access the raw resource but the object that
+contains the resource.For example:</p>
+
+<pre><code>#include &lt;cstdio&gt;
+#include &lt;tr1/memory&gt;
+
+typedef int Mutex;
+
+static Mutex *
+createMutex()
+{
+    static Mutex *p = new Mutex();
+
+    return p;
+}
+
+int
+main(int argc, char **argv)
+{
+    std::tr1::shared_ptr&lt;Mutex&gt; pMutex;
+
+    printf("%d\n", pMutex);
+
+    return 0;
+}
+</code></pre>
+
+<p>Therefore, we must provide a method to access the raw resource.Like this.</p>
+
+<pre><code>    printf("%d\n", pMutex.get());
+</code></pre>
+
+<p>There are two ways, one is explicit and the other is implicit.</p>
+
+<pre><code>class MutexManager {
+public:
+    explicit MutexManager(Mutex* p)
+        :p_(p)
+    { }
+    ~MutexManager()
+    {
+        delete p_;
+    }
+    Mutex
+    get() const
+    {
+        return *p_;
+    }
+private:
+    Mutex *p_;
+};
+
+int
+main(int argc, char **argv)
+{
+    MutexManager mm(createMutex());
+
+    printf("%d\n", mm.get());
+
+    return 0;
+}
+</code></pre>
+
+<p>This one above is exciplit conversion.And this one below is implicit.</p>
+
+<pre><code>class MutexManager {
+public:
+    explicit MutexManager(Mutex* p)
+        :p_(p)
+    { }
+    ~MutexManager()
+    {
+        delete p_;
+    }
+    operator Mutex() const
+    {
+        return *p_;
+    }
+private:
+    Mutex *p_;
+};
+
+void
+print(Mutex m)
+{
+    printf("%d\n", m);
+}
+
+int
+main(int argc, char **argv)
+{
+    MutexManager mm(createMutex());
+
+    print(mm);
+
+    return 0;
+}
+</code></pre>
+
+<p>It&#8217;s obviously that the explicit method is safer and the implicit method is
+more convenient for clients.</p>
+
+<h2>Keep new and delete in the same form</h2>
+
+<p>We all know that the following code is wrong.</p>
+
+<pre><code>std::string *str = new std::string[10];
+delete str;
+</code></pre>
+
+<p>We should use <code>delete []str;</code> instead of <code>delete str;</code>.</p>
+
+<p>But how about this?</p>
+
+<pre><code>#include &lt;iostream&gt;
+
+typedef std::string Lines[4];
+
+int
+main(int argc, char **argv)
+{
+    std::string *p = new Lines;
+    delete p;
+
+    return 0;
+}
+</code></pre>
+
+<p>If let me delete the pointer p, I will use this <code>delete p;</code>.But I am wrong.
+I shouldn&#8217;t look at the left of the pointer, that is, <code>std::string</code>.I should
+look at the right of the <code>new</code>, that is, <code>Lines</code>.So, in this case, we
+should use <code>delete []p;</code>.</p>
+
+<p>Avoid typedef for array types, use <code>vector</code> instead.</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2013/08/01/cpp-resource-management//blog/page/2/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -1057,237 +1477,6 @@ code, use it anyway.</p>
 <div class="meta">
 	
 		<span class="comments"><a href="/blog/2013/07/24/const-anyway//blog/page/2/index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2013/07/23/more-consts-enums-inlines-and-less-defines/">
-		
-			More Consts Enums Inlines and Less #defines</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-23T21:33:00+08:00" pubdate data-updated="true">Jul 23<span>rd</span>, 2013</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/c-plus-plus/'>C++</a>
-
-
-</div>
-    </div>
-		<p>This is an old topic.</p>
-
-<h1>For constants</h1>
-
-<p>Consider a macro below.</p>
-
-<pre><code>#define PI 3.14
-</code></pre>
-
-<p>There are several drawbacks when using a macro.</p>
-
-<ul>
-<li><p>It&#8217;s hard to debug.As we all know, the macros are resolved by the
-preprocessor and the compiler know nothing about them.When you get an error
-when compiling the program, the error message may refer to <code>3.14</code> but not
-<code>PI</code> because <code>PI</code> is not in the symbol table.</p></li>
-<li><p>It will result in more object codes.When the preprocessor replace <code>PI</code>
-with <code>3.14</code>, there will be several copy of 3.14 in the object code.</p></li>
-</ul>
-
-
-<p>If we use the <strong>constant</strong> instead of the macro,</p>
-
-<pre><code>const double Pi = 3.14;
-</code></pre>
-
-<p>it has the following advantages, respectively.</p>
-
-<ul>
-<li><p>It&#8217;s easy to debug, since the constant is in the symble table.</p></li>
-<li><p>It has only one copy in the object code.The other place it appears is just
-its references.</p></li>
-</ul>
-
-
-<p>But I think it has disadvantages too.</p>
-
-<p>When replacing lots of <strong>macros</strong> with <strong>constant</strong>, there will be
-lots of entries in the symbol table.And it will make the object files or
-executable files larger.</p>
-
-<p>When defining a constant string, we may want to do this.</p>
-
-<pre><code>const char *Name = "Tom";
-</code></pre>
-
-<p>But this is not effecient.</p>
-
-<p>If defined above, the value &#8220;Tom&#8221; cannot be changed, but what the pointer
-<code>Name</code> points to can be changed.So the compiler will allocate a piece of
-memory for the pointer <code>Name</code> in the normal data segment.Moreover, when
-the linker starts working, it need to perform some relocations for <code>Name</code>.</p>
-
-<p>So, it&#8217;s better to be defined as follows.</p>
-
-<pre><code>const char * const Name = "Tom";
-</code></pre>
-
-<p>or</p>
-
-<pre><code>const char Name[] = "Tom";
-</code></pre>
-
-<p>Now the compiler will put <code>Name</code> in the read only data segment and the linker
-needn&#8217;t performing relocations.</p>
-
-<p>Alternatively, we can use this.</p>
-
-<pre><code>const std::string Name("Tom");
-</code></pre>
-
-<h1>For class-specific constants</h1>
-
-<p>Sometimes we need a constant member in the class, for example.</p>
-
-<pre><code>class Hand {
-private:
-    static const int NumFingers = 5;
-    int fingers[NumFingers];
-};
-</code></pre>
-
-<p>In order to ensure there is only one copy of the constant, it must be
-<code>static</code>.</p>
-
-<p>However, <code>static const int NumFingers = 5;</code> is just a <strong>declaration</strong> for
-<code>NumFinger</code>.Why this can be compiled with no error message?Everything
-should have its definition, does it?However, the class-specific constants
-that are static and with integral type(<code>int</code>, <code>char</code>, <code>bool</code>,&#8230;) is
-an exception.</p>
-
-<p>You can even use the constant.</p>
-
-<pre><code>#include &lt;cstdio&gt;
-
-class Hand {
- public:
-    static const int NumFingers = 5;
-    int fingers[NumFingers];
-};
-
-int main(int argc, char *argv[])
-{
-    printf("%d\n", Hand::NumFingers);
-
-    return 0;
-}
-</code></pre>
-
-<p>But when you want to use the address of <code>NumFingers</code>, you must put the
-definition of <code>NumFingers</code> in the implemetation file of the class.</p>
-
-<pre><code>#include &lt;cstdio&gt;
-
-class Hand {
- public:
-    static const int NumFingers = 5;
-    int fingers[NumFingers];
-};
-
-const int Hand::NumFingers;
-
-int main(int argc, char *argv[])
-{
-    printf("%p\n", &amp;Hand::NumFingers);
-
-    return 0;
-}
-</code></pre>
-
-<p>Remember, there is no need to put <code>static</code> at the begining of the definition.</p>
-
-<p>We know that the size of the array <code>finger</code> is just the value of the static
-constant <code>NumFingers</code>.But there is another way to do that.</p>
-
-<pre><code>class Hand {
- public:
-    enum {NumFingers = 5};
-    int fingers[NumFingers];
-};
-</code></pre>
-
-<p>That is fine, too.</p>
-
-<h1>For functions</h1>
-
-<p>Macros like this</p>
-
-<pre><code>#define MAX(a, b) ((a) &gt; (b) ? (a) : (b))
-</code></pre>
-
-<p>can result in many painful problems.</p>
-
-<ul>
-<li><p>First, you have to remember parenthesizing all the arguments(We all know
-why).</p></li>
-<li><p>There are problems when calling it like this <code>MAX(++a, b)</code>(It&#8217;s easy to
-think about it).</p></li>
-</ul>
-
-
-<p>If using <code>inline</code> and <code>template</code>, we can solve all this problems.</p>
-
-<pre><code>#include &lt;cstdio&gt;
-
-template&lt;typename T&gt;
-inline T
-max(const T&amp; a, const T&amp; b)
-{
-    return a &gt; b ? a : b;
-}
-
-int
-main(int argc, char *argv[])
-{
-    char a = 'a', b = 'b';
-    int c = 1, d = 2;
-
-    printf("%c\n", max(a, b));
-    printf("%d\n", max(c, d));
-
-    return 0;
-}
-</code></pre>
-
-<p>However, I don&#8217;t think macros are useless and should be replaced by const,
-enum and inline.In a way, macro can decrease the time of compiling and
-linking.And there are still lots of code that using macros.</p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2013/07/23/more-consts-enums-inlines-and-less-defines//blog/page/2/index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>

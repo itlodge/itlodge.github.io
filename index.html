@@ -6,7 +6,8 @@
 	<title>Yuanhang Zheng</title>
     <meta name="author" content="Yuanhang Zheng">
     
-	<meta name="description" content="Published on: Aug 11th, 2013 Tags: C++ Prepone definitions? Wrong! Before C99, you must prepone all the variables&#8217; definitions before any &hellip;">
+	<meta name="description" content="Published on: Aug 15th, 2013 Tags: C++ In inheritance, there are some rules defined by C++, one of which is that
+the virables or the functions in &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -95,6 +96,145 @@
 <!-- begin toload --> 
     <div id="content" class="inner">
         
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2013/08/15/do-not-hide-inherited-names/">
+		
+			Do Not Hide Inherited Names</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-15T19:26:00+08:00" pubdate data-updated="true">Aug 15<span>th</span>, 2013</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/c-plus-plus/'>C++</a>
+
+
+</div>
+    </div>
+		<p>In inheritance, there are some rules defined by C++, one of which is that
+the virables or the functions in the base class will be hidden if there
+are virables and functions with the same name.</p>
+
+<p>It seems perfect, but it&#8217;s a pitfall of C++. Consider the following example.</p>
+
+<pre><code>#include &lt;cstdio&gt;
+#include &lt;iostream&gt;
+
+class Person {
+public:
+    explicit Person()
+    { }
+    void
+    sleep() const
+    { printf("Person sleep\n"); }
+    void
+    sleep(const int sec) const
+    { printf("Person sleep %d s\n", sec); }
+private:
+    Person(const Person&amp;);
+    const Person&amp;
+    operator=(const Person&amp;);
+};
+
+class Student:public Person {
+public:
+    explicit Student()
+    { }
+    void
+    sleep() const
+    { printf("Student sleep\n"); }
+private:
+    Student(const Student&amp;);
+    const Student&amp;
+    operator=(const Student&amp;);
+};
+
+int
+main(int argc, char **argv)
+{
+    Student stu;
+
+    stu.sleep();
+    stu.sleep(1);
+
+    return 0;
+}
+</code></pre>
+
+<p>This program won&#8217;t be compiled. It shows the following error:</p>
+
+<pre><code>test.cpp:39:16: error: no matching function for call to ‘Student::sleep(int)’
+     stu.sleep(1);
+                ^
+test.cpp:39:16: note: candidate is:
+test.cpp:25:5: note: void Student::sleep() const
+     sleep() const
+     ^
+test.cpp:25:5: note:   candidate expects 0 arguments, 1 provided
+</code></pre>
+
+<p>That is because C++ will hide all the names in the base class as long as there
+are the same names in the derived class. In the <code>Person</code> class, <code>sleep()</code>
+and <code>sleep(const int sec)</code> have the same name. In the <code>Student</code> class, it
+only want to override the <code>sleep()</code> function, but the overriding cause the
+hiding of the <code>sleep(const int sec)</code> function!</p>
+
+<p>So how to solve this problem? There are two methods so far.</p>
+
+<ol>
+<li>Don&#8217;t hide the names in the base class will using overloading functions.</li>
+<li><p>Use <code>using</code> directive to make the certain methods visible.</p>
+
+<pre><code> class Student:public Person {
+ public:
+     using Person::sleep;
+
+     explicit Student()
+     { }
+     void
+     sleep() const
+     { printf("Student sleep\n"); }
+</code></pre></li>
+</ol>
+
+
+<p>Finally, another important thing should be stated. In the above example, I
+implement <code>sleep()</code> function in the definition of the class. Why do that?
+I have worked in some very large C++ projects and there are many implementation
+in the definition. In fact, this is so-called <strong>implicit inline</strong>. The compiler
+will inline the functions that are implemented in the class definition
+automatically. Therefore, it&#8217;s good to implement some small functions in the
+definition of class. And let the large function implement in another file.
+This will make my code more effecient and I will follow this guide in the
+future.</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2013/08/15/do-not-hide-inherited-names//index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -699,425 +839,6 @@ a tour <strong>alone</strong>.</p>
 <div class="meta">
 	
 		<span class="comments"><a href="/blog/2013/08/03/a-tour-to-the-badaling-great-wall//index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2013/08/01/cpp-resource-management/">
-		
-			Cpp Resource Management</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-01T22:16:00+08:00" pubdate data-updated="true">Aug 1<span>st</span>, 2013</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/c-plus-plus/'>C++</a>
-
-
-</div>
-    </div>
-		<p>I always forget freeing a memory that allocated from the heap.And I always
-forget closing the file handler.</p>
-
-<p>Resources include file descriptors, mutex locks, fonts, brushes, database
-connections and network sockets.</p>
-
-<p>I think less programmers can remember closing a file handler, especially
-in a large project.</p>
-
-<p>Nowadays, many programming languages have the garbage collection function.
-In C++, since the destructor will be automatically called, we can release
-the resources automatically if we put the resource into an object.</p>
-
-<p>How can do that?Use the <em>smart pointer</em>:<code>std::auto_ptr</code>.</p>
-
-<pre><code>#include &lt;cstdio&gt;
-#include &lt;memory&gt;
-
-int
-main(int argc, char **argv)
-{
-    int *num = NULL;
-    {
-        num = new int();
-        std::auto_ptr&lt;int&gt; ap(num);
-    }
-    // delete num;
-
-    return 0;
-}
-</code></pre>
-
-<p>If trying to delete num after the block, that will be a double free error.</p>
-
-<p>Reference from <a href="http://www.cplusplus.com/reference/memory/auto_ptr/">cplusplus.com</a>, <code>auto_ptr</code> is deprecated in C++11 and is replaced by <code>unique_ptr</code>.
-But they are similar.</p>
-
-<p>However, multiple <code>auto_ptr</code> cannot contain the same object.</p>
-
-<p>Here is the test program.</p>
-
-<pre><code>#include &lt;cstdio&gt;
-#include &lt;memory&gt;
-
-int
-main(int argc, char **argv)
-{
-    int *num = NULL;
-    {
-        num = new int();
-        std::auto_ptr&lt;int&gt; ap1(num);
-        std::auto_ptr&lt;int&gt; ap2(ap1);
-
-        printf("%p\n", &amp;ap1);
-        ap1 = ap2;
-        printf("%p\n", &amp;ap2);
-    }
-    // delete num;
-
-    return 0;
-}
-</code></pre>
-
-<p>And here is the gdb debug output information.</p>
-
-<pre><code>Temporary breakpoint 1, main (argc=1, argv=0x7fffffffe6e8) at test.cpp:7
-7       int *num = NULL;
-(gdb) n
-9       num = new int();
-(gdb) n
-10      std::auto_ptr&lt;int&gt; ap1(num);
-(gdb) n
-11      std::auto_ptr&lt;int&gt; ap2(ap1);
-(gdb) p ap1
-$1 = {_M_ptr = 0x601010}
-(gdb) p ap2
-$2 = {_M_ptr = 0x7fff00000001}
-(gdb) n
-13      printf("%p\n", &amp;ap1);
-(gdb) p ap1
-$3 = {_M_ptr = 0x0}
-(gdb) p ap2
-$4 = {_M_ptr = 0x601010}
-(gdb) n
-0x7fffffffe5e0
-14      ap1 = ap2;
-(gdb) p ap1
-$5 = {_M_ptr = 0x0}
-(gdb) p ap2
-$6 = {_M_ptr = 0x601010}
-(gdb) n
-15      printf("%p\n", &amp;ap2);
-(gdb) p ap1
-$7 = {_M_ptr = 0x601010}
-(gdb) p ap2
-$8 = {_M_ptr = 0x0}
-(gdb) 
-</code></pre>
-
-<p>But there are another smart pointer that can do this.It&#8217;s the
-<code>std::tr1::shared_ptr</code>.Mutiple shared_ptr can contain the same object.</p>
-
-<p>The testing program is as follow.</p>
-
-<pre><code>#include &lt;cstdio&gt;
-#include &lt;tr1/memory&gt;
-
-int
-main(int argc, char **argv)
-{
-    int *num = NULL;
-    {
-        num = new int();
-        std::tr1::shared_ptr&lt;int&gt; ap1(num);
-        std::tr1::shared_ptr&lt;int&gt; ap2(ap1);
-
-        printf("%p\n", &amp;ap1);
-        ap1 = ap2;
-        printf("%p\n", &amp;ap2);
-    }
-
-    return 0;
-}
-</code></pre>
-
-<p>And the gdb debug information is:</p>
-
-<pre><code>Temporary breakpoint 1, main (argc=1, argv=0x7fffffffe6e8) at test.cpp:7
-7       int *num = NULL;
-(gdb) n
-9       num = new int();
-(gdb) n
-10      std::tr1::shared_ptr&lt;int&gt; ap1(num);
-(gdb) n
-11      std::tr1::shared_ptr&lt;int&gt; ap2(ap1);
-(gdb) n
-13      printf("%p\n", &amp;ap1);
-(gdb) p ap1
-$1 = std::tr1::shared_ptr (count 2, weak 0) 0x602010
-(gdb) p ap2
-$2 = std::tr1::shared_ptr (count 2, weak 0) 0x602010
-(gdb) n
-0x7fffffffe5d0
-14      ap1 = ap2;
-(gdb) n
-15      printf("%p\n", &amp;ap2);
-(gdb) p ap1
-$3 = std::tr1::shared_ptr (count 2, weak 0) 0x602010
-(gdb) p ap2
-$4 = std::tr1::shared_ptr (count 2, weak 0) 0x602010
-</code></pre>
-
-<p>We can see that both of <code>ap1</code> and <code>ap2</code> point to the same object.</p>
-
-<p>The <code>auto_ptr</code> and <code>shared_ptr</code> use <code>delete</code> but not <code>delete[]</code>,
-so they don&#8217;t support array.But the <code>unique_ptr</code> support.</p>
-
-<p>Sometimes, the resource may be a mutex, and we don&#8217;t want to remember
-unlocking the mutex every time we lock it.So a resource management object
-may be:</p>
-
-<pre><code>#include &lt;cstdio&gt;
-
-typedef int Mutex;
-
-void
-lock(Mutex *p)
-{
-    printf("Locking...\n");
-}
-
-void
-unlock(Mutex *p)
-{
-    printf("Unlocked\n");
-}
-
-class Lock {
-public:
-    explicit Lock(Mutex *p)
-        :pMutex(p)
-    {
-        lock(pMutex);
-    }
-    ~Lock()
-    {
-        unlock(pMutex);
-    }
-private:
-    Mutex *pMutex;
-};
-
-int
-main(int argc, char **argv)
-{
-    Mutex m;
-    {
-        Lock ml(&amp;m);
-    }
-
-    return 0;
-}
-</code></pre>
-
-<p>However, when we copy the <code>Lock</code> object, problems appear.</p>
-
-<pre><code>Lock ml2(ml);
-</code></pre>
-
-<p>The default copy constructor will directly copy the pointer <code>pMutex</code> to
-the target object.So we should let the object uncopyable.</p>
-
-<pre><code>private:
-Lock(const Lock&amp;);
-Lock&amp;
-operator=(const Lock&amp;);
-
-Mutex *pMutex;
-</code></pre>
-
-<p>Multiple objects can use the same resource, so the resource may be existed
-until the last object has been destroyed.The <code>tr1::shared_ptr</code> provide a
-<code>deleter</code> and its <strong>shared ability</strong> to solve this problem.</p>
-
-<pre><code>class Lock {
-public:
-    explicit Lock(Mutex *p)
-        :pMutex(p, unlock)
-    {
-        lock(pMutex.get());
-    }
-private:
-    Lock(const Lock&amp;);
-    Lock&amp;
-    operator=(const Lock&amp;);
-
-    std::tr1::shared_ptr&lt;Mutex&gt; pMutex;
-};
-</code></pre>
-
-<h2>Provide access to raw resources</h2>
-
-<p>Sometimes we may only want to access the raw resource but the object that
-contains the resource.For example:</p>
-
-<pre><code>#include &lt;cstdio&gt;
-#include &lt;tr1/memory&gt;
-
-typedef int Mutex;
-
-static Mutex *
-createMutex()
-{
-    static Mutex *p = new Mutex();
-
-    return p;
-}
-
-int
-main(int argc, char **argv)
-{
-    std::tr1::shared_ptr&lt;Mutex&gt; pMutex;
-
-    printf("%d\n", pMutex);
-
-    return 0;
-}
-</code></pre>
-
-<p>Therefore, we must provide a method to access the raw resource.Like this.</p>
-
-<pre><code>    printf("%d\n", pMutex.get());
-</code></pre>
-
-<p>There are two ways, one is explicit and the other is implicit.</p>
-
-<pre><code>class MutexManager {
-public:
-    explicit MutexManager(Mutex* p)
-        :p_(p)
-    { }
-    ~MutexManager()
-    {
-        delete p_;
-    }
-    Mutex
-    get() const
-    {
-        return *p_;
-    }
-private:
-    Mutex *p_;
-};
-
-int
-main(int argc, char **argv)
-{
-    MutexManager mm(createMutex());
-
-    printf("%d\n", mm.get());
-
-    return 0;
-}
-</code></pre>
-
-<p>This one above is exciplit conversion.And this one below is implicit.</p>
-
-<pre><code>class MutexManager {
-public:
-    explicit MutexManager(Mutex* p)
-        :p_(p)
-    { }
-    ~MutexManager()
-    {
-        delete p_;
-    }
-    operator Mutex() const
-    {
-        return *p_;
-    }
-private:
-    Mutex *p_;
-};
-
-void
-print(Mutex m)
-{
-    printf("%d\n", m);
-}
-
-int
-main(int argc, char **argv)
-{
-    MutexManager mm(createMutex());
-
-    print(mm);
-
-    return 0;
-}
-</code></pre>
-
-<p>It&#8217;s obviously that the explicit method is safer and the implicit method is
-more convenient for clients.</p>
-
-<h2>Keep new and delete in the same form</h2>
-
-<p>We all know that the following code is wrong.</p>
-
-<pre><code>std::string *str = new std::string[10];
-delete str;
-</code></pre>
-
-<p>We should use <code>delete []str;</code> instead of <code>delete str;</code>.</p>
-
-<p>But how about this?</p>
-
-<pre><code>#include &lt;iostream&gt;
-
-typedef std::string Lines[4];
-
-int
-main(int argc, char **argv)
-{
-    std::string *p = new Lines;
-    delete p;
-
-    return 0;
-}
-</code></pre>
-
-<p>If let me delete the pointer p, I will use this <code>delete p;</code>.But I am wrong.
-I shouldn&#8217;t look at the left of the pointer, that is, <code>std::string</code>.I should
-look at the right of the <code>new</code>, that is, <code>Lines</code>.So, in this case, we
-should use <code>delete []p;</code>.</p>
-
-<p>Avoid typedef for array types, use <code>vector</code> instead.</p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2013/08/01/cpp-resource-management//index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>

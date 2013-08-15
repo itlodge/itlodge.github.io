@@ -4,7 +4,7 @@
   <title><![CDATA[Category: C++ | Yuanhang Zheng]]></title>
   <link href="http://itlodge.github.io/blog/categories/c-plus-plus/atom.xml" rel="self"/>
   <link href="http://itlodge.github.io/"/>
-  <updated>2013-08-11T15:34:29+08:00</updated>
+  <updated>2013-08-15T20:25:22+08:00</updated>
   <id>http://itlodge.github.io/</id>
   <author>
     <name><![CDATA[Yuanhang Zheng]]></name>
@@ -12,6 +12,110 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Do not hide inherited names]]></title>
+    <link href="http://itlodge.github.io/blog/2013/08/15/do-not-hide-inherited-names/"/>
+    <updated>2013-08-15T19:26:00+08:00</updated>
+    <id>http://itlodge.github.io/blog/2013/08/15/do-not-hide-inherited-names</id>
+    <content type="html"><![CDATA[<p>In inheritance, there are some rules defined by C++, one of which is that
+the virables or the functions in the base class will be hidden if there
+are virables and functions with the same name.</p>
+
+<p>It seems perfect, but it's a pitfall of C++. Consider the following example.</p>
+
+<pre><code>#include &lt;cstdio&gt;
+#include &lt;iostream&gt;
+
+class Person {
+public:
+    explicit Person()
+    { }
+    void
+    sleep() const
+    { printf("Person sleep\n"); }
+    void
+    sleep(const int sec) const
+    { printf("Person sleep %d s\n", sec); }
+private:
+    Person(const Person&amp;);
+    const Person&amp;
+    operator=(const Person&amp;);
+};
+
+class Student:public Person {
+public:
+    explicit Student()
+    { }
+    void
+    sleep() const
+    { printf("Student sleep\n"); }
+private:
+    Student(const Student&amp;);
+    const Student&amp;
+    operator=(const Student&amp;);
+};
+
+int
+main(int argc, char **argv)
+{
+    Student stu;
+
+    stu.sleep();
+    stu.sleep(1);
+
+    return 0;
+}
+</code></pre>
+
+<p>This program won't be compiled. It shows the following error:</p>
+
+<pre><code>test.cpp:39:16: error: no matching function for call to ‘Student::sleep(int)’
+     stu.sleep(1);
+                ^
+test.cpp:39:16: note: candidate is:
+test.cpp:25:5: note: void Student::sleep() const
+     sleep() const
+     ^
+test.cpp:25:5: note:   candidate expects 0 arguments, 1 provided
+</code></pre>
+
+<p>That is because C++ will hide all the names in the base class as long as there
+are the same names in the derived class. In the <code>Person</code> class, <code>sleep()</code>
+and <code>sleep(const int sec)</code> have the same name. In the <code>Student</code> class, it
+only want to override the <code>sleep()</code> function, but the overriding cause the
+hiding of the <code>sleep(const int sec)</code> function!</p>
+
+<p>So how to solve this problem? There are two methods so far.</p>
+
+<ol>
+<li>Don't hide the names in the base class will using overloading functions.</li>
+<li><p>Use <code>using</code> directive to make the certain methods visible.</p>
+
+<pre><code> class Student:public Person {
+ public:
+     using Person::sleep;
+
+     explicit Student()
+     { }
+     void
+     sleep() const
+     { printf("Student sleep\n"); }
+</code></pre></li>
+</ol>
+
+
+<p>Finally, another important thing should be stated. In the above example, I
+implement <code>sleep()</code> function in the definition of the class. Why do that?
+I have worked in some very large C++ projects and there are many implementation
+in the definition. In fact, this is so-called <strong>implicit inline</strong>. The compiler
+will inline the functions that are implemented in the class definition
+automatically. Therefore, it's good to implement some small functions in the
+definition of class. And let the large function implement in another file.
+This will make my code more effecient and I will follow this guide in the
+future.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Postponing definitions instead of preponing]]></title>
@@ -771,296 +875,6 @@ look at the right of the <code>new</code>, that is, <code>Lines</code>.So, in th
 should use <code>delete []p;</code>.</p>
 
 <p>Avoid typedef for array types, use <code>vector</code> instead.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[About Constructors Destructors and Assignment Operators]]></title>
-    <link href="http://itlodge.github.io/blog/2013/07/28/about-constructors-destructors-and-assignment-operators/"/>
-    <updated>2013-07-28T18:32:00+08:00</updated>
-    <id>http://itlodge.github.io/blog/2013/07/28/about-constructors-destructors-and-assignment-operators</id>
-    <content type="html"><![CDATA[<h2>What functions C++ will silently write and call?</h2>
-
-<p>If we declare an empty class, the compiler will declare a constructor,
-a copy constructor, a copy assignment operator and a destructor for us.</p>
-
-<pre><code>class Girl {
-
-};
-</code></pre>
-
-<p>But the compiler is not foolish, it will only generate them when needed.</p>
-
-<p>What do the generated functions do?</p>
-
-<ul>
-<li><p>For construtor, it will invoke the corresponding constructor and non-static
-members of its base class.</p></li>
-<li><p>For destructor, it will invoke the corresponding destructor of its base class.
-If its base class's destructor is virtual, the destructor will declare as
-virtual.</p></li>
-<li><p>For copy constructor and copy assignment operator, they will copy each
-non-static data member from the source object to the target object.</p></li>
-</ul>
-
-
-<p>If the class has some members that are pointer, reference or constant, there
-will be some trouble with the compiler.Therefore, always define the four
-functions when we define our own class.</p>
-
-<h2>Disallow the use of generated functions you don't want</h2>
-
-<p>Sometimes, we may not want the copy constructor or the copy assignment
-operator because every member may be different with the other object's
-members.Preventing the generation of these functions will make the
-program more effecient.</p>
-
-<p>If we don't declare these two functions, the compiler will generate them
-for us.</p>
-
-<p>So how can we do?</p>
-
-<p>The prefer solution is <strong>declare the copy constructor and copy assignment</strong>
-<strong>operator as private and never implement them</strong>.</p>
-
-<p>If we implement them, the members and friends of the class can call them.But
-if we don't implement them, the linker will complain at it.</p>
-
-<p>In order to move the link-time error to the compile time, we should let the
-members and the friends of the class cannot call them.One method is to define
-a base class that can't be copied and inherited by the class that you don't
-want it to be copyable.</p>
-
-<pre><code>class Uncopyable {
-protected:
-    Uncopyable()
-    { }
-    ~Uncopyable()
-    { }
-private:
-    Uncopyable(const Uncopyable&amp;);
-    Uncopyable&amp; operator=(const Uncopyable&amp;);
-};
-
-class Person: private Uncopyable {
-
-};
-</code></pre>
-
-<p>The copy constructor and copy assignment operator of the class <code>Uncopyable</code>
-are declared as private, so the members and friends of class <code>Person</code> can't
-call them.</p>
-
-<h2>Declare destructors virtual in polymorphic base classes</h2>
-
-<p>I have met this problem in an interview.</p>
-
-<p>Suppose the destructor of the base class is not virtual.</p>
-
-<pre><code>class Dog {
-public:
-    Dog();
-    ~Dog();
-};
-</code></pre>
-
-<p>And there are two class inherited from it.</p>
-
-<pre><code>class Whippet:public Dog {
-
-};
-
-class Spaniel:public Dog {
-
-};
-</code></pre>
-
-<p>We can use a base class pointer to handle the derived classes.</p>
-
-<pre><code>Dog *aDog = new Whippet();
-...
-</code></pre>
-
-<p>Then you should delete the pointer when you want to quit.</p>
-
-<pre><code>delete aDog;
-</code></pre>
-
-<p>Now, the problem appears.The C++ specifies that when a derived class
-object is deleted through a pointer to a base class with a non-virtual
-destructor, results are undefined.</p>
-
-<p>That is, the destructor of the base class will be called typically, but
-the destructor of the derived class may not be called.</p>
-
-<p>I have written a simple program to test it.</p>
-
-<pre><code>#include &lt;cstdio&gt;
-
-class Dog {
-public:
-    Dog()
-    { }
-    ~Dog()
-    {
-        printf("Call Dog's destructor\n");
-    }
-private:
-    Dog(const Dog&amp;);
-    Dog&amp;
-    operator=(const Dog&amp;);
-};
-
-class Whippet:public Dog {
-public:
-    Whippet()
-    { }
-    ~Whippet()
-    {
-        printf("Call Whippet's destructor\n");
-    }
-};
-
-int
-main(int argc, char **argv)
-{
-    Dog *aDog = new Whippet();
-    delete aDog;
-
-    return 0;
-}
-</code></pre>
-
-<p>I run the program several times and the results are the same.</p>
-
-<pre><code>~/test $ ./test 
-Call Dog's destructor
-</code></pre>
-
-<p>Now, if I change the destrutor to <code>virtual</code>, the result is:</p>
-
-<pre><code>virtual ~Dog()
-{
-    printf("Call Dog's destructor\n");
-}
-
-~/test $ ./test 
-Call Whippet's destructor
-Call Dog's destructor
-</code></pre>
-
-<p>Therefore, when the base class have virtual member functions, you should
-always make the destructor virtual.</p>
-
-<p>However, not every destructor of any class should be virtual.Making it
-virtual will occupy some additional information(virtual table pointer)
-that can increase the size of an object of that class.</p>
-
-<p><strong>Prevent exceptions from leaving destructors</strong></p>
-
-<p><strong>Never call virtual functions during construction or destruction</strong></p>
-
-<p>I have seen the assignment operator in this form many times.</p>
-
-<pre><code>Person&amp; operator=(const Person&amp; p)
-{
-    ...
-    return *this;
-}
-</code></pre>
-
-<p>First, the parameter is passed by const-reference, which is more effecient.
-Second, the function returns a reference of the object.This is more effecient
-when doing this.</p>
-
-<pre><code>p3 = p2 = p1;
-</code></pre>
-
-<p>Remember that always write assignment operator in this form.</p>
-
-<p>This is also appropriate with <code>+=</code>, <code>*=</code> and so on.</p>
-
-<p>Sometimes we may assignment to the object itself.</p>
-
-<pre><code>Person p;
-p = p;
-</code></pre>
-
-<p>It seems impossible, but how about this.</p>
-
-<pre><code>persons[i] = persons[j];
-*p1 = *p2;
-</code></pre>
-
-<p><code>persons[i]</code> and <code>persons[j]</code> may be the same.<code>p1</code> and <code>p2</code> may point
-to the same object.</p>
-
-<p>Some assignment operator may be like this one.</p>
-
-<pre><code>Disk&amp;
-Disk::operator=(const Disk&amp; d)
-{
-    delete data;
-    data = new Disk(*(d.data));
-
-    return *this;
-}
-</code></pre>
-
-<p>It seems reasonable that delete the original data and then allocate a
-new one using the data of <code>d</code>.</p>
-
-<p>However, this is very dangerous.What if <code>this</code> is the same as <code>d</code>?
-If that happened, the content of <code>data</code> and <code>d.data</code> is the same
-thing.So the content of <code>d.data</code> have been delete before call the
-copy constructor.</p>
-
-<p>A direct solution to this problem is obvious.That is, just check if they
-are the same.</p>
-
-<pre><code>Disk&amp;
-Disk::operator=(const Disk&amp; d)
-{
-    if (this == &amp;d) {
-        return *this;
-    }
-    delete data;
-    data = new Disk(*(d.data));
-
-    return *this;
-}
-</code></pre>
-
-<p>I prefer the above solution.But there are another solution.</p>
-
-<pre><code>Disk&amp;
-Disk::operator=(const Disk&amp; d)
-{
-    Disk *origin = data;
-    data = new Disk(*(d.data));
-    delete origin;
-
-    return *this;
-}
-</code></pre>
-
-<p>This code just change the order of some statement, but it make great
-difference.</p>
-
-<p><strong>When adding a member to a class, remember to update the constructors,</strong>
-<strong>destructor, copy constructor, copy assignment operator</strong>.</p>
-
-<p><strong>Don't miss anyone!</strong></p>
-
-<p>When a class is a derived class, make sure to call the constructors,
-copy constructor and copy assignment operator of the base class, respectively
-when writing my own constructors, copy constructor, assignment operator.</p>
-
-<p><strong>Do not call copy constructor in the copy assignment operator.</strong>
-<strong>Do not call copy assignment operator in the copy constructor.</strong></p>
-
-<p>That is all about constructors, copy constructor and copy assignment operator.
-It really helps.</p>
 ]]></content>
   </entry>
   
