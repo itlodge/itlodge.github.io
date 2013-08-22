@@ -4,7 +4,7 @@
   <title><![CDATA[Yuanhang Zheng]]></title>
   <link href="http://itlodge.github.io/atom.xml" rel="self"/>
   <link href="http://itlodge.github.io/"/>
-  <updated>2013-08-15T20:25:22+08:00</updated>
+  <updated>2013-08-22T13:45:25+08:00</updated>
   <id>http://itlodge.github.io/</id>
   <author>
     <name><![CDATA[Yuanhang Zheng]]></name>
@@ -31,6 +31,8 @@ class Person {
 public:
     explicit Person()
     { }
+    ~Person()
+    { }
     void
     sleep() const
     { printf("Person sleep\n"); }
@@ -46,6 +48,8 @@ private:
 class Student:public Person {
 public:
     explicit Student()
+    { }
+    ~Person()
     { }
     void
     sleep() const
@@ -97,6 +101,8 @@ hiding of the <code>sleep(const int sec)</code> function!</p>
      using Person::sleep;
 
      explicit Student()
+     { }
+     ~Person()
      { }
      void
      sleep() const
@@ -306,6 +312,10 @@ changed in the future to the clients.</p>
 
 <pre><code>class Person {
 public:
+    explicit Person()
+    { }
+    ~Person()
+    { }
     void
     say_age() const
     { printf("%d\n", age); }
@@ -313,6 +323,9 @@ public:
     say_name() const
     { printf("%s\n", name.c_str()); }
 private:
+    Person(const Person&amp;);
+    const Person&amp;
+    operator=(const Person&amp;);
     int age;
     std::string name;
 };
@@ -323,6 +336,10 @@ function.</p>
 
 <pre><code>class Person {
 public:
+    explicit Person()
+    { }
+    ~Person()
+    { }
     void
     say_age() const
     { printf("%d\n", age); }
@@ -336,6 +353,9 @@ public:
         say_name();
     }
 private:
+    Person(const Person&amp;);
+    const Person&amp;
+    operator=(const Person&amp;);
     int age;
     std::string name;
 };
@@ -348,6 +368,10 @@ functions should be in a class and everything is object. It&#8217;s obvious, rig
 
 <pre><code>class Person {
 public:
+    explicit Person()
+    { }
+    ~Person()
+    { }
     void
     say_age() const
     { printf("%d\n", age); }
@@ -355,6 +379,9 @@ public:
     say_name() const
     { printf("%s\n", name.c_str()); }
 private:
+    Person(const Person&amp;);
+    const Person&amp;
+    operator=(const Person&amp;);
     int age;
     std::string name;
 };

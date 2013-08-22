@@ -111,6 +111,8 @@ class Person {
 public:
     explicit Person()
     { }
+    ~Person()
+    { }
     void
     sleep() const
     { printf("Person sleep\n"); }
@@ -126,6 +128,8 @@ private:
 class Student:public Person {
 public:
     explicit Student()
+    { }
+    ~Person()
     { }
     void
     sleep() const
@@ -177,6 +181,8 @@ hiding of the <code>sleep(const int sec)</code> function!</p>
      using Person::sleep;
 
      explicit Student()
+     { }
+     ~Person()
      { }
      void
      sleep() const
