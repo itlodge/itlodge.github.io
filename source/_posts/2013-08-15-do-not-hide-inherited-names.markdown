@@ -20,6 +20,8 @@ It seems perfect, but it's a pitfall of C++. Consider the following example.
     public:
         explicit Person()
         { }
+		~Person()
+		{ }
         void
         sleep() const
         { printf("Person sleep\n"); }
@@ -36,6 +38,8 @@ It seems perfect, but it's a pitfall of C++. Consider the following example.
     public:
         explicit Student()
         { }
+		~Person()
+		{ }
         void
         sleep() const
         { printf("Student sleep\n"); }
@@ -84,7 +88,9 @@ So how to solve this problem? There are two methods so far.
 			
 			explicit Student()
 			{ }
-			void
+			~Person()
+			{ }
+		    void
 			sleep() const
 			{ printf("Student sleep\n"); }
 

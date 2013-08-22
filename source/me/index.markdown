@@ -9,8 +9,6 @@ footer: true
 
 My name is Yuanhang Zheng.
 
-First, I am an Emacser.
-
 My chinese blog: [IT足迹](http://www.zhengyuanhang.com)
 
 Books I read.
@@ -22,7 +20,7 @@ Books I read.
   <tr>
     <td>Effective C++ 3rd</td>
     <td>Scott Meyers</td>
-    <td>2013......................</td>
+    <td>2013.8.22</td>
   </tr>
   <tr>
     <td>每天学点经济学</td>

@@ -41,6 +41,10 @@ Consider the following class.
 
     class Person {
 	public:
+	    explicit Person()
+		{ }
+		~Person()
+		{ }
 	    void
 		say_age() const
 		{ printf("%d\n", age); }
@@ -48,6 +52,9 @@ Consider the following class.
 		say_name() const
 		{ printf("%s\n", name.c_str()); }
 	private:
+	    Person(const Person&);
+		const Person&
+		operator=(const Person&);
 	    int age;
 		std::string name;
 	};
@@ -57,7 +64,11 @@ function.
 
     class Person {
 	public:
-	    void
+	    explicit Person()
+		{ }
+		~Person()
+		{ }
+		void
 		say_age() const
 		{ printf("%d\n", age); }
 		void
@@ -70,7 +81,10 @@ function.
 			say_name();
 		}
 	private:
-	    int age;
+	    Person(const Person&);
+		const Person&
+		operator=(const Person&);
+		int age;
 		std::string name;
 	};
 
@@ -81,14 +95,21 @@ However, e have another option, that is, using the non-member function.
 
     class Person {
 	public:
-	    void
+	    explicit Person()
+		{ }
+		~Person()
+		{ }
+		void
 		say_age() const
 		{ printf("%d\n", age); }
 		void
 		say_name() const
 		{ printf("%s\n", name.c_str()); }
 	private:
-	    int age;
+	    Person(const Person&);
+		const Person&
+		operator=(const Person&);
+		int age;
 		std::string name;
 	};
 
