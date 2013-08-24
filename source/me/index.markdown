@@ -18,6 +18,11 @@ Books I read.
     <td>Name</td><td>Author<td>Finish date</td>
   </tr></th>
   <tr>
+    <td>何以笙萧默</td>
+    <td>顾漫</td>
+    <td>2013.8.24</td>
+  </tr>
+  <tr>
     <td>Effective C++ 3rd</td>
     <td>Scott Meyers</td>
     <td>2013.8.22</td>
