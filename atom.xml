@@ -4,7 +4,7 @@
   <title><![CDATA[Yuanhang Zheng]]></title>
   <link href="http://itlodge.github.io/atom.xml" rel="self"/>
   <link href="http://itlodge.github.io/"/>
-  <updated>2013-08-24T12:09:23+08:00</updated>
+  <updated>2013-08-25T16:00:36+08:00</updated>
   <id>http://itlodge.github.io/</id>
   <author>
     <name><![CDATA[Yuanhang Zheng]]></name>
@@ -12,6 +12,66 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Some interview questions about array and string]]></title>
+    <link href="http://itlodge.github.io/blog/2013/08/25/some-interview-questions-about-array-and-string/"/>
+    <updated>2013-08-25T08:43:00+08:00</updated>
+    <id>http://itlodge.github.io/blog/2013/08/25/some-interview-questions-about-array-and-string</id>
+    <content type="html"><![CDATA[<h1>Hash Table</h1>
+
+<p>In C++, the namespace<code>std::tr1</code> contains lots of hash tables. We can play
+with it.</p>
+
+<figure class='code'><figcaption><span> (careerup-hash.cpp)</span> <a href='http://itlodge.github.io/code/careerup-hash.cpp'>download</a></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include &lt;iostream&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;tr1/unordered_map&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">int</span>
+</span><span class='line'><span class="n">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">typedef</span> <span class="n">std</span><span class="o">::</span><span class="n">tr1</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">HashMap</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">HashMap</span> <span class="n">num</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">num</span><span class="p">[</span><span class="s">&quot;one&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">num</span><span class="p">[</span><span class="s">&quot;two&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">std</span><span class="o">::</span><span class="n">tr1</span><span class="o">::</span><span class="n">hash</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">hash_func</span> <span class="o">=</span> <span class="n">num</span><span class="p">.</span><span class="n">hash_function</span><span class="p">();</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="n">HashMap</span><span class="o">::</span><span class="n">const_iterator</span> <span class="n">i</span> <span class="o">=</span> <span class="n">num</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">num</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">i</span><span class="o">-&gt;</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; -&gt; &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">i</span><span class="o">-&gt;</span><span class="n">second</span>
+</span><span class='line'>                  <span class="o">&lt;&lt;</span> <span class="s">&quot;(hash=&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">hash_func</span><span class="p">(</span><span class="n">i</span><span class="o">-&gt;</span><span class="n">first</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;)&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Do not hide inherited names]]></title>
@@ -22,7 +82,7 @@
 the virables or the functions in the base class will be hidden if there
 are virables and functions with the same name.</p>
 
-<p>It seems perfect, but it&#8217;s a pitfall of C++. Consider the following example.</p>
+<p>It seems perfect, but it&rsquo;s a pitfall of C++. Consider the following example.</p>
 
 <pre><code>#include &lt;cstdio&gt;
 #include &lt;iostream&gt;
@@ -72,7 +132,7 @@ main(int argc, char **argv)
 }
 </code></pre>
 
-<p>This program won&#8217;t be compiled. It shows the following error:</p>
+<p>This program won&rsquo;t be compiled. It shows the following error:</p>
 
 <pre><code>test.cpp:39:16: error: no matching function for call to ‘Student::sleep(int)’
      stu.sleep(1);
@@ -93,7 +153,7 @@ hiding of the <code>sleep(const int sec)</code> function!</p>
 <p>So how to solve this problem? There are two methods so far.</p>
 
 <ol>
-<li>Don&#8217;t hide the names in the base class will using overloading functions.</li>
+<li>Don&rsquo;t hide the names in the base class will using overloading functions.</li>
 <li><p>Use <code>using</code> directive to make the certain methods visible.</p>
 
 <pre><code> class Student:public Person {
@@ -116,7 +176,7 @@ implement <code>sleep()</code> function in the definition of the class. Why do t
 I have worked in some very large C++ projects and there are many implementation
 in the definition. In fact, this is so-called <strong>implicit inline</strong>. The compiler
 will inline the functions that are implemented in the class definition
-automatically. Therefore, it&#8217;s good to implement some small functions in the
+automatically. Therefore, it&rsquo;s good to implement some small functions in the
 definition of class. And let the large function implement in another file.
 This will make my code more effecient and I will follow this guide in the
 future.</p>
@@ -131,7 +191,7 @@ future.</p>
     <content type="html"><![CDATA[<h2>Prepone definitions? Wrong!</h2>
 
 <p>Before C99, you must prepone all the variables&#8217; definitions before any
-statements. But after C99 was released, you can put a variable&#8217;s definition
+statements. But after C99 was released, you can put a variable&rsquo;s definition
 in any place as long as before being used. I think this new feature is
 introduced by learning from C++.</p>
 
@@ -140,7 +200,7 @@ old style. I even teach my students that they should use the old style when
 I was a TA of the course <em>Programming with C</em>.</p>
 
 <p>However, now I realize that I was wrong. <strong>We should postpone variables&#8217;</strong>
-<strong>definitions as long as possible</strong>. It&#8217;s not for coding style, but for the
+<strong>definitions as long as possible</strong>. It&rsquo;s not for coding style, but for the
 effeciency of the program.</p>
 
 <p>Consider this program.</p>
@@ -259,7 +319,7 @@ for (int i = 0; i &lt; n; i++) {
 
 <p>, which is better?</p>
 
-<p>Let&#8217;s analysis the performance of them.
+<p>Let&rsquo;s analysis the performance of them.
 * The former need 1 construction, n assignments and 1 destruction. But it makes
 the object <code>p</code> in a larger scope, which increase the comprehensibility and
 maintainability of the program.
@@ -280,16 +340,16 @@ will be more expensive than assignment.</p>
     <link href="http://itlodge.github.io/blog/2013/08/09/understanding-encapsulation/"/>
     <updated>2013-08-09T21:38:00+08:00</updated>
     <id>http://itlodge.github.io/blog/2013/08/09/understanding-encapsulation</id>
-    <content type="html"><![CDATA[<p>Once I loved <em>C</em> very much and I thought it&#8217;s the best programming language
+    <content type="html"><![CDATA[<p>Once I loved <em>C</em> very much and I thought it&rsquo;s the best programming language
 in the world. I used to argue that <em>C</em> can be used to implement the
 object-oriented design with <code>struct</code>. I used to argue that <code>private</code> and
 <code>public</code> is useless in <em>C++</em>. However, now I know I was wrong.</p>
 
 <h2>Why we need private</h2>
 
-<p>It&#8217;s related to a very important concept in C++, that is, <strong>encapsulation</strong>.</p>
+<p>It&rsquo;s related to a very important concept in C++, that is, <strong>encapsulation</strong>.</p>
 
-<p><strong>Encapsulation is not invisibility. It&#8217;s maintainability.</strong></p>
+<p><strong>Encapsulation is not invisibility. It&rsquo;s maintainability.</strong></p>
 
 <p>Suppose a class is very popular and is used by many projects. For example,
 the <code>string</code> class. If every members in this class is <code>public</code>, the clients
@@ -302,8 +362,8 @@ change their codes.</p>
 
 <p>Therefore, <strong>public means unchangable and public means unencapsulated</strong>.</p>
 
-<p>The public member functions should not be changed in the future. Since you don&#8217;t
-know how your clients will use your class, don&#8217;t expose the members that may be
+<p>The public member functions should not be changed in the future. Since you don&rsquo;t
+know how your clients will use your class, don&rsquo;t expose the members that may be
 changed in the future to the clients.</p>
 
 <h2>Prefer non-member non-friend functions to member functions</h2>
@@ -362,7 +422,7 @@ private:
 </code></pre>
 
 <p>This is straightforward, especially for those Java and C# programmers. Every
-functions should be in a class and everything is object. It&#8217;s obvious, right?</p>
+functions should be in a class and everything is object. It&rsquo;s obvious, right?</p>
 
 <p>However, e have another option, that is, using the non-member function.</p>
 
@@ -405,7 +465,7 @@ friend functions are the only interface that can access the private members.</p>
 <p>In this example, if we add another public member function, we decrease the
 encapsulation of the class since this member function can access the private
 members of the class. But if we use the non-member non-friend function, it
-won&#8217;t have impact with the class because it&#8217;s the function outside.</p>
+won&rsquo;t have impact with the class because it&rsquo;s the function outside.</p>
 
 <p>Does it explain that <em>C++</em> is not so object-oriented? From Java or C#, those
 programmers will say that everything is object and classes are everywhere.
@@ -414,7 +474,7 @@ However, they are wrong. Object-oriented princiles state that <strong>data shoul
 functions is more <em>object-oriented</em>.</p>
 
 <p>Until now, I can say that I really understand the meaning of encapsulation and
-why it&#8217;s so important in object-oriented programming.</p>
+why it&rsquo;s so important in object-oriented programming.</p>
 ]]></content>
   </entry>
   
@@ -474,7 +534,7 @@ Calling Dog's destructor
 Calling Dog's destructor
 </code></pre>
 
-<p>Now, let&#8217;s analysis this <em>passing by value</em> process.
+<p>Now, let&rsquo;s analysis this <em>passing by value</em> process.
 First, <code>Dog dog;</code> will call the constructor. Then, since the function
 <code>walk_the_dog</code> pass the parameter <code>d</code> by value, it will call the copy
 constructor. Before exiting the function, it will call the destructor of <code>Dog</code>
@@ -511,7 +571,7 @@ of functions so that the program need less memory.</p>
 
 <p>The implementation of reference is using the pointer in C. Therefore, it may
 be more effecient to pass the built-in type parameters by value than referece.
-It&#8217;s true. If the parameter is an object of type <code>char</code>, which occupies
+It&rsquo;s true. If the parameter is an object of type <code>char</code>, which occupies
 1 byte. But a pointer ocuppies 4 bytes in a 32-bit machine. So we should prefer
 passing by value when the parameter is of built-in type? No, we should always
 pass the parameters by reference-to-const, since <strong>the compiler will always</strong>
@@ -542,9 +602,9 @@ It took me 30 minutes to arrive at <em>Xi zhi men station</em> from where I live
 <p>I planed to take the <em>Shi jiao yan qing s2 line</em> train to the Great Wall
 directly at <em>Beijing bei station</em>, which is near the <em>Xi zhi men station</em>.
 However, when I arrived there, the staff of the station said that the train
-will depart at 11:00am.I watched my smart phone, which showed that it&#8217;s
+will depart at 11:00am.I watched my smart phone, which showed that it&rsquo;s
 8:24am now.So I had to wait for about 2.5 hours if I took this train.Because
-I&#8217;am those one who don&#8217;t want to stay in a place too long and want to go
+I&#8217;am those one who don&rsquo;t want to stay in a place too long and want to go
 somewhere to have a look, I prefer the other type of a tour.Therefore, from
 the staff of the train, I knew that I could take buses to the Great Wall.</p>
 
@@ -552,7 +612,7 @@ the staff of the train, I knew that I could take buses to the Great Wall.</p>
 arrive at the <em>Long ze station</em>, then take the <em>878 bus</em>.However, when I
 arrived at the <em>Long ze station</em> and the <em>878 bus station</em>, I found something
 almost shock me.That is, the <em>878 bus</em> only depart at 7:00am-9:00am.But my
-smart phone showed that it&#8217;s 9:03am.Oh my god!But I didn&#8217;t give up.I stayed
+smart phone showed that it&rsquo;s 9:03am.Oh my god!But I didn&rsquo;t give up.I stayed
 there for another 20 minutes.This time, I almost wanted to go back home because
 I looked for 10 minutes to find some bus that can go to the Great Wall and I
 failed.</p>
@@ -563,13 +623,13 @@ failed.</p>
 <em>Baidu Map</em>.This time I went back to the <em>Xi er qi station</em>, take the
 <em>Chang ping line train</em> and arrived at the final station <em>Nan shao station</em>.
 When I got out of the station, I was shock again.This place is a remote village
-and I can&#8217;t find a bus after looking for 10 minutes.So I went back to the
+and I can&rsquo;t find a bus after looking for 10 minutes.So I went back to the
 exit of the subway and ask a driver of the <em>black car</em> how much of taking me
 to the Badaling Great Wall.His answer suprised me because he wanted 180 yuan.
-Although I could bargin with him to reduce the price to 100 yuan, but it&#8217;s
+Although I could bargin with him to reduce the price to 100 yuan, but it&rsquo;s
 still very very very expensive.This time I wanted to give up and went away to
-find another bus station.When I got there, I found it&#8217;s excactly the bus I
-could take to the Great Wall.This is the <em>870 bus</em> and then the bus didn&#8217;t
+find another bus station.When I got there, I found it&rsquo;s excactly the bus I
+could take to the Great Wall.This is the <em>870 bus</em> and then the bus didn&rsquo;t
 appear.Fortunately, the bus was coming soon and I got in without thinking.
 That is, <strong>there is a way out for somebody</strong>.</p>
 
@@ -577,7 +637,7 @@ That is, <strong>there is a way out for somebody</strong>.</p>
 another bus.This time, I could take <em>919 bus</em> or the <em>879</em> bus and I felt the
 Great Wall was near.After about 5 minutes, the bus comed but there were too
 many people there, so I had to stand in the bus.I thought the bus will arrived
-at the Great Wall no more than 20 minutes, but I never wanted to know that it&#8217;s
+at the Great Wall no more than 20 minutes, but I never wanted to know that it&rsquo;s
 the most painful bus I have ever taken.I standed in the bus for more than 1.5
 hours because of the traffic jam!</p>
 
@@ -592,13 +652,13 @@ The photo below shows the <em>North Wall</em>.</p>
 
 <p><img src="http://itlodge.github.io/pictures/13.8.3.north-wall.jpg" title="North Wall" alt="North Wall"></p>
 
-<p>It&#8217;s obvious that I was on the south wall, and the photo below is a bird&#8217;s-eye
+<p>It&rsquo;s obvious that I was on the south wall, and the photo below is a bird&rsquo;s-eye
 view of the north wall.</p>
 
 <p><img src="http://itlodge.github.io/pictures/13.8.3.north-wall-bird-view.jpg" title="North Wall bird view" alt="North Wall bird view"></p>
 
 <p>There is no doubt that I must have someone take a photo for myself.The photo
-below is it, I&#8217;m not very handsome as you imaged, though.</p>
+below is it, I&rsquo;m not very handsome as you imaged, though.</p>
 
 <p><img src="http://itlodge.github.io/pictures/13.8.3.Great-Wall-me.jpg" title="Me" alt="Me"></p>
 
@@ -606,7 +666,7 @@ below is it, I&#8217;m not very handsome as you imaged, though.</p>
 <em>De sheng men xi station</em> directly!And it const me only 4.8 yuan.</p>
 
 <p>In a word, although <em>the Badaling Great Wall</em> is not so <strong>great</strong> as
-<em>the Palace</em>, I was still very happy today, because it&#8217;s the first time I have
+<em>the Palace</em>, I was still very happy today, because it&rsquo;s the first time I have
 a tour <strong>alone</strong>.</p>
 ]]></content>
   </entry>
@@ -715,7 +775,7 @@ $8 = {_M_ptr = 0x0}
 (gdb) 
 </code></pre>
 
-<p>But there are another smart pointer that can do this.It&#8217;s the
+<p>But there are another smart pointer that can do this.It&rsquo;s the
 <code>std::tr1::shared_ptr</code>.Mutiple shared_ptr can contain the same object.</p>
 
 <p>The testing program is as follow.</p>
@@ -771,9 +831,9 @@ $4 = std::tr1::shared_ptr (count 2, weak 0) 0x602010
 <p>We can see that both of <code>ap1</code> and <code>ap2</code> point to the same object.</p>
 
 <p>The <code>auto_ptr</code> and <code>shared_ptr</code> use <code>delete</code> but not <code>delete[]</code>,
-so they don&#8217;t support array.But the <code>unique_ptr</code> support.</p>
+so they don&rsquo;t support array.But the <code>unique_ptr</code> support.</p>
 
-<p>Sometimes, the resource may be a mutex, and we don&#8217;t want to remember
+<p>Sometimes, the resource may be a mutex, and we don&rsquo;t want to remember
 unlocking the mutex every time we lock it.So a resource management object
 may be:</p>
 
@@ -957,7 +1017,7 @@ main(int argc, char **argv)
 }
 </code></pre>
 
-<p>It&#8217;s obviously that the explicit method is safer and the implicit method is
+<p>It&rsquo;s obviously that the explicit method is safer and the implicit method is
 more convenient for clients.</p>
 
 <h2>Keep new and delete in the same form</h2>
@@ -987,7 +1047,7 @@ main(int argc, char **argv)
 </code></pre>
 
 <p>If let me delete the pointer p, I will use this <code>delete p;</code>.But I am wrong.
-I shouldn&#8217;t look at the left of the pointer, that is, <code>std::string</code>.I should
+I shouldn&rsquo;t look at the left of the pointer, that is, <code>std::string</code>.I should
 look at the right of the <code>new</code>, that is, <code>Lines</code>.So, in this case, we
 should use <code>delete []p;</code>.</p>
 
@@ -1018,7 +1078,7 @@ a copy constructor, a copy assignment operator and a destructor for us.</p>
 <li><p>For construtor, it will invoke the corresponding constructor and non-static
 members of its base class.</p></li>
 <li><p>For destructor, it will invoke the corresponding destructor of its base class.
-If its base class&#8217;s destructor is virtual, the destructor will declare as
+If its base class&rsquo;s destructor is virtual, the destructor will declare as
 virtual.</p></li>
 <li><p>For copy constructor and copy assignment operator, they will copy each
 non-static data member from the source object to the target object.</p></li>
@@ -1029,14 +1089,14 @@ non-static data member from the source object to the target object.</p></li>
 will be some trouble with the compiler.Therefore, always define the four
 functions when we define our own class.</p>
 
-<h2>Disallow the use of generated functions you don&#8217;t want</h2>
+<h2>Disallow the use of generated functions you don&rsquo;t want</h2>
 
 <p>Sometimes, we may not want the copy constructor or the copy assignment
-operator because every member may be different with the other object&#8217;s
+operator because every member may be different with the other object&rsquo;s
 members.Preventing the generation of these functions will make the
 program more effecient.</p>
 
-<p>If we don&#8217;t declare these two functions, the compiler will generate them
+<p>If we don&rsquo;t declare these two functions, the compiler will generate them
 for us.</p>
 
 <p>So how can we do?</p>
@@ -1045,11 +1105,11 @@ for us.</p>
 <strong>operator as private and never implement them</strong>.</p>
 
 <p>If we implement them, the members and friends of the class can call them.But
-if we don&#8217;t implement them, the linker will complain at it.</p>
+if we don&rsquo;t implement them, the linker will complain at it.</p>
 
 <p>In order to move the link-time error to the compile time, we should let the
 members and the friends of the class cannot call them.One method is to define
-a base class that can&#8217;t be copied and inherited by the class that you don&#8217;t
+a base class that can&rsquo;t be copied and inherited by the class that you don&rsquo;t
 want it to be copyable.</p>
 
 <pre><code>class Uncopyable {
@@ -1069,7 +1129,7 @@ class Person: private Uncopyable {
 </code></pre>
 
 <p>The copy constructor and copy assignment operator of the class <code>Uncopyable</code>
-are declared as private, so the members and friends of class <code>Person</code> can&#8217;t
+are declared as private, so the members and friends of class <code>Person</code> can&rsquo;t
 call them.</p>
 
 <h2>Declare destructors virtual in polymorphic base classes</h2>
@@ -1271,7 +1331,7 @@ difference.</p>
 <p><strong>When adding a member to a class, remember to update the constructors,</strong>
 <strong>destructor, copy constructor, copy assignment operator</strong>.</p>
 
-<p><strong>Don&#8217;t miss anyone!</strong></p>
+<p><strong>Don&rsquo;t miss anyone!</strong></p>
 
 <p>When a class is a derived class, make sure to call the constructors,
 copy constructor and copy assignment operator of the base class, respectively
@@ -1494,13 +1554,13 @@ puts(say_hello("man"))
 </code></pre>
 
 <p>However, when there are more than one parameters, it will be difficult to
-know which argument goes with which method invocation.So it&#8217;s recommended
+know which argument goes with which method invocation.So it&rsquo;s recommended
 using parentheses in all but the simplest cases.</p>
 
-<p>We can use single-quote or double-quote to create a string.What&#8217;s the
+<p>We can use single-quote or double-quote to create a string.What&rsquo;s the
 difference?</p>
 
-<p>First, single-quoted string can&#8217;t represent the escape character, and
+<p>First, single-quoted string can&rsquo;t represent the escape character, and
 double-quoted string can.</p>
 
 <pre><code>puts '\nabc'
@@ -1699,7 +1759,7 @@ char const *str = "Hello";
 * <code>const std::vector&lt;int&gt;::iterator iter</code> is just like <code>T * const iter</code>.
 * <code>std::vector&lt;int&gt;::const_iterator cIter</code> is just like <code>const T *iter</code>.</p>
 
-<p>So, in a loop, if we don&#8217;t want to modify the data, use <code>const_iterator</code>.</p>
+<p>So, in a loop, if we don&rsquo;t want to modify the data, use <code>const_iterator</code>.</p>
 
 <h2>Const member function</h2>
 
@@ -1759,13 +1819,13 @@ argument list.This means the function is a const member function.</p>
 
 <p>Reference to <a href="http://msdn.microsoft.com/en-us/library/6ke686zh.aspx">MSDN</a>,
 <strong>A constant member function cannot modify any non-static members or call any</strong>
-<strong>member functions that aren&#8217;t constant.</strong>That is, the cons member function
-can&#8217;t modify the object that it is called.</p>
+<strong>member functions that aren&rsquo;t constant.</strong>That is, the cons member function
+can&rsquo;t modify the object that it is called.</p>
 
 <p>The above philosophy is called <strong>bitwise constness</strong> or <strong>physical constness</strong>.
 There are another philosophy called <strong>logical constness</strong>.Adherents to this
 philosophy argue that <strong>a const member function might modify some of the bits</strong>
-<strong>in the object on which it&#8217;s invoked, but only in ways that clients cannot</strong>
+<strong>in the object on which it&rsquo;s invoked, but only in ways that clients cannot</strong>
 <strong>detect</strong>.</p>
 
 <p>For example, if we add a new member function <code>length()</code> to the above class.</p>
@@ -1791,7 +1851,7 @@ private:
 </code></pre>
 
 <p>Since member variable <code>len</code> has been modified and the compiler use the
-<strong>bitwise const</strong>, error produces.However, return and object&#8217;s length seems
+<strong>bitwise const</strong>, error produces.However, return and object&rsquo;s length seems
 not modify the object it is called.</p>
 
 <p>To solved this problem, use the <strong>mutable</strong> keyword.It can free non-static
@@ -1815,7 +1875,7 @@ operator[](std::size_t pos)    // Non-const objects use this
 <p><code>static_cast&lt;const Str&amp;&gt;</code>will make <code>*this</code>const and then it can call
 <code>operator[]</code>.Finally, <code>const_cast</code> is used the free the const constraint.</p>
 
-<p>This is all about <code>const</code>, it&#8217;s an amazing keyword.For readable and efficient
+<p>This is all about <code>const</code>, it&rsquo;s an amazing keyword.For readable and efficient
 code, use it anyway.</p>
 ]]></content>
   </entry>
@@ -1837,7 +1897,7 @@ code, use it anyway.</p>
 <p>There are several drawbacks when using a macro.</p>
 
 <ul>
-<li><p>It&#8217;s hard to debug.As we all know, the macros are resolved by the
+<li><p>It&rsquo;s hard to debug.As we all know, the macros are resolved by the
 preprocessor and the compiler know nothing about them.When you get an error
 when compiling the program, the error message may refer to <code>3.14</code> but not
 <code>PI</code> because <code>PI</code> is not in the symbol table.</p></li>
@@ -1854,7 +1914,7 @@ with <code>3.14</code>, there will be several copy of 3.14 in the object code.</
 <p>it has the following advantages, respectively.</p>
 
 <ul>
-<li><p>It&#8217;s easy to debug, since the constant is in the symble table.</p></li>
+<li><p>It&rsquo;s easy to debug, since the constant is in the symble table.</p></li>
 <li><p>It has only one copy in the object code.The other place it appears is just
 its references.</p></li>
 </ul>
@@ -1873,12 +1933,12 @@ executable files larger.</p>
 
 <p>But this is not effecient.</p>
 
-<p>If defined above, the value &#8220;Tom&#8221; cannot be changed, but what the pointer
+<p>If defined above, the value &ldquo;Tom&rdquo; cannot be changed, but what the pointer
 <code>Name</code> points to can be changed.So the compiler will allocate a piece of
 memory for the pointer <code>Name</code> in the normal data segment.Moreover, when
 the linker starts working, it need to perform some relocations for <code>Name</code>.</p>
 
-<p>So, it&#8217;s better to be defined as follows.</p>
+<p>So, it&rsquo;s better to be defined as follows.</p>
 
 <pre><code>const char * const Name = "Tom";
 </code></pre>
@@ -1889,7 +1949,7 @@ the linker starts working, it need to perform some relocations for <code>Name</c
 </code></pre>
 
 <p>Now the compiler will put <code>Name</code> in the read only data segment and the linker
-needn&#8217;t performing relocations.</p>
+needn&rsquo;t performing relocations.</p>
 
 <p>Alternatively, we can use this.</p>
 
@@ -1913,7 +1973,7 @@ private:
 <p>However, <code>static const int NumFingers = 5;</code> is just a <strong>declaration</strong> for
 <code>NumFinger</code>.Why this can be compiled with no error message?Everything
 should have its definition, does it?However, the class-specific constants
-that are static and with integral type(<code>int</code>, <code>char</code>, <code>bool</code>,&#8230;) is
+that are static and with integral type(<code>int</code>, <code>char</code>, <code>bool</code>,&hellip;) is
 an exception.</p>
 
 <p>You can even use the constant.</p>
@@ -1981,7 +2041,7 @@ constant <code>NumFingers</code>.But there is another way to do that.</p>
 <ul>
 <li><p>First, you have to remember parenthesizing all the arguments(We all know
 why).</p></li>
-<li><p>There are problems when calling it like this <code>MAX(++a, b)</code>(It&#8217;s easy to
+<li><p>There are problems when calling it like this <code>MAX(++a, b)</code>(It&rsquo;s easy to
 think about it).</p></li>
 </ul>
 
@@ -2010,7 +2070,7 @@ main(int argc, char *argv[])
 }
 </code></pre>
 
-<p>However, I don&#8217;t think macros are useless and should be replaced by const,
+<p>However, I don&rsquo;t think macros are useless and should be replaced by const,
 enum and inline.In a way, macro can decrease the time of compiling and
 linking.And there are still lots of code that using macros.</p>
 ]]></content>
@@ -2027,7 +2087,7 @@ linking.And there are still lots of code that using macros.</p>
 but now I find that my understanding is not complete.</p>
 
 <p><strong>Declaration</strong> just tells the compiler about the name and the type of
-something.It&#8217;s very common about the declaration of <em>objects</em> and <em>functions</em>.</p>
+something.It&rsquo;s very common about the declaration of <em>objects</em> and <em>functions</em>.</p>
 
 <pre><code>extern int a;
 
@@ -2054,10 +2114,10 @@ will consider it, anyway.</p>
 <p><strong>Definition</strong> gives the details of something to the compiler.In the past, I
 hold the opinion that <em>definition</em> always be related to <em>memory</em>.In fact, it is
 not allways.
-- For object, the definition tell the compiler about the memory asigned for the
+&ndash; For object, the definition tell the compiler about the memory asigned for the
 object.
-- For function or function template, the definition provides the function body.
-- For class or class template, the definition lists the members of the class.</p>
+&ndash; For function or function template, the definition provides the function body.
+&ndash; For class or class template, the definition lists the members of the class.</p>
 
 <p>For example:</p>
 
@@ -2078,7 +2138,7 @@ public:
 
 <h1>Defaul constructor</h1>
 
-<p>I found I can&#8217;t tell whether a constructor is a <strong>default constructor</strong> or not.
+<p>I found I can&rsquo;t tell whether a constructor is a <strong>default constructor</strong> or not.
 But now, I know.A <strong>default constructor</strong> is a constructor that can be called
 without any arguments.That is, either no parameters or every parameter is
 initialized.</p>
@@ -2160,7 +2220,7 @@ type conversions.So the policy is:</p>
 <p>This amazes me very much.But now I can distinguish it easily.</p>
 
 <p>If a new object is being defined, invoke the <em>copy constructor</em>.Otherwise,
-invoke the <em>copy assignment operator</em> since it&#8217;s just the <strong>asignment</strong>.</p>
+invoke the <em>copy assignment operator</em> since it&rsquo;s just the <strong>asignment</strong>.</p>
 
 <h1>Some common sense</h1>
 
@@ -2284,11 +2344,11 @@ sleep forever.
 :
 </code></pre>
 
-<p>A method&#8217;s name may be the same in different classes or modules.In this case,
+<p>A method&rsquo;s name may be the same in different classes or modules.In this case,
 <code>ri</code> will list all of them.If you type <code>ri ClassName.method's name</code>, it
-will show only the documentation of the corresponding class&#8217;s.</p>
+will show only the documentation of the corresponding class&rsquo;s.</p>
 
-<p>More contributions, more reputations.If a class or module hasn&#8217;t yet documented
+<p>More contributions, more reputations.If a class or module hasn&rsquo;t yet documented
 in RDoc, send an email to <code>suggestions@ruby-doc.org</code> to ask them to add.</p>
 ]]></content>
   </entry>

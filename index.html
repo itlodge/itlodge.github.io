@@ -6,8 +6,8 @@
 	<title>Yuanhang Zheng</title>
     <meta name="author" content="Yuanhang Zheng">
     
-	<meta name="description" content="Published on: Aug 15th, 2013 Tags: C++ In inheritance, there are some rules defined by C++, one of which is that
-the virables or the functions in &hellip;">
+	<meta name="description" content="Published on: Aug 25th, 2013 Tags: C++, interview, Hash Table In C++, the namespacestd::tr1 contains lots of hash tables. We can play
+with it. ( &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -101,6 +101,101 @@ the virables or the functions in &hellip;">
     <article class="post">
 	<h2 class="title">
 		
+		<a href="/blog/2013/08/25/some-interview-questions-about-array-and-string/">
+		
+			Some Interview Questions About Array and String</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-25T08:43:00+08:00" pubdate data-updated="true">Aug 25<span>th</span>, 2013</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/c-plus-plus/'>C++</a>, <a class='category' href='/blog/categories/interview/'>interview,</a>
+
+
+</div>
+    </div>
+		<h1>Hash Table</h1>
+
+<p>In C++, the namespace<code>std::tr1</code> contains lots of hash tables. We can play
+with it.</p>
+
+<figure class='code'><figcaption><span> (careerup-hash.cpp)</span> <a href='/code/careerup-hash.cpp'>download</a></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include &lt;iostream&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;tr1/unordered_map&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">int</span>
+</span><span class='line'><span class="n">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">typedef</span> <span class="n">std</span><span class="o">::</span><span class="n">tr1</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">HashMap</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">HashMap</span> <span class="n">num</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">num</span><span class="p">[</span><span class="s">&quot;one&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">num</span><span class="p">[</span><span class="s">&quot;two&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">std</span><span class="o">::</span><span class="n">tr1</span><span class="o">::</span><span class="n">hash</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">hash_func</span> <span class="o">=</span> <span class="n">num</span><span class="p">.</span><span class="n">hash_function</span><span class="p">();</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="n">HashMap</span><span class="o">::</span><span class="n">const_iterator</span> <span class="n">i</span> <span class="o">=</span> <span class="n">num</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">num</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">i</span><span class="o">-&gt;</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; -&gt; &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">i</span><span class="o">-&gt;</span><span class="n">second</span>
+</span><span class='line'>                  <span class="o">&lt;&lt;</span> <span class="s">&quot;(hash=&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">hash_func</span><span class="p">(</span><span class="n">i</span><span class="o">-&gt;</span><span class="n">first</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;)&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2013/08/25/some-interview-questions-about-array-and-string//index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
 		<a href="/blog/2013/08/15/do-not-hide-inherited-names/">
 		
 			Do Not Hide Inherited Names</a>
@@ -132,7 +227,7 @@ the virables or the functions in &hellip;">
 the virables or the functions in the base class will be hidden if there
 are virables and functions with the same name.</p>
 
-<p>It seems perfect, but it&#8217;s a pitfall of C++. Consider the following example.</p>
+<p>It seems perfect, but it&rsquo;s a pitfall of C++. Consider the following example.</p>
 
 <pre><code>#include &lt;cstdio&gt;
 #include &lt;iostream&gt;
@@ -182,7 +277,7 @@ main(int argc, char **argv)
 }
 </code></pre>
 
-<p>This program won&#8217;t be compiled. It shows the following error:</p>
+<p>This program won&rsquo;t be compiled. It shows the following error:</p>
 
 <pre><code>test.cpp:39:16: error: no matching function for call to ‘Student::sleep(int)’
      stu.sleep(1);
@@ -203,7 +298,7 @@ hiding of the <code>sleep(const int sec)</code> function!</p>
 <p>So how to solve this problem? There are two methods so far.</p>
 
 <ol>
-<li>Don&#8217;t hide the names in the base class will using overloading functions.</li>
+<li>Don&rsquo;t hide the names in the base class will using overloading functions.</li>
 <li><p>Use <code>using</code> directive to make the certain methods visible.</p>
 
 <pre><code> class Student:public Person {
@@ -226,7 +321,7 @@ implement <code>sleep()</code> function in the definition of the class. Why do t
 I have worked in some very large C++ projects and there are many implementation
 in the definition. In fact, this is so-called <strong>implicit inline</strong>. The compiler
 will inline the functions that are implemented in the class definition
-automatically. Therefore, it&#8217;s good to implement some small functions in the
+automatically. Therefore, it&rsquo;s good to implement some small functions in the
 definition of class. And let the large function implement in another file.
 This will make my code more effecient and I will follow this guide in the
 future.</p>
@@ -276,7 +371,7 @@ future.</p>
 		<h2>Prepone definitions? Wrong!</h2>
 
 <p>Before C99, you must prepone all the variables&#8217; definitions before any
-statements. But after C99 was released, you can put a variable&#8217;s definition
+statements. But after C99 was released, you can put a variable&rsquo;s definition
 in any place as long as before being used. I think this new feature is
 introduced by learning from C++.</p>
 
@@ -285,7 +380,7 @@ old style. I even teach my students that they should use the old style when
 I was a TA of the course <em>Programming with C</em>.</p>
 
 <p>However, now I realize that I was wrong. <strong>We should postpone variables&#8217;</strong>
-<strong>definitions as long as possible</strong>. It&#8217;s not for coding style, but for the
+<strong>definitions as long as possible</strong>. It&rsquo;s not for coding style, but for the
 effeciency of the program.</p>
 
 <p>Consider this program.</p>
@@ -404,7 +499,7 @@ for (int i = 0; i &lt; n; i++) {
 
 <p>, which is better?</p>
 
-<p>Let&#8217;s analysis the performance of them.
+<p>Let&rsquo;s analysis the performance of them.
 * The former need 1 construction, n assignments and 1 destruction. But it makes
 the object <code>p</code> in a larger scope, which increase the comprehensibility and
 maintainability of the program.
@@ -460,16 +555,16 @@ will be more expensive than assignment.</p>
 
 </div>
     </div>
-		<p>Once I loved <em>C</em> very much and I thought it&#8217;s the best programming language
+		<p>Once I loved <em>C</em> very much and I thought it&rsquo;s the best programming language
 in the world. I used to argue that <em>C</em> can be used to implement the
 object-oriented design with <code>struct</code>. I used to argue that <code>private</code> and
 <code>public</code> is useless in <em>C++</em>. However, now I know I was wrong.</p>
 
 <h2>Why we need private</h2>
 
-<p>It&#8217;s related to a very important concept in C++, that is, <strong>encapsulation</strong>.</p>
+<p>It&rsquo;s related to a very important concept in C++, that is, <strong>encapsulation</strong>.</p>
 
-<p><strong>Encapsulation is not invisibility. It&#8217;s maintainability.</strong></p>
+<p><strong>Encapsulation is not invisibility. It&rsquo;s maintainability.</strong></p>
 
 <p>Suppose a class is very popular and is used by many projects. For example,
 the <code>string</code> class. If every members in this class is <code>public</code>, the clients
@@ -482,8 +577,8 @@ change their codes.</p>
 
 <p>Therefore, <strong>public means unchangable and public means unencapsulated</strong>.</p>
 
-<p>The public member functions should not be changed in the future. Since you don&#8217;t
-know how your clients will use your class, don&#8217;t expose the members that may be
+<p>The public member functions should not be changed in the future. Since you don&rsquo;t
+know how your clients will use your class, don&rsquo;t expose the members that may be
 changed in the future to the clients.</p>
 
 <h2>Prefer non-member non-friend functions to member functions</h2>
@@ -542,7 +637,7 @@ private:
 </code></pre>
 
 <p>This is straightforward, especially for those Java and C# programmers. Every
-functions should be in a class and everything is object. It&#8217;s obvious, right?</p>
+functions should be in a class and everything is object. It&rsquo;s obvious, right?</p>
 
 <p>However, e have another option, that is, using the non-member function.</p>
 
@@ -585,7 +680,7 @@ friend functions are the only interface that can access the private members.</p>
 <p>In this example, if we add another public member function, we decrease the
 encapsulation of the class since this member function can access the private
 members of the class. But if we use the non-member non-friend function, it
-won&#8217;t have impact with the class because it&#8217;s the function outside.</p>
+won&rsquo;t have impact with the class because it&rsquo;s the function outside.</p>
 
 <p>Does it explain that <em>C++</em> is not so object-oriented? From Java or C#, those
 programmers will say that everything is object and classes are everywhere.
@@ -594,7 +689,7 @@ However, they are wrong. Object-oriented princiles state that <strong>data shoul
 functions is more <em>object-oriented</em>.</p>
 
 <p>Until now, I can say that I really understand the meaning of encapsulation and
-why it&#8217;s so important in object-oriented programming.</p>
+why it&rsquo;s so important in object-oriented programming.</p>
 
 		
 		
@@ -689,7 +784,7 @@ Calling Dog's destructor
 Calling Dog's destructor
 </code></pre>
 
-<p>Now, let&#8217;s analysis this <em>passing by value</em> process.
+<p>Now, let&rsquo;s analysis this <em>passing by value</em> process.
 First, <code>Dog dog;</code> will call the constructor. Then, since the function
 <code>walk_the_dog</code> pass the parameter <code>d</code> by value, it will call the copy
 constructor. Before exiting the function, it will call the destructor of <code>Dog</code>
@@ -726,7 +821,7 @@ of functions so that the program need less memory.</p>
 
 <p>The implementation of reference is using the pointer in C. Therefore, it may
 be more effecient to pass the built-in type parameters by value than referece.
-It&#8217;s true. If the parameter is an object of type <code>char</code>, which occupies
+It&rsquo;s true. If the parameter is an object of type <code>char</code>, which occupies
 1 byte. But a pointer ocuppies 4 bytes in a 32-bit machine. So we should prefer
 passing by value when the parameter is of built-in type? No, we should always
 pass the parameters by reference-to-const, since <strong>the compiler will always</strong>
@@ -741,131 +836,6 @@ pass the parameters by reference-to-const, since <strong>the compiler will alway
 <div class="meta">
 	
 		<span class="comments"><a href="/blog/2013/08/09/always-pass-parameters-by-reference-to-const//index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2013/08/03/a-tour-to-the-badaling-great-wall/">
-		
-			A Tour to the Badaling Great Wall</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-03T19:52:00+08:00" pubdate data-updated="true">Aug 3<span>rd</span>, 2013</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/travel/'>Travel</a>
-
-
-</div>
-    </div>
-		<p>Today, I went to the Badaling Great Wall <strong>alone</strong>.</p>
-
-<p>There is a saying that <strong>He who has never been to the Great Wall is not a</strong>
-<strong>true man</strong>.</p>
-
-<p>I had read this saying for many times when I was in high school, but I have
-never been to the Great Wall util today.</p>
-
-<p>I got up at 7:00am and began my tour at about 7:40am after the breakfast.
-It took me 30 minutes to arrive at <em>Xi zhi men station</em> from where I live.</p>
-
-<p><img class="right" src="/pictures/13.8.3.Great-Wall-too-many-people.jpg" width="300" height="350" title="'Too many people'" ></p>
-
-<p>I planed to take the <em>Shi jiao yan qing s2 line</em> train to the Great Wall
-directly at <em>Beijing bei station</em>, which is near the <em>Xi zhi men station</em>.
-However, when I arrived there, the staff of the station said that the train
-will depart at 11:00am.I watched my smart phone, which showed that it&#8217;s
-8:24am now.So I had to wait for about 2.5 hours if I took this train.Because
-I&#8217;am those one who don&#8217;t want to stay in a place too long and want to go
-somewhere to have a look, I prefer the other type of a tour.Therefore, from
-the staff of the train, I knew that I could take buses to the Great Wall.</p>
-
-<p>Thanks to the <em>Baidu Map</em>, this time I need to take the <em>line 13 train</em> and
-arrive at the <em>Long ze station</em>, then take the <em>878 bus</em>.However, when I
-arrived at the <em>Long ze station</em> and the <em>878 bus station</em>, I found something
-almost shock me.That is, the <em>878 bus</em> only depart at 7:00am-9:00am.But my
-smart phone showed that it&#8217;s 9:03am.Oh my god!But I didn&#8217;t give up.I stayed
-there for another 20 minutes.This time, I almost wanted to go back home because
-I looked for 10 minutes to find some bus that can go to the Great Wall and I
-failed.</p>
-
-<p><img class="left" src="/pictures/13.8.3.south-wall.jpg" width="300" height="350" title="'South Wall'" ></p>
-
-<p>I was still stubborn so that I found another way to go to the Great Wall from
-<em>Baidu Map</em>.This time I went back to the <em>Xi er qi station</em>, take the
-<em>Chang ping line train</em> and arrived at the final station <em>Nan shao station</em>.
-When I got out of the station, I was shock again.This place is a remote village
-and I can&#8217;t find a bus after looking for 10 minutes.So I went back to the
-exit of the subway and ask a driver of the <em>black car</em> how much of taking me
-to the Badaling Great Wall.His answer suprised me because he wanted 180 yuan.
-Although I could bargin with him to reduce the price to 100 yuan, but it&#8217;s
-still very very very expensive.This time I wanted to give up and went away to
-find another bus station.When I got there, I found it&#8217;s excactly the bus I
-could take to the Great Wall.This is the <em>870 bus</em> and then the bus didn&#8217;t
-appear.Fortunately, the bus was coming soon and I got in without thinking.
-That is, <strong>there is a way out for somebody</strong>.</p>
-
-<p>After about an hour, I arrived at <em>Ni sha he station</em> and I need to change to
-another bus.This time, I could take <em>919 bus</em> or the <em>879</em> bus and I felt the
-Great Wall was near.After about 5 minutes, the bus comed but there were too
-many people there, so I had to stand in the bus.I thought the bus will arrived
-at the Great Wall no more than 20 minutes, but I never wanted to know that it&#8217;s
-the most painful bus I have ever taken.I standed in the bus for more than 1.5
-hours because of the traffic jam!</p>
-
-<p>Finally I arrived at the Great Wall.</p>
-
-<p>First, I have a lunch at <em>Yong he da wang restaurant</em>.</p>
-
-<p><img src="/pictures/13.8.3.have-a-lunch.jpg" title="Have a lunch" alt="Have a lunch"></p>
-
-<p>There were lots of people.But I thought there will be more in Spring and Autumn.
-The photo below shows the <em>North Wall</em>.</p>
-
-<p><img src="/pictures/13.8.3.north-wall.jpg" title="North Wall" alt="North Wall"></p>
-
-<p>It&#8217;s obvious that I was on the south wall, and the photo below is a bird&#8217;s-eye
-view of the north wall.</p>
-
-<p><img src="/pictures/13.8.3.north-wall-bird-view.jpg" title="North Wall bird view" alt="North Wall bird view"></p>
-
-<p>There is no doubt that I must have someone take a photo for myself.The photo
-below is it, I&#8217;m not very handsome as you imaged, though.</p>
-
-<p><img src="/pictures/13.8.3.Great-Wall-me.jpg" title="Me" alt="Me"></p>
-
-<p>The return tour was so relax because I could take the <em>877 bus</em> to
-<em>De sheng men xi station</em> directly!And it const me only 4.8 yuan.</p>
-
-<p>In a word, although <em>the Badaling Great Wall</em> is not so <strong>great</strong> as
-<em>the Palace</em>, I was still very happy today, because it&#8217;s the first time I have
-a tour <strong>alone</strong>.</p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2013/08/03/a-tour-to-the-badaling-great-wall//index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>
