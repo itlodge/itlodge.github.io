@@ -12,4 +12,5 @@ Hash Table
 In C++, the namespace``std::tr1`` contains lots of hash tables. We can play
 with it.
 
+{% include_code careerup-hash.cpp %}
 
