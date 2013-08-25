@@ -1,0 +1,335 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Some reviews about C plus plus - Yuanhang Zheng</title>
+    <meta name="author" content="Yuanhang Zheng">
+    
+	<meta name="description" content="Declaration and Definition I have already known the difference between declaration and definion,
+but now I find that my understanding is not complete &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Yuanhang Zheng" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='http://fonts.googleapis.com/css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Amethysta' rel='stylesheet' type='text/css'>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <script src="/javascripts/ajaxify.js"></script>
+   
+    
+    
+
+</head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Yuanhang Zheng
+    </div>
+</h1>
+<br>
+
+<ul id="social-links" style="text-align:center">
+  
+  <!-- GitHub -->
+  <li>
+  <a href="https://github.com/itlodge" class="github" title="Github"></a>
+  </li>
+  
+  
+  <!-- Google Plus -->
+  <li>
+  <a href="http://plus.google.com/107688243765597180052?rel=author" class="google" title="Google+"></a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a href="http://www.twitter.com/itlodge" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  
+  
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/blog/archives/index.html">Archives</a></li>
+	<li id="ajax"><a href="/me/index.html">Me</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    
+    <li>
+    <div id="dark">
+        <form method="get" action="/search.html" id="search">
+            <input name="query" type="text" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+<div id="toload">
+<!-- begin toload --> 
+    <div id="content" class="inner">
+        <article class="post">
+	<h2 class="title">Some Reviews About C Plus Plus</h2>
+	<div class="entry-content"><h1>Declaration and Definition</h1>
+
+<p>I have already known the difference between <strong>declaration</strong> and <strong>definion</strong>,
+but now I find that my understanding is not complete.</p>
+
+<p><strong>Declaration</strong> just tells the compiler about the name and the type of
+something.It&#8217;s very common about the declaration of <em>objects</em> and <em>functions</em>.</p>
+
+<pre><code>extern int a;
+
+int max(int a, int b);
+</code></pre>
+
+<p>However, I never think about the declaration of <em>class</em>.Recently, I have to
+view some codes in a large project and I have found many of these declarations.</p>
+
+<pre><code>class Option;
+class Parameter;
+</code></pre>
+
+<p>Additionally, there are many declarations of the <em>template class</em>.</p>
+
+<pre><code>template&lt;typename T&gt;
+class Swap;
+</code></pre>
+
+<p>Another interesting thing is that the official C++ definition of
+<em>function signature</em> excludes the return type.I think this is strange and I
+will consider it, anyway.</p>
+
+<p><strong>Definition</strong> gives the details of something to the compiler.In the past, I
+hold the opinion that <em>definition</em> always be related to <em>memory</em>.In fact, it is
+not allways.
+- For object, the definition tell the compiler about the memory asigned for the
+object.
+- For function or function template, the definition provides the function body.
+- For class or class template, the definition lists the members of the class.</p>
+
+<p>For example:</p>
+
+<pre><code>int a;
+
+int max(int a, int b)
+{
+    return a &gt; b ? a : b;
+}
+
+class Option {
+public:
+    Option();
+    ~Option();
+    ...
+};
+</code></pre>
+
+<h1>Defaul constructor</h1>
+
+<p>I found I can&#8217;t tell whether a constructor is a <strong>default constructor</strong> or not.
+But now, I know.A <strong>default constructor</strong> is a constructor that can be called
+without any arguments.That is, either no parameters or every parameter is
+initialized.</p>
+
+<p>The following are default constructors.</p>
+
+<pre><code>Option();
+explicit Option(bool short = true);
+</code></pre>
+
+<p>And this one is not a default constructor.</p>
+
+<pre><code>explicit Option(bool short);
+</code></pre>
+
+<p>What the hell <strong>explicit</strong> is doing here?I have never used this reserved word
+even if I have learned C++ for several years.But this guy, <em>explicit</em>, is of
+great importance.</p>
+
+<p>Placing <em>explicit</em> before the constructor can prevent the objects of the class
+being used to perform implicit type conversions.Obviously, they can be used
+for explicit type conversions.</p>
+
+<p>For example, if we have two classes and a function.</p>
+
+<pre><code>class Dog {
+    explicit Dog();
+    ...
+}
+
+Dog aDog;
+Cat aCat;
+
+void kill(Dog d);
+</code></pre>
+
+<p>Now call the <code>kill</code> function passing <code>aDog</code> as parameter.</p>
+
+<pre><code>kill(aDog);    // No problem.
+</code></pre>
+
+<p>If with the <code>explicit</code> reserved word and call the <code>kill</code> function passing
+<code>aCat</code> as parameter, it will be error since it prevents implicit type
+conversions.</p>
+
+<pre><code>kill(aCat);    // Error, prevent implicit conversion.
+</code></pre>
+
+<p>But if without the <code>explicit</code> reserved word and call the <code>kill</code> function
+passing <code>aCat</code> as parameter, it will lead the compiler to perform unexpected
+type conversions.So the policy is:</p>
+
+<p><strong>Always declare the constructor as explicit.</strong></p>
+
+<h1>Copy constructor and copy assignment operator</h1>
+
+<p>I have already known that this</p>
+
+<pre><code>Parameter p1;
+</code></pre>
+
+<p>will invoke the <em>default constructor</em> and this</p>
+
+<pre><code>Parameter p2(p1);
+</code></pre>
+
+<p>will invoke the <em>copy constructor</em> and this</p>
+
+<pre><code>p1 = p2;
+</code></pre>
+
+<p>will invoke the <em>copy assignment operator</em>, but I have never known that this</p>
+
+<pre><code>Parameter p3 = p2;
+</code></pre>
+
+<p>will not invoke the <em>copy assignment operator</em> but the <em>copy constructor</em>.</p>
+
+<p>This amazes me very much.But now I can distinguish it easily.</p>
+
+<p>If a new object is being defined, invoke the <em>copy constructor</em>.Otherwise,
+invoke the <em>copy assignment operator</em> since it&#8217;s just the <strong>asignment</strong>.</p>
+
+<h1>Some common sense</h1>
+
+<ul>
+<li>TR1, Technical Report 1, is a specification for new functionality in
+C++ standard library.</li>
+</ul>
+
+
+<p>This really deepens my understanding of C plus plus and now I am very
+interested in this great programming language.</p>
+</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2013/07/22/some-reviews-about-c-plus-plus/#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2013
+
+    Yuanhang Zheng
+. Powered by <a href="http://octopress.org">Octopress</a> | 
+    Theme <a href="http://github.com/panks/fabric">fabric</a> by <a href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'itlodge';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://itlodge.github.io/blog/2013/07/22/some-reviews-about-c-plus-plus/';
+        var disqus_url = 'http://itlodge.github.io/blog/2013/07/22/some-reviews-about-c-plus-plus/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+</body>
+</html>

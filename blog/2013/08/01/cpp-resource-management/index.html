@@ -1,0 +1,560 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Cpp Resource Management - Yuanhang Zheng</title>
+    <meta name="author" content="Yuanhang Zheng">
+    
+	<meta name="description" content="I always forget freeing a memory that allocated from the heap.And I always
+forget closing the file handler. Resources include file descriptors, mutex &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Yuanhang Zheng" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='http://fonts.googleapis.com/css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Amethysta' rel='stylesheet' type='text/css'>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <script src="/javascripts/ajaxify.js"></script>
+   
+    
+    
+
+</head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Yuanhang Zheng
+    </div>
+</h1>
+<br>
+
+<ul id="social-links" style="text-align:center">
+  
+  <!-- GitHub -->
+  <li>
+  <a href="https://github.com/itlodge" class="github" title="Github"></a>
+  </li>
+  
+  
+  <!-- Google Plus -->
+  <li>
+  <a href="http://plus.google.com/107688243765597180052?rel=author" class="google" title="Google+"></a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a href="http://www.twitter.com/itlodge" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  
+  
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/blog/archives/index.html">Archives</a></li>
+	<li id="ajax"><a href="/me/index.html">Me</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    
+    <li>
+    <div id="dark">
+        <form method="get" action="/search.html" id="search">
+            <input name="query" type="text" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+<div id="toload">
+<!-- begin toload --> 
+    <div id="content" class="inner">
+        <article class="post">
+	<h2 class="title">Cpp Resource Management</h2>
+	<div class="entry-content"><p>I always forget freeing a memory that allocated from the heap.And I always
+forget closing the file handler.</p>
+
+<p>Resources include file descriptors, mutex locks, fonts, brushes, database
+connections and network sockets.</p>
+
+<p>I think less programmers can remember closing a file handler, especially
+in a large project.</p>
+
+<p>Nowadays, many programming languages have the garbage collection function.
+In C++, since the destructor will be automatically called, we can release
+the resources automatically if we put the resource into an object.</p>
+
+<p>How can do that?Use the <em>smart pointer</em>:<code>std::auto_ptr</code>.</p>
+
+<pre><code>#include &lt;cstdio&gt;
+#include &lt;memory&gt;
+
+int
+main(int argc, char **argv)
+{
+    int *num = NULL;
+    {
+        num = new int();
+        std::auto_ptr&lt;int&gt; ap(num);
+    }
+    // delete num;
+
+    return 0;
+}
+</code></pre>
+
+<p>If trying to delete num after the block, that will be a double free error.</p>
+
+<p>Reference from <a href="http://www.cplusplus.com/reference/memory/auto_ptr/">cplusplus.com</a>, <code>auto_ptr</code> is deprecated in C++11 and is replaced by <code>unique_ptr</code>.
+But they are similar.</p>
+
+<p>However, multiple <code>auto_ptr</code> cannot contain the same object.</p>
+
+<p>Here is the test program.</p>
+
+<pre><code>#include &lt;cstdio&gt;
+#include &lt;memory&gt;
+
+int
+main(int argc, char **argv)
+{
+    int *num = NULL;
+    {
+        num = new int();
+        std::auto_ptr&lt;int&gt; ap1(num);
+        std::auto_ptr&lt;int&gt; ap2(ap1);
+
+        printf("%p\n", &amp;ap1);
+        ap1 = ap2;
+        printf("%p\n", &amp;ap2);
+    }
+    // delete num;
+
+    return 0;
+}
+</code></pre>
+
+<p>And here is the gdb debug output information.</p>
+
+<pre><code>Temporary breakpoint 1, main (argc=1, argv=0x7fffffffe6e8) at test.cpp:7
+7       int *num = NULL;
+(gdb) n
+9       num = new int();
+(gdb) n
+10      std::auto_ptr&lt;int&gt; ap1(num);
+(gdb) n
+11      std::auto_ptr&lt;int&gt; ap2(ap1);
+(gdb) p ap1
+$1 = {_M_ptr = 0x601010}
+(gdb) p ap2
+$2 = {_M_ptr = 0x7fff00000001}
+(gdb) n
+13      printf("%p\n", &amp;ap1);
+(gdb) p ap1
+$3 = {_M_ptr = 0x0}
+(gdb) p ap2
+$4 = {_M_ptr = 0x601010}
+(gdb) n
+0x7fffffffe5e0
+14      ap1 = ap2;
+(gdb) p ap1
+$5 = {_M_ptr = 0x0}
+(gdb) p ap2
+$6 = {_M_ptr = 0x601010}
+(gdb) n
+15      printf("%p\n", &amp;ap2);
+(gdb) p ap1
+$7 = {_M_ptr = 0x601010}
+(gdb) p ap2
+$8 = {_M_ptr = 0x0}
+(gdb) 
+</code></pre>
+
+<p>But there are another smart pointer that can do this.It&#8217;s the
+<code>std::tr1::shared_ptr</code>.Mutiple shared_ptr can contain the same object.</p>
+
+<p>The testing program is as follow.</p>
+
+<pre><code>#include &lt;cstdio&gt;
+#include &lt;tr1/memory&gt;
+
+int
+main(int argc, char **argv)
+{
+    int *num = NULL;
+    {
+        num = new int();
+        std::tr1::shared_ptr&lt;int&gt; ap1(num);
+        std::tr1::shared_ptr&lt;int&gt; ap2(ap1);
+
+        printf("%p\n", &amp;ap1);
+        ap1 = ap2;
+        printf("%p\n", &amp;ap2);
+    }
+
+    return 0;
+}
+</code></pre>
+
+<p>And the gdb debug information is:</p>
+
+<pre><code>Temporary breakpoint 1, main (argc=1, argv=0x7fffffffe6e8) at test.cpp:7
+7       int *num = NULL;
+(gdb) n
+9       num = new int();
+(gdb) n
+10      std::tr1::shared_ptr&lt;int&gt; ap1(num);
+(gdb) n
+11      std::tr1::shared_ptr&lt;int&gt; ap2(ap1);
+(gdb) n
+13      printf("%p\n", &amp;ap1);
+(gdb) p ap1
+$1 = std::tr1::shared_ptr (count 2, weak 0) 0x602010
+(gdb) p ap2
+$2 = std::tr1::shared_ptr (count 2, weak 0) 0x602010
+(gdb) n
+0x7fffffffe5d0
+14      ap1 = ap2;
+(gdb) n
+15      printf("%p\n", &amp;ap2);
+(gdb) p ap1
+$3 = std::tr1::shared_ptr (count 2, weak 0) 0x602010
+(gdb) p ap2
+$4 = std::tr1::shared_ptr (count 2, weak 0) 0x602010
+</code></pre>
+
+<p>We can see that both of <code>ap1</code> and <code>ap2</code> point to the same object.</p>
+
+<p>The <code>auto_ptr</code> and <code>shared_ptr</code> use <code>delete</code> but not <code>delete[]</code>,
+so they don&#8217;t support array.But the <code>unique_ptr</code> support.</p>
+
+<p>Sometimes, the resource may be a mutex, and we don&#8217;t want to remember
+unlocking the mutex every time we lock it.So a resource management object
+may be:</p>
+
+<pre><code>#include &lt;cstdio&gt;
+
+typedef int Mutex;
+
+void
+lock(Mutex *p)
+{
+    printf("Locking...\n");
+}
+
+void
+unlock(Mutex *p)
+{
+    printf("Unlocked\n");
+}
+
+class Lock {
+public:
+    explicit Lock(Mutex *p)
+        :pMutex(p)
+    {
+        lock(pMutex);
+    }
+    ~Lock()
+    {
+        unlock(pMutex);
+    }
+private:
+    Mutex *pMutex;
+};
+
+int
+main(int argc, char **argv)
+{
+    Mutex m;
+    {
+        Lock ml(&amp;m);
+    }
+
+    return 0;
+}
+</code></pre>
+
+<p>However, when we copy the <code>Lock</code> object, problems appear.</p>
+
+<pre><code>Lock ml2(ml);
+</code></pre>
+
+<p>The default copy constructor will directly copy the pointer <code>pMutex</code> to
+the target object.So we should let the object uncopyable.</p>
+
+<pre><code>private:
+Lock(const Lock&amp;);
+Lock&amp;
+operator=(const Lock&amp;);
+
+Mutex *pMutex;
+</code></pre>
+
+<p>Multiple objects can use the same resource, so the resource may be existed
+until the last object has been destroyed.The <code>tr1::shared_ptr</code> provide a
+<code>deleter</code> and its <strong>shared ability</strong> to solve this problem.</p>
+
+<pre><code>class Lock {
+public:
+    explicit Lock(Mutex *p)
+        :pMutex(p, unlock)
+    {
+        lock(pMutex.get());
+    }
+private:
+    Lock(const Lock&amp;);
+    Lock&amp;
+    operator=(const Lock&amp;);
+
+    std::tr1::shared_ptr&lt;Mutex&gt; pMutex;
+};
+</code></pre>
+
+<h2>Provide access to raw resources</h2>
+
+<p>Sometimes we may only want to access the raw resource but the object that
+contains the resource.For example:</p>
+
+<pre><code>#include &lt;cstdio&gt;
+#include &lt;tr1/memory&gt;
+
+typedef int Mutex;
+
+static Mutex *
+createMutex()
+{
+    static Mutex *p = new Mutex();
+
+    return p;
+}
+
+int
+main(int argc, char **argv)
+{
+    std::tr1::shared_ptr&lt;Mutex&gt; pMutex;
+
+    printf("%d\n", pMutex);
+
+    return 0;
+}
+</code></pre>
+
+<p>Therefore, we must provide a method to access the raw resource.Like this.</p>
+
+<pre><code>    printf("%d\n", pMutex.get());
+</code></pre>
+
+<p>There are two ways, one is explicit and the other is implicit.</p>
+
+<pre><code>class MutexManager {
+public:
+    explicit MutexManager(Mutex* p)
+        :p_(p)
+    { }
+    ~MutexManager()
+    {
+        delete p_;
+    }
+    Mutex
+    get() const
+    {
+        return *p_;
+    }
+private:
+    Mutex *p_;
+};
+
+int
+main(int argc, char **argv)
+{
+    MutexManager mm(createMutex());
+
+    printf("%d\n", mm.get());
+
+    return 0;
+}
+</code></pre>
+
+<p>This one above is exciplit conversion.And this one below is implicit.</p>
+
+<pre><code>class MutexManager {
+public:
+    explicit MutexManager(Mutex* p)
+        :p_(p)
+    { }
+    ~MutexManager()
+    {
+        delete p_;
+    }
+    operator Mutex() const
+    {
+        return *p_;
+    }
+private:
+    Mutex *p_;
+};
+
+void
+print(Mutex m)
+{
+    printf("%d\n", m);
+}
+
+int
+main(int argc, char **argv)
+{
+    MutexManager mm(createMutex());
+
+    print(mm);
+
+    return 0;
+}
+</code></pre>
+
+<p>It&#8217;s obviously that the explicit method is safer and the implicit method is
+more convenient for clients.</p>
+
+<h2>Keep new and delete in the same form</h2>
+
+<p>We all know that the following code is wrong.</p>
+
+<pre><code>std::string *str = new std::string[10];
+delete str;
+</code></pre>
+
+<p>We should use <code>delete []str;</code> instead of <code>delete str;</code>.</p>
+
+<p>But how about this?</p>
+
+<pre><code>#include &lt;iostream&gt;
+
+typedef std::string Lines[4];
+
+int
+main(int argc, char **argv)
+{
+    std::string *p = new Lines;
+    delete p;
+
+    return 0;
+}
+</code></pre>
+
+<p>If let me delete the pointer p, I will use this <code>delete p;</code>.But I am wrong.
+I shouldn&#8217;t look at the left of the pointer, that is, <code>std::string</code>.I should
+look at the right of the <code>new</code>, that is, <code>Lines</code>.So, in this case, we
+should use <code>delete []p;</code>.</p>
+
+<p>Avoid typedef for array types, use <code>vector</code> instead.</p>
+</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2013/08/01/cpp-resource-management/#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2013
+
+    Yuanhang Zheng
+. Powered by <a href="http://octopress.org">Octopress</a> | 
+    Theme <a href="http://github.com/panks/fabric">fabric</a> by <a href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'itlodge';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://itlodge.github.io/blog/2013/08/01/cpp-resource-management/';
+        var disqus_url = 'http://itlodge.github.io/blog/2013/08/01/cpp-resource-management/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+</body>
+</html>

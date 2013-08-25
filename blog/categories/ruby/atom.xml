@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Ruby | Yuanhang Zheng]]></title>
+  <link href="http://itlodge.github.io/blog/categories/ruby/atom.xml" rel="self"/>
+  <link href="http://itlodge.github.io/"/>
+  <updated>2013-08-24T12:09:23+08:00</updated>
+  <id>http://itlodge.github.io/</id>
+  <author>
+    <name><![CDATA[Yuanhang Zheng]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Some basic Ruby]]></title>
+    <link href="http://itlodge.github.io/blog/2013/07/25/some-basic-ruby/"/>
+    <updated>2013-07-25T20:07:00+08:00</updated>
+    <id>http://itlodge.github.io/blog/2013/07/25/some-basic-ruby</id>
+    <content type="html"><![CDATA[<h2>String and name</h2>
+
+<p>When defining a function, the parentheses are not necessary.So this one</p>
+
+<pre><code>def say_hello name
+  "Hello " + name
+end
+
+puts say_hello "man"
+</code></pre>
+
+<p>is the same as this.</p>
+
+<pre><code>def say_hello(name)
+  "Hello " + name
+end
+
+puts(say_hello("man"))
+</code></pre>
+
+<p>However, when there are more than one parameters, it will be difficult to
+know which argument goes with which method invocation.So it's recommended
+using parentheses in all but the simplest cases.</p>
+
+<p>We can use single-quote or double-quote to create a string.What's the
+difference?</p>
+
+<p>First, single-quoted string can't represent the escape character, and
+double-quoted string can.</p>
+
+<pre><code>puts '\nabc'
+puts "\nabc"
+</code></pre>
+
+<p>The above code will output this.</p>
+
+<pre><code>\nabc
+
+abc
+</code></pre>
+
+<p>Second, double-quoted string can be expression interpolated.</p>
+
+<pre><code>name = 'Tom'
+
+puts 'Hello #{name}'
+puts "Hello #{name}"
+</code></pre>
+
+<p>The above code will output this.</p>
+
+<pre><code>ruby test.rb
+Hello #{name}
+Hello Tom
+</code></pre>
+
+<p>And we can even invoke methods.</p>
+
+<pre><code>name = 'Tom'
+puts "Hello #{name.upcase}"
+</code></pre>
+
+<p>This will generate the following.</p>
+
+<pre><code>Hello TOM
+</code></pre>
+
+<p>When the expression is a global, instance or class variable, there is no need
+to use the braces.</p>
+
+<pre><code>@h = "Hello"    # @ means instance
+$name = 'Tom'    # $ means global
+
+puts "#@h #$name"
+</code></pre>
+
+<p>This will generate the same output.</p>
+
+<p>There are some conventions for the <strong>name</strong> in Ruby.</p>
+
+<ul>
+<li><p>Local variables, method parameters and method names <em>should</em> all start
+with a lowercase letter or an underscore.</p></li>
+<li><p>Class names, module names and constants <em>must</em> start with an uppercase
+letter.</p></li>
+<li><p>Global variables start with <code>$</code>.</p></li>
+<li><p>Instance variables begin with <code>@</code>.</p></li>
+<li><p>Class variables are prefixed with <code>@@</code>.</p></li>
+</ul>
+
+
+<h2>Arrays and Hashes</h2>
+
+<p>In ruby, arrays and hashes can hold objects of different types.</p>
+
+<pre><code>a = [1, 'abc', :sym]
+puts a
+</code></pre>
+
+<p>It will generate the following output.</p>
+
+<pre><code>1
+abc
+sym
+</code></pre>
+
+<p>By the way, <code>nil</code> is an object, represent <strong>nothing</strong>.</p>
+
+<p>If we want to create an array of string, we have to list all the strings.
+And we have to type lots of quotes and commas.However, <code>%w</code> can do it
+more easily.</p>
+
+<pre><code>a = ['a', 'b', 'c']
+b = %w{a b c}
+
+puts a
+puts b
+</code></pre>
+
+<p>It will generate the following output.</p>
+
+<pre><code>a
+b
+c
+a
+b
+c
+</code></pre>
+
+<p>The index of Array is integer, but the index of Hash is anything.</p>
+
+<p>It has the following form.</p>
+
+<pre><code>var = {
+  key1 =&gt; value1
+  key2 =&gt; value2
+  ...
+}
+</code></pre>
+
+<p>For example:</p>
+
+<pre><code>girl = {
+  :name =&gt; 'Mary',
+  :age =&gt; 20
+}
+
+puts "#{girl[:name]} is #{girl[:age]} years old."
+</code></pre>
+
+<p>Output:</p>
+
+<pre><code>Mary is 20 years old.
+</code></pre>
+
+<p>A new Hash can also be created in this way.</p>
+
+<pre><code>decimal = Hash.new(0)
+puts decimal[:first]
+decimal[:first] = 1
+puts decimal[:first]
+</code></pre>
+
+<p>Ouput:</p>
+
+<pre><code>0
+1
+</code></pre>
+
+<p><code>0</code> is the default value for all keys.</p>
+
+<h2>Control Structures</h2>
+
+<p>In Ruby, there is a <code>elsif</code> keyword instead of <code>else if</code>.</p>
+
+<p>The method <code>gets</code> return the next line from the standard input stream and
+return nil when get the <code>EOF</code>, so the following code can let all the inputs
+be upcase.</p>
+
+<pre><code>while line = gets
+  puts line.upcase
+end
+</code></pre>
+
+<p>If the <code>if</code> and <code>while</code> statement is just a single expression, we usually
+write them in this way.</p>
+
+<pre><code>puts 'Hey' if 2 &gt; 1
+
+i = 1
+puts i while (i += 1) &lt; 10
+</code></pre>
+
+<p>Someone say that this style is similar with <code>Perl</code>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Ruby-getting started]]></title>
+    <link href="http://itlodge.github.io/blog/2013/06/30/ruby-getting-started/"/>
+    <updated>2013-06-30T22:54:00+08:00</updated>
+    <id>http://itlodge.github.io/blog/2013/06/30/ruby-getting-started</id>
+    <content type="html"><![CDATA[<h1>Running ruby</h1>
+
+<h2>Interactive</h2>
+
+<p>In the past, I always tested some ruby statements with <code>irb</code>. Now I can
+test a small ruby program in the following way.</p>
+
+<pre><code>[monkey@itlodge octopress]$ ruby
+str = "abc"
+puts str
+Ctrl+d
+abc
+</code></pre>
+
+<p>After hit <code>ruby</code>, it allows me to type as many code as possible.Finally,
+press <code>Ctrl+d</code> will end the input and it will evaluate the code.</p>
+
+<h2>Programs</h2>
+
+<p>When writing a script, we always use <code>#!</code> and specific which language used
+to run the code.This is the Unix <a href="http://en.wikipedia.org/wiki/Shebang_%28Unix%29">Shebang</a> notation.For example:</p>
+
+<pre><code>#!/usr/bin/ruby -w
+puts "abc"
+</code></pre>
+
+<p>From the man page, I know that the <code>-w</code> option means <em>Enables verbose mode
+without printing version message at the beginning</em>.</p>
+
+<p>But, many guys like this style:</p>
+
+<pre><code>#!/usr/bin/env ruby
+puts "abc"
+</code></pre>
+
+<p>From the man page, I know that the <code>env</code> is a program that <em>run a program in
+a modified environment</em>.So it can search the <code>$PATH</code> and find the <code>ruby</code>
+program to run.</p>
+
+<h1>Ruby documentation</h1>
+
+<p>The site <a href="http://www.ruby-doc.org">ruby-doc.org</a> contains a complete set of the
+RDoc documentation for Ruby.</p>
+
+<p>The <code>ri</code> tool is very useful for looking up documentation.If you want to find
+the documentation for a class, just type <code>ri ClassName</code>. For example:</p>
+
+<pre><code>[monkey@itlodge ~]$ ri Vector
+= Vector &lt; Object
+
+------------------------------------------------------------------------------
+= Includes:
+Enumerable (from ruby core)
+
+(from ruby core)
+------------------------------------------------------------------------------
+The Vector class represents a mathematical vector, which is useful in its own
+right, and also constitutes a row or column of a Matrix.
+
+== Method Catalogue
+
+To create a Vector:
+*   Vector.[](*array)                   
+*   Vector.elements(array, copy = true) 
+
+To access elements:
+*   [](i)                               
+
+To enumerate the elements:
+*  #each2(v)                            
+*  #collect2(v)                         
+:
+</code></pre>
+
+<p>If you want to find the documentation for a method, just type
+<code>ri method's name</code>.For example:</p>
+
+<pre><code>[monkey@itlodge ~]$ ri sleep
+= .sleep
+
+(from ruby core)
+=== Implementation from Kernel
+------------------------------------------------------------------------------
+  sleep([duration])    -&gt; fixnum
+
+
+------------------------------------------------------------------------------
+
+Suspends the current thread for duration seconds (which may be
+any number, including a Float with fractional seconds). Returns the actual
+number of seconds slept (rounded), which may be less than that asked for if
+another thread calls Thread#run. Called without an argument, sleep() will
+sleep forever.
+
+  Time.new    #=&gt; 2008-03-08 19:56:19 +0900
+  sleep 1.2   #=&gt; 1
+  Time.new    #=&gt; 2008-03-08 19:56:20 +0900
+  sleep 1.9   #=&gt; 2
+  Time.new    #=&gt; 2008-03-08 19:56:22 +0900
+
+
+:
+</code></pre>
+
+<p>A method's name may be the same in different classes or modules.In this case,
+<code>ri</code> will list all of them.If you type <code>ri ClassName.method's name</code>, it
+will show only the documentation of the corresponding class's.</p>
+
+<p>More contributions, more reputations.If a class or module hasn't yet documented
+in RDoc, send an email to <code>suggestions@ruby-doc.org</code> to ask them to add.</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,378 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Some basic Ruby - Yuanhang Zheng</title>
+    <meta name="author" content="Yuanhang Zheng">
+    
+	<meta name="description" content="String and name When defining a function, the parentheses are not necessary.So this one def say_hello name "Hello " + name
+end puts say_hello "man" &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Yuanhang Zheng" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='http://fonts.googleapis.com/css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Amethysta' rel='stylesheet' type='text/css'>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <script src="/javascripts/ajaxify.js"></script>
+   
+    
+    
+
+</head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Yuanhang Zheng
+    </div>
+</h1>
+<br>
+
+<ul id="social-links" style="text-align:center">
+  
+  <!-- GitHub -->
+  <li>
+  <a href="https://github.com/itlodge" class="github" title="Github"></a>
+  </li>
+  
+  
+  <!-- Google Plus -->
+  <li>
+  <a href="http://plus.google.com/107688243765597180052?rel=author" class="google" title="Google+"></a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a href="http://www.twitter.com/itlodge" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  
+  
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/blog/archives/index.html">Archives</a></li>
+	<li id="ajax"><a href="/me/index.html">Me</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    
+    <li>
+    <div id="dark">
+        <form method="get" action="/search.html" id="search">
+            <input name="query" type="text" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+<div id="toload">
+<!-- begin toload --> 
+    <div id="content" class="inner">
+        <article class="post">
+	<h2 class="title">Some Basic Ruby</h2>
+	<div class="entry-content"><h2>String and name</h2>
+
+<p>When defining a function, the parentheses are not necessary.So this one</p>
+
+<pre><code>def say_hello name
+  "Hello " + name
+end
+
+puts say_hello "man"
+</code></pre>
+
+<p>is the same as this.</p>
+
+<pre><code>def say_hello(name)
+  "Hello " + name
+end
+
+puts(say_hello("man"))
+</code></pre>
+
+<p>However, when there are more than one parameters, it will be difficult to
+know which argument goes with which method invocation.So it&#8217;s recommended
+using parentheses in all but the simplest cases.</p>
+
+<p>We can use single-quote or double-quote to create a string.What&#8217;s the
+difference?</p>
+
+<p>First, single-quoted string can&#8217;t represent the escape character, and
+double-quoted string can.</p>
+
+<pre><code>puts '\nabc'
+puts "\nabc"
+</code></pre>
+
+<p>The above code will output this.</p>
+
+<pre><code>\nabc
+
+abc
+</code></pre>
+
+<p>Second, double-quoted string can be expression interpolated.</p>
+
+<pre><code>name = 'Tom'
+
+puts 'Hello #{name}'
+puts "Hello #{name}"
+</code></pre>
+
+<p>The above code will output this.</p>
+
+<pre><code>ruby test.rb
+Hello #{name}
+Hello Tom
+</code></pre>
+
+<p>And we can even invoke methods.</p>
+
+<pre><code>name = 'Tom'
+puts "Hello #{name.upcase}"
+</code></pre>
+
+<p>This will generate the following.</p>
+
+<pre><code>Hello TOM
+</code></pre>
+
+<p>When the expression is a global, instance or class variable, there is no need
+to use the braces.</p>
+
+<pre><code>@h = "Hello"    # @ means instance
+$name = 'Tom'    # $ means global
+
+puts "#@h #$name"
+</code></pre>
+
+<p>This will generate the same output.</p>
+
+<p>There are some conventions for the <strong>name</strong> in Ruby.</p>
+
+<ul>
+<li><p>Local variables, method parameters and method names <em>should</em> all start
+with a lowercase letter or an underscore.</p></li>
+<li><p>Class names, module names and constants <em>must</em> start with an uppercase
+letter.</p></li>
+<li><p>Global variables start with <code>$</code>.</p></li>
+<li><p>Instance variables begin with <code>@</code>.</p></li>
+<li><p>Class variables are prefixed with <code>@@</code>.</p></li>
+</ul>
+
+
+<h2>Arrays and Hashes</h2>
+
+<p>In ruby, arrays and hashes can hold objects of different types.</p>
+
+<pre><code>a = [1, 'abc', :sym]
+puts a
+</code></pre>
+
+<p>It will generate the following output.</p>
+
+<pre><code>1
+abc
+sym
+</code></pre>
+
+<p>By the way, <code>nil</code> is an object, represent <strong>nothing</strong>.</p>
+
+<p>If we want to create an array of string, we have to list all the strings.
+And we have to type lots of quotes and commas.However, <code>%w</code> can do it
+more easily.</p>
+
+<pre><code>a = ['a', 'b', 'c']
+b = %w{a b c}
+
+puts a
+puts b
+</code></pre>
+
+<p>It will generate the following output.</p>
+
+<pre><code>a
+b
+c
+a
+b
+c
+</code></pre>
+
+<p>The index of Array is integer, but the index of Hash is anything.</p>
+
+<p>It has the following form.</p>
+
+<pre><code>var = {
+  key1 =&gt; value1
+  key2 =&gt; value2
+  ...
+}
+</code></pre>
+
+<p>For example:</p>
+
+<pre><code>girl = {
+  :name =&gt; 'Mary',
+  :age =&gt; 20
+}
+
+puts "#{girl[:name]} is #{girl[:age]} years old."
+</code></pre>
+
+<p>Output:</p>
+
+<pre><code>Mary is 20 years old.
+</code></pre>
+
+<p>A new Hash can also be created in this way.</p>
+
+<pre><code>decimal = Hash.new(0)
+puts decimal[:first]
+decimal[:first] = 1
+puts decimal[:first]
+</code></pre>
+
+<p>Ouput:</p>
+
+<pre><code>0
+1
+</code></pre>
+
+<p><code>0</code> is the default value for all keys.</p>
+
+<h2>Control Structures</h2>
+
+<p>In Ruby, there is a <code>elsif</code> keyword instead of <code>else if</code>.</p>
+
+<p>The method <code>gets</code> return the next line from the standard input stream and
+return nil when get the <code>EOF</code>, so the following code can let all the inputs
+be upcase.</p>
+
+<pre><code>while line = gets
+  puts line.upcase
+end
+</code></pre>
+
+<p>If the <code>if</code> and <code>while</code> statement is just a single expression, we usually
+write them in this way.</p>
+
+<pre><code>puts 'Hey' if 2 &gt; 1
+
+i = 1
+puts i while (i += 1) &lt; 10
+</code></pre>
+
+<p>Someone say that this style is similar with <code>Perl</code>.</p>
+</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2013/07/25/some-basic-ruby/#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2013
+
+    Yuanhang Zheng
+. Powered by <a href="http://octopress.org">Octopress</a> | 
+    Theme <a href="http://github.com/panks/fabric">fabric</a> by <a href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'itlodge';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://itlodge.github.io/blog/2013/07/25/some-basic-ruby/';
+        var disqus_url = 'http://itlodge.github.io/blog/2013/07/25/some-basic-ruby/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+</body>
+</html>
