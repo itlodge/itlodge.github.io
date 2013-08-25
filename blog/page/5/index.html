@@ -1,0 +1,503 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Yuanhang Zheng</title>
+    <meta name="author" content="Yuanhang Zheng">
+    
+	<meta name="description" content="Published on: Jul 22nd, 2013 Tags: C++ Declaration and Definition I have already known the difference between declaration and definion,
+but now I &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Yuanhang Zheng" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='http://fonts.googleapis.com/css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Amethysta' rel='stylesheet' type='text/css'>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <script src="/javascripts/ajaxify.js"></script>
+   
+    
+    
+
+</head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Yuanhang Zheng
+    </div>
+</h1>
+<br>
+
+<ul id="social-links" style="text-align:center">
+  
+  <!-- GitHub -->
+  <li>
+  <a href="https://github.com/itlodge" class="github" title="Github"></a>
+  </li>
+  
+  
+  <!-- Google Plus -->
+  <li>
+  <a href="http://plus.google.com/107688243765597180052?rel=author" class="google" title="Google+"></a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a href="http://www.twitter.com/itlodge" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  
+  
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/blog/archives/index.html">Archives</a></li>
+	<li id="ajax"><a href="/me/index.html">Me</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    
+    <li>
+    <div id="dark">
+        <form method="get" action="/search.html" id="search">
+            <input name="query" type="text" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+<div id="toload">
+<!-- begin toload --> 
+    <div id="content" class="inner">
+        
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2013/07/22/some-reviews-about-c-plus-plus/">
+		
+			Some Reviews About C Plus Plus</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-22T19:33:00+08:00" pubdate data-updated="true">Jul 22<span>nd</span>, 2013</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/c-plus-plus/'>C++</a>
+
+
+</div>
+    </div>
+		<h1>Declaration and Definition</h1>
+
+<p>I have already known the difference between <strong>declaration</strong> and <strong>definion</strong>,
+but now I find that my understanding is not complete.</p>
+
+<p><strong>Declaration</strong> just tells the compiler about the name and the type of
+something.It&rsquo;s very common about the declaration of <em>objects</em> and <em>functions</em>.</p>
+
+<pre><code>extern int a;
+
+int max(int a, int b);
+</code></pre>
+
+<p>However, I never think about the declaration of <em>class</em>.Recently, I have to
+view some codes in a large project and I have found many of these declarations.</p>
+
+<pre><code>class Option;
+class Parameter;
+</code></pre>
+
+<p>Additionally, there are many declarations of the <em>template class</em>.</p>
+
+<pre><code>template&lt;typename T&gt;
+class Swap;
+</code></pre>
+
+<p>Another interesting thing is that the official C++ definition of
+<em>function signature</em> excludes the return type.I think this is strange and I
+will consider it, anyway.</p>
+
+<p><strong>Definition</strong> gives the details of something to the compiler.In the past, I
+hold the opinion that <em>definition</em> always be related to <em>memory</em>.In fact, it is
+not allways.
+&ndash; For object, the definition tell the compiler about the memory asigned for the
+object.
+&ndash; For function or function template, the definition provides the function body.
+&ndash; For class or class template, the definition lists the members of the class.</p>
+
+<p>For example:</p>
+
+<pre><code>int a;
+
+int max(int a, int b)
+{
+    return a &gt; b ? a : b;
+}
+
+class Option {
+public:
+    Option();
+    ~Option();
+    ...
+};
+</code></pre>
+
+<h1>Defaul constructor</h1>
+
+<p>I found I can&rsquo;t tell whether a constructor is a <strong>default constructor</strong> or not.
+But now, I know.A <strong>default constructor</strong> is a constructor that can be called
+without any arguments.That is, either no parameters or every parameter is
+initialized.</p>
+
+<p>The following are default constructors.</p>
+
+<pre><code>Option();
+explicit Option(bool short = true);
+</code></pre>
+
+<p>And this one is not a default constructor.</p>
+
+<pre><code>explicit Option(bool short);
+</code></pre>
+
+<p>What the hell <strong>explicit</strong> is doing here?I have never used this reserved word
+even if I have learned C++ for several years.But this guy, <em>explicit</em>, is of
+great importance.</p>
+
+<p>Placing <em>explicit</em> before the constructor can prevent the objects of the class
+being used to perform implicit type conversions.Obviously, they can be used
+for explicit type conversions.</p>
+
+<p>For example, if we have two classes and a function.</p>
+
+<pre><code>class Dog {
+    explicit Dog();
+    ...
+}
+
+Dog aDog;
+Cat aCat;
+
+void kill(Dog d);
+</code></pre>
+
+<p>Now call the <code>kill</code> function passing <code>aDog</code> as parameter.</p>
+
+<pre><code>kill(aDog);    // No problem.
+</code></pre>
+
+<p>If with the <code>explicit</code> reserved word and call the <code>kill</code> function passing
+<code>aCat</code> as parameter, it will be error since it prevents implicit type
+conversions.</p>
+
+<pre><code>kill(aCat);    // Error, prevent implicit conversion.
+</code></pre>
+
+<p>But if without the <code>explicit</code> reserved word and call the <code>kill</code> function
+passing <code>aCat</code> as parameter, it will lead the compiler to perform unexpected
+type conversions.So the policy is:</p>
+
+<p><strong>Always declare the constructor as explicit.</strong></p>
+
+<h1>Copy constructor and copy assignment operator</h1>
+
+<p>I have already known that this</p>
+
+<pre><code>Parameter p1;
+</code></pre>
+
+<p>will invoke the <em>default constructor</em> and this</p>
+
+<pre><code>Parameter p2(p1);
+</code></pre>
+
+<p>will invoke the <em>copy constructor</em> and this</p>
+
+<pre><code>p1 = p2;
+</code></pre>
+
+<p>will invoke the <em>copy assignment operator</em>, but I have never known that this</p>
+
+<pre><code>Parameter p3 = p2;
+</code></pre>
+
+<p>will not invoke the <em>copy assignment operator</em> but the <em>copy constructor</em>.</p>
+
+<p>This amazes me very much.But now I can distinguish it easily.</p>
+
+<p>If a new object is being defined, invoke the <em>copy constructor</em>.Otherwise,
+invoke the <em>copy assignment operator</em> since it&rsquo;s just the <strong>asignment</strong>.</p>
+
+<h1>Some common sense</h1>
+
+<ul>
+<li>TR1, Technical Report 1, is a specification for new functionality in
+C++ standard library.</li>
+</ul>
+
+
+<p>This really deepens my understanding of C plus plus and now I am very
+interested in this great programming language.</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2013/07/22/some-reviews-about-c-plus-plus//blog/page/5/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2013/06/30/ruby-getting-started/">
+		
+			Ruby-getting Started</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-30T22:54:00+08:00" pubdate data-updated="true">Jun 30<span>th</span>, 2013</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/ruby/'>Ruby</a>
+
+
+</div>
+    </div>
+		<h1>Running ruby</h1>
+
+<h2>Interactive</h2>
+
+<p>In the past, I always tested some ruby statements with <code>irb</code>. Now I can
+test a small ruby program in the following way.</p>
+
+<pre><code>[monkey@itlodge octopress]$ ruby
+str = "abc"
+puts str
+Ctrl+d
+abc
+</code></pre>
+
+<p>After hit <code>ruby</code>, it allows me to type as many code as possible.Finally,
+press <code>Ctrl+d</code> will end the input and it will evaluate the code.</p>
+
+<h2>Programs</h2>
+
+<p>When writing a script, we always use <code>#!</code> and specific which language used
+to run the code.This is the Unix <a href="http://en.wikipedia.org/wiki/Shebang_%28Unix%29">Shebang</a> notation.For example:</p>
+
+<pre><code>#!/usr/bin/ruby -w
+puts "abc"
+</code></pre>
+
+<p>From the man page, I know that the <code>-w</code> option means <em>Enables verbose mode
+without printing version message at the beginning</em>.</p>
+
+<p>But, many guys like this style:</p>
+
+<pre><code>#!/usr/bin/env ruby
+puts "abc"
+</code></pre>
+
+<p>From the man page, I know that the <code>env</code> is a program that <em>run a program in
+a modified environment</em>.So it can search the <code>$PATH</code> and find the <code>ruby</code>
+program to run.</p>
+
+<h1>Ruby documentation</h1>
+
+<p>The site <a href="http://www.ruby-doc.org">ruby-doc.org</a> contains a complete set of the
+RDoc documentation for Ruby.</p>
+
+<p>The <code>ri</code> tool is very useful for looking up documentation.If you want to find
+the documentation for a class, just type <code>ri ClassName</code>. For example:</p>
+
+<pre><code>[monkey@itlodge ~]$ ri Vector
+= Vector &lt; Object
+
+------------------------------------------------------------------------------
+= Includes:
+Enumerable (from ruby core)
+
+(from ruby core)
+------------------------------------------------------------------------------
+The Vector class represents a mathematical vector, which is useful in its own
+right, and also constitutes a row or column of a Matrix.
+
+== Method Catalogue
+
+To create a Vector:
+*   Vector.[](*array)                   
+*   Vector.elements(array, copy = true) 
+
+To access elements:
+*   [](i)                               
+
+To enumerate the elements:
+*  #each2(v)                            
+*  #collect2(v)                         
+:
+</code></pre>
+
+<p>If you want to find the documentation for a method, just type
+<code>ri method's name</code>.For example:</p>
+
+<pre><code>[monkey@itlodge ~]$ ri sleep
+= .sleep
+
+(from ruby core)
+=== Implementation from Kernel
+------------------------------------------------------------------------------
+  sleep([duration])    -&gt; fixnum
+
+
+------------------------------------------------------------------------------
+
+Suspends the current thread for duration seconds (which may be
+any number, including a Float with fractional seconds). Returns the actual
+number of seconds slept (rounded), which may be less than that asked for if
+another thread calls Thread#run. Called without an argument, sleep() will
+sleep forever.
+
+  Time.new    #=&gt; 2008-03-08 19:56:19 +0900
+  sleep 1.2   #=&gt; 1
+  Time.new    #=&gt; 2008-03-08 19:56:20 +0900
+  sleep 1.9   #=&gt; 2
+  Time.new    #=&gt; 2008-03-08 19:56:22 +0900
+
+
+:
+</code></pre>
+
+<p>A method&rsquo;s name may be the same in different classes or modules.In this case,
+<code>ri</code> will list all of them.If you type <code>ri ClassName.method's name</code>, it
+will show only the documentation of the corresponding class&rsquo;s.</p>
+
+<p>More contributions, more reputations.If a class or module hasn&rsquo;t yet documented
+in RDoc, send an email to <code>suggestions@ruby-doc.org</code> to ask them to add.</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2013/06/30/ruby-getting-started//blog/page/5/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
+
+<nav id="pagenavi">
+    
+        <a href="/blog/page/4/" class="prev">Prev</a>
+    
+    
+    <div class="center"><a href="/blog/archives">Blog Archives</a></div>
+</nav>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2013
+
+    Yuanhang Zheng
+. Powered by <a href="http://octopress.org">Octopress</a> | 
+    Theme <a href="http://github.com/panks/fabric">fabric</a> by <a href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'itlodge';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+</body>
+</html>
