@@ -46,3 +46,30 @@ Here is the code.
 
 **1.2.** Write code to reverse a C-Style String(C-String means that "abcd" is
 represented as five characters, including the null character)
+
+The approach I come up with is described as follows.
+
+1. Get the length of the string, which needs iterate the whole string.
+
+2. According to the property of continuing, we can manipulate the string
+from the end. So we can swap the first character with the last character,
+and swap the second character with the last but not least character, ...
+This needs iterate half of the string.
+
+In sumary, this will need O(1.5n) -> O(n) time complexity. Here is the code.
+
+{% include_code careerup-1.2.cpp %}
+
+However, the answer is using pointer instead of index. But the algorithm and
+the time complexity are the same. Here is the code.
+
+{% include_code careerup-1.2-answer.cpp %}
+
+This code has several problems. First, the variable ``end`` and ``tmp`` should
+be defined in the ``if`` block. Otherwise, if ``str`` is ``NULL``, the
+definition of the two variables will be wasteful. Second, using the pointer with
+the ``++`` and ``--`` is error-prone.
+
+
+
+
