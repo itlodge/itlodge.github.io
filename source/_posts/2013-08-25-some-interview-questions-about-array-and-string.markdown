@@ -70,6 +70,29 @@ be defined in the ``if`` block. Otherwise, if ``str`` is ``NULL``, the
 definition of the two variables will be wasteful. Second, using the pointer with
 the ``++`` and ``--`` is error-prone.
 
+**1.3** Design an algorithm and write code to remove the duplicate characters
+in a string without using any additional buffer. NOTE: One or two additional
+variables are fine. An extra copy of the array is not.
+
+FOLLOW UP
+
+Write the test cases for this method.
+
+I am not so smart that I can only come up with the straightforward method. Just
+iterate the whole string and check from the former characters to find duplicate
+character. If there is duplicate, remove it by moving the rest characters front.
+Here is the code.
+
+{% include_code careerup-1.3.cpp %}
+
+The algorithm is ok but the program is too slow. In fact, the last ``for`` loop
+is not necessary. Here is the improved version according to the answer.
+
+{% include_code careerup-1.3-answer.cpp %}
+
+
+
+
 
 
 
