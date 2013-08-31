@@ -1,3 +1,7 @@
+#define BOOST_TEST_DYN_LINK
+#define BOOST_TEST_MODULE has_unique
+
+#include <boost/test/unit_test.hpp>
 #include <iostream>
 
 bool
@@ -6,26 +10,15 @@ has_unique_char_array(const std::string& str);
 bool
 has_unique_char_bit(const std::string& str);
 
-int
-main(int argc, char *argv[])
+BOOST_AUTO_TEST_CASE(has_unique)
 {
     const std::string test_str1 = "abcd";
     const std::string test_str2 = "abca";
 
-    if (has_unique_char_array(test_str1)) {
-        std::cout << "Array unique" << std::endl;
-    }
-    if (!has_unique_char_array(test_str2)) {
-        std::cout << "Array not unique" << std::endl;
-    }
-    if (has_unique_char_bit(test_str1)) {
-        std::cout << "Bit unique" << std::endl;
-    }
-    if (!has_unique_char_bit(test_str2)) {
-        std::cout << "Bit not unique" << std::endl;
-    }
-    
-    return 0;
+    BOOST_CHECK(has_unique_char_array(test_str1));
+    BOOST_CHECK(has_unique_char_array(test_str2));
+    BOOST_CHECK(has_unique_char_bit(test_str1));
+    BOOST_CHECK(has_unique_char_bit(test_str2));
 }
 
 bool

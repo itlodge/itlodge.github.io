@@ -229,14 +229,11 @@ the string once.</p></li>
 <span class='line-number'>50</span>
 <span class='line-number'>51</span>
 <span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include &lt;tr1/unordered_set&gt;</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#define BOOST_TEST_DYN_LINK</span>
+</span><span class='line'><span class="cp">#define BOOST_TEST_MODULE has_unique</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#include &lt;boost/test/unit_test.hpp&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;tr1/unordered_set&gt;</span>
 </span><span class='line'><span class="cp">#include &lt;iostream&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="kt">bool</span>
@@ -245,26 +242,15 @@ the string once.</p></li>
 </span><span class='line'><span class="kt">bool</span>
 </span><span class='line'><span class="n">has_unique_char_set</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">str</span><span class="p">);</span>
 </span><span class='line'>
-</span><span class='line'><span class="kt">int</span>
-</span><span class='line'><span class="n">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">has_unique</span><span class="p">)</span>
 </span><span class='line'><span class="p">{</span>
 </span><span class='line'>    <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">test_str1</span> <span class="o">=</span> <span class="s">&quot;abcd&quot;</span><span class="p">;</span>
 </span><span class='line'>    <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">test_str2</span> <span class="o">=</span> <span class="s">&quot;abca&quot;</span><span class="p">;</span>
 </span><span class='line'>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">has_unique_char_normal</span><span class="p">(</span><span class="n">test_str1</span><span class="p">))</span> <span class="p">{</span>
-</span><span class='line'>        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Normal unique&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">has_unique_char_normal</span><span class="p">(</span><span class="n">test_str2</span><span class="p">))</span> <span class="p">{</span>
-</span><span class='line'>        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Normal not unique&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">has_unique_char_set</span><span class="p">(</span><span class="n">test_str1</span><span class="p">))</span> <span class="p">{</span>
-</span><span class='line'>        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Set unique&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">has_unique_char_set</span><span class="p">(</span><span class="n">test_str2</span><span class="p">))</span> <span class="p">{</span>
-</span><span class='line'>        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Set not unique&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK</span><span class="p">(</span><span class="n">has_unique_char_normal</span><span class="p">(</span><span class="n">test_str1</span><span class="p">));</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK</span><span class="p">(</span><span class="n">has_unique_char_normal</span><span class="p">(</span><span class="n">test_str2</span><span class="p">));</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK</span><span class="p">(</span><span class="n">has_unique_char_set</span><span class="p">(</span><span class="n">test_str1</span><span class="p">));</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK</span><span class="p">(</span><span class="n">has_unique_char_set</span><span class="p">(</span><span class="n">test_str2</span><span class="p">));</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
 </span><span class='line'><span class="kt">bool</span>
@@ -364,14 +350,11 @@ characters in the string.</p></li>
 <span class='line-number'>50</span>
 <span class='line-number'>51</span>
 <span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include &lt;iostream&gt;</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#define BOOST_TEST_DYN_LINK</span>
+</span><span class='line'><span class="cp">#define BOOST_TEST_MODULE has_unique</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#include &lt;boost/test/unit_test.hpp&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;iostream&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="kt">bool</span>
 </span><span class='line'><span class="n">has_unique_char_array</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">str</span><span class="p">);</span>
@@ -379,26 +362,15 @@ characters in the string.</p></li>
 </span><span class='line'><span class="kt">bool</span>
 </span><span class='line'><span class="n">has_unique_char_bit</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">str</span><span class="p">);</span>
 </span><span class='line'>
-</span><span class='line'><span class="kt">int</span>
-</span><span class='line'><span class="n">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">has_unique</span><span class="p">)</span>
 </span><span class='line'><span class="p">{</span>
 </span><span class='line'>    <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">test_str1</span> <span class="o">=</span> <span class="s">&quot;abcd&quot;</span><span class="p">;</span>
 </span><span class='line'>    <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">test_str2</span> <span class="o">=</span> <span class="s">&quot;abca&quot;</span><span class="p">;</span>
 </span><span class='line'>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">has_unique_char_array</span><span class="p">(</span><span class="n">test_str1</span><span class="p">))</span> <span class="p">{</span>
-</span><span class='line'>        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Array unique&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">has_unique_char_array</span><span class="p">(</span><span class="n">test_str2</span><span class="p">))</span> <span class="p">{</span>
-</span><span class='line'>        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Array not unique&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">has_unique_char_bit</span><span class="p">(</span><span class="n">test_str1</span><span class="p">))</span> <span class="p">{</span>
-</span><span class='line'>        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Bit unique&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">has_unique_char_bit</span><span class="p">(</span><span class="n">test_str2</span><span class="p">))</span> <span class="p">{</span>
-</span><span class='line'>        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Bit not unique&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK</span><span class="p">(</span><span class="n">has_unique_char_array</span><span class="p">(</span><span class="n">test_str1</span><span class="p">));</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK</span><span class="p">(</span><span class="n">has_unique_char_array</span><span class="p">(</span><span class="n">test_str2</span><span class="p">));</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK</span><span class="p">(</span><span class="n">has_unique_char_bit</span><span class="p">(</span><span class="n">test_str1</span><span class="p">));</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK</span><span class="p">(</span><span class="n">has_unique_char_bit</span><span class="p">(</span><span class="n">test_str2</span><span class="p">));</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
 </span><span class='line'><span class="kt">bool</span>
@@ -486,21 +458,19 @@ This needs iterate half of the string.</p></li>
 <span class='line-number'>34</span>
 <span class='line-number'>35</span>
 <span class='line-number'>36</span>
-<span class='line-number'>37</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include &lt;iostream&gt;</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#define BOOST_TEST_DYN_LINK</span>
+</span><span class='line'><span class="cp">#define BOOST_TEST_MODULE reverse_string</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#include &lt;boost/test/unit_test.hpp&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;iostream&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="kt">char</span> <span class="o">*</span>
 </span><span class='line'><span class="n">reverse_str</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">);</span>
 </span><span class='line'>
-</span><span class='line'><span class="kt">int</span>
-</span><span class='line'><span class="n">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">reverse_string</span><span class="p">)</span>
 </span><span class='line'><span class="p">{</span>
 </span><span class='line'>    <span class="kt">char</span> <span class="n">test_str</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;abcd&quot;</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">test_str</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">reverse_str</span><span class="p">(</span><span class="n">test_str</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">reverse_str</span><span class="p">(</span><span class="n">test_str</span><span class="p">),</span> <span class="s">&quot;dcba&quot;</span><span class="p">);</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
 </span><span class='line'><span class="kt">char</span> <span class="o">*</span>
@@ -565,22 +535,20 @@ the time complexity are the same. Here is the code.</p>
 <span class='line-number'>32</span>
 <span class='line-number'>33</span>
 <span class='line-number'>34</span>
-<span class='line-number'>35</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include &lt;iostream&gt;</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#define BOOST_TEST_DYN_LINK</span>
+</span><span class='line'><span class="cp">#define BOOST_TEST_MODULE reverse_string</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#include &lt;boost/test/unit_test.hpp&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;iostream&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="kt">void</span>
 </span><span class='line'><span class="n">reverse</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">);</span>
 </span><span class='line'>
-</span><span class='line'><span class="kt">int</span>
-</span><span class='line'><span class="n">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">reverse_string</span><span class="p">)</span>
 </span><span class='line'><span class="p">{</span>
 </span><span class='line'>    <span class="kt">char</span> <span class="n">test_str</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;abcd&quot;</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">test_str</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 </span><span class='line'>    <span class="n">reverse</span><span class="p">(</span><span class="n">test_str</span><span class="p">);</span>
-</span><span class='line'>    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">test_str</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">test_str</span><span class="p">,</span> <span class="s">&quot;dcba&quot;</span><span class="p">);</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
 </span><span class='line'><span class="kt">void</span>
@@ -665,16 +633,20 @@ Here is the code.</p>
 <span class='line-number'>40</span>
 <span class='line-number'>41</span>
 <span class='line-number'>42</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include &lt;iostream&gt;</span>
+<span class='line-number'>43</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#define BOOST_TEST_DYN_LINK</span>
+</span><span class='line'><span class="cp">#define BOOST_TEST_MODULE remove_duplicate</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#include &lt;iostream&gt;</span>
 </span><span class='line'><span class="cp">#include &lt;cstring&gt;</span>
 </span><span class='line'><span class="cp">#include &lt;cstdlib&gt;</span>
 </span><span class='line'><span class="cp">#include &lt;ctime&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;boost/test/unit_test.hpp&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="kt">void</span>
 </span><span class='line'><span class="n">rm_dup</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">);</span>
 </span><span class='line'>
-</span><span class='line'><span class="kt">int</span>
-</span><span class='line'><span class="n">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">remove_duplicate</span><span class="p">)</span>
 </span><span class='line'><span class="p">{</span>
 </span><span class='line'>    <span class="kt">char</span> <span class="n">test_str</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>
 </span><span class='line'>
@@ -685,8 +657,6 @@ Here is the code.</p>
 </span><span class='line'>    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">test_str</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 </span><span class='line'>    <span class="n">rm_dup</span><span class="p">(</span><span class="n">test_str</span><span class="p">);</span>
 </span><span class='line'>    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">test_str</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
 </span><span class='line'><span class="kt">void</span>
@@ -781,39 +751,79 @@ is not necessary. Here is the improved version according to the answer.</p>
 <span class='line-number'>65</span>
 <span class='line-number'>66</span>
 <span class='line-number'>67</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include &lt;iostream&gt;</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#define BOOST_TEST_DYN_LINK</span>
+</span><span class='line'><span class="cp">#define BOOST_TEST_MODULE remove_duplicate</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#include &lt;iostream&gt;</span>
 </span><span class='line'><span class="cp">#include &lt;cstring&gt;</span>
 </span><span class='line'><span class="cp">#include &lt;cstdlib&gt;</span>
 </span><span class='line'><span class="cp">#include &lt;ctime&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;boost/test/unit_test.hpp&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="kt">void</span>
 </span><span class='line'><span class="n">rm_dup</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">);</span>
 </span><span class='line'>
-</span><span class='line'><span class="kt">int</span>
-</span><span class='line'><span class="n">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">null</span><span class="p">)</span>
 </span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="kt">char</span> <span class="n">test_str1</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;abcd&quot;</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">rm_dup</span><span class="p">(</span><span class="n">test_str1</span><span class="p">);</span>
-</span><span class='line'>    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">test_str1</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="kt">char</span> <span class="n">test_str2</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;aaaa&quot;</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">rm_dup</span><span class="p">(</span><span class="n">test_str2</span><span class="p">);</span>
-</span><span class='line'>    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">test_str2</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-</span><span class='line'>
 </span><span class='line'>    <span class="n">rm_dup</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
 </span><span class='line'>
-</span><span class='line'>    <span class="kt">char</span> <span class="n">test_str3</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">rm_dup</span><span class="p">(</span><span class="n">test_str3</span><span class="p">);</span>
-</span><span class='line'>    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">test_str3</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">No_duplicate</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">char</span> <span class="n">test_str</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;abcd&quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">rm_dup</span><span class="p">(</span><span class="n">test_str</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">test_str</span><span class="p">,</span> <span class="s">&quot;abcd&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
 </span><span class='line'>
-</span><span class='line'>    <span class="kt">char</span> <span class="n">test_str4</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;aaabbb&quot;</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">rm_dup</span><span class="p">(</span><span class="n">test_str4</span><span class="p">);</span>
-</span><span class='line'>    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">test_str4</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">All_duplicate</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">char</span> <span class="n">test_str</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;aaaa&quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">rm_dup</span><span class="p">(</span><span class="n">test_str</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">test_str</span><span class="p">,</span> <span class="s">&quot;a&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
 </span><span class='line'>
-</span><span class='line'>    <span class="kt">char</span> <span class="n">test_str5</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;abababa&quot;</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">rm_dup</span><span class="p">(</span><span class="n">test_str5</span><span class="p">);</span>
-</span><span class='line'>    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">test_str5</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">Empty</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">char</span> <span class="n">test_str</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">rm_dup</span><span class="p">(</span><span class="n">test_str</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">test_str</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
 </span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">Continual_duplicate</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">char</span> <span class="n">test_str</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;aaabbb&quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">rm_dup</span><span class="p">(</span><span class="n">test_str</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">test_str</span><span class="p">,</span> <span class="s">&quot;ab&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">Non_continual_duplicate</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">char</span> <span class="n">test_str</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;abababa&quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">rm_dup</span><span class="p">(</span><span class="n">test_str</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">test_str</span><span class="p">,</span> <span class="s">&quot;ab&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">random_string</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
 </span><span class='line'>    <span class="kt">char</span> <span class="n">test_str6</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>
 </span><span class='line'>    <span class="n">srand</span><span class="p">(</span><span class="n">time</span><span class="p">(</span><span class="mi">0</span><span class="p">));</span>
 </span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
@@ -822,8 +832,6 @@ is not necessary. Here is the improved version according to the answer.</p>
 </span><span class='line'>    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">test_str6</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 </span><span class='line'>    <span class="n">rm_dup</span><span class="p">(</span><span class="n">test_str6</span><span class="p">);</span>
 </span><span class='line'>    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">test_str6</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
 </span><span class='line'><span class="kt">void</span>
@@ -847,6 +855,111 @@ is not necessary. Here is the improved version according to the answer.</p>
 </span><span class='line'>        <span class="p">}</span>
 </span><span class='line'>    <span class="p">}</span>
 </span><span class='line'>    <span class="n">str</span><span class="p">[</span><span class="n">tail</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>1.4</strong> Write a method to decide if two strings are anagrams or not.</p>
+
+<p>From <a href="http://en.wikipedia.org/wiki/Anagram">Wikipedia</a>, An anagram is a type
+of word play, the result of rearranging the letters of a word or phrase to
+produce a new word or phrase, using all the original letters exactly once.</p>
+
+<p>For example, <code>"abc"</code>, <code>"acb"</code>, <code>"bac"</code>, <code>"bca"</code>, <code>"cab"</code> and <code>"cba"</code>
+are all anagrams.</p>
+
+<p>I come up with two approaches.</p>
+
+<ol>
+<li><p>Sort them and compare them. This will require at least O(nlogn) * 2 + O(n)
+time complexity.</p></li>
+<li><p>Use an extra array to record the occurrence of each character when compare
+the two string.</p></li>
+</ol>
+
+
+<p>I implemented the last method here.</p>
+
+<figure class='code'><figcaption><span> (careerup-1.4.cpp)</span> <a href='/code/careerup-1.4.cpp'>download</a></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#define BOOST_TEST_DYN_LINK</span>
+</span><span class='line'><span class="cp">#define BOOST_TEST_MODULE is_anagram</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#include &lt;iostream&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;boost/test/unit_test.hpp&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">bool</span>
+</span><span class='line'><span class="n">is_anagram</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">lhs</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">rhs</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">lhs_size</span> <span class="o">=</span> <span class="n">lhs</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">rhs_size</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">lhs_size</span> <span class="o">!=</span> <span class="n">rhs_size</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="kt">bool</span> <span class="n">rhs_is_marked</span><span class="p">[</span><span class="n">rhs_size</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">memset</span><span class="p">(</span><span class="n">rhs_is_marked</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="n">rhs_size</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">bool</span><span class="p">));</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">lhs_size</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kt">int</span> <span class="n">j</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">rhs_size</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="n">rhs_is_marked</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="p">{</span>
+</span><span class='line'>                <span class="k">continue</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">lhs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">rhs</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="p">{</span>
+</span><span class='line'>                <span class="n">rhs_is_marked</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>                <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">==</span> <span class="n">rhs_size</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">test_is_anagram</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK</span><span class="p">(</span><span class="n">is_anagram</span><span class="p">(</span><span class="s">&quot;abc&quot;</span><span class="p">,</span> <span class="s">&quot;abcd&quot;</span><span class="p">));</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK</span><span class="p">(</span><span class="n">is_anagram</span><span class="p">(</span><span class="s">&quot;abc&quot;</span><span class="p">,</span> <span class="s">&quot;cab&quot;</span><span class="p">));</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK</span><span class="p">(</span><span class="n">is_anagram</span><span class="p">(</span><span class="s">&quot;orchestra&quot;</span><span class="p">,</span> <span class="s">&quot;carthorse&quot;</span><span class="p">));</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 

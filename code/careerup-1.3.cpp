@@ -1,13 +1,16 @@
+#define BOOST_TEST_DYN_LINK
+#define BOOST_TEST_MODULE remove_duplicate
+
 #include <iostream>
 #include <cstring>
 #include <cstdlib>
 #include <ctime>
+#include <boost/test/unit_test.hpp>
 
 void
 rm_dup(char *str);
 
-int
-main(int argc, char *argv[])
+BOOST_AUTO_TEST_CASE(remove_duplicate)
 {
     char test_str[20];
 
@@ -18,8 +21,6 @@ main(int argc, char *argv[])
     std::cout << test_str << std::endl;
     rm_dup(test_str);
     std::cout << test_str << std::endl;
-    
-    return 0;
 }
 
 void
