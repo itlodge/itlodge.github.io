@@ -1,18 +1,17 @@
+#define BOOST_TEST_DYN_LINK
+#define BOOST_TEST_MODULE reverse_string
+
+#include <boost/test/unit_test.hpp>
 #include <iostream>
 
 void
 reverse(char *str);
 
-int
-main(int argc, char *argv[])
+BOOST_AUTO_TEST_CASE(reverse_string)
 {
     char test_str[] = "abcd";
-    
-    std::cout << test_str << std::endl;
     reverse(test_str);
-    std::cout << test_str << std::endl;
-    
-    return 0;
+    BOOST_CHECK_EQUAL(test_str, "dcba");
 }
 
 void

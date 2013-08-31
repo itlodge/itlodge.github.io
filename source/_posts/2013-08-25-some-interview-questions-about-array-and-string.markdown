@@ -90,6 +90,29 @@ is not necessary. Here is the improved version according to the answer.
 
 {% include_code careerup-1.3-answer.cpp %}
 
+**1.4** Write a method to decide if two strings are anagrams or not.
+
+From [Wikipedia](http://en.wikipedia.org/wiki/Anagram), An anagram is a type
+of word play, the result of rearranging the letters of a word or phrase to
+produce a new word or phrase, using all the original letters exactly once.
+
+For example, ``"abc"``, ``"acb"``, ``"bac"``, ``"bca"``, ``"cab"`` and ``"cba"``
+are all anagrams.
+
+I come up with two approaches.
+
+1. Sort them and compare them. This will require at least O(nlogn) * 2 + O(n)
+time complexity.
+
+2. Use an extra array to record the occurrence of each character when compare
+the two string.
+
+I implemented the last method here.
+
+{% include_code careerup-1.4.cpp %}
+
+
+
 
 
 

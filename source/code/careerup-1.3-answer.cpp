@@ -1,36 +1,57 @@
+#define BOOST_TEST_DYN_LINK
+#define BOOST_TEST_MODULE remove_duplicate
+
 #include <iostream>
 #include <cstring>
 #include <cstdlib>
 #include <ctime>
+#include <boost/test/unit_test.hpp>
 
 void
 rm_dup(char *str);
 
-int
-main(int argc, char *argv[])
+BOOST_AUTO_TEST_CASE(null)
 {
-    char test_str1[] = "abcd";
-    rm_dup(test_str1);
-    std::cout << test_str1 << std::endl;
-
-    char test_str2[] = "aaaa";    
-    rm_dup(test_str2);
-    std::cout << test_str2 << std::endl;
-
     rm_dup(NULL);
-    
-    char test_str3[] = "";    
-    rm_dup(test_str3);
-    std::cout << test_str3 << std::endl;
+}
 
-    char test_str4[] = "aaabbb";    
-    rm_dup(test_str4);
-    std::cout << test_str4 << std::endl;
+BOOST_AUTO_TEST_CASE(No_duplicate)
+{
+    char test_str[] = "abcd";
+    rm_dup(test_str);
+    BOOST_CHECK_EQUAL(test_str, "abcd");
+}
 
-    char test_str5[] = "abababa";    
-    rm_dup(test_str5);
-    std::cout << test_str5 << std::endl;
+BOOST_AUTO_TEST_CASE(All_duplicate)
+{
+    char test_str[] = "aaaa";
+    rm_dup(test_str);
+    BOOST_CHECK_EQUAL(test_str, "a");
+}
 
+BOOST_AUTO_TEST_CASE(Empty)
+{
+    char test_str[] = "";
+    rm_dup(test_str);
+    BOOST_CHECK_EQUAL(test_str, "");
+}
+
+BOOST_AUTO_TEST_CASE(Continual_duplicate)
+{
+    char test_str[] = "aaabbb";
+    rm_dup(test_str);
+    BOOST_CHECK_EQUAL(test_str, "ab");
+}
+
+BOOST_AUTO_TEST_CASE(Non_continual_duplicate)
+{
+    char test_str[] = "abababa";
+    rm_dup(test_str);
+    BOOST_CHECK_EQUAL(test_str, "ab");
+}
+
+BOOST_AUTO_TEST_CASE(random_string)
+{
     char test_str6[20];    
     srand(time(0));
     for (int i = 0; i < 20; i++) {
@@ -39,8 +60,6 @@ main(int argc, char *argv[])
     std::cout << test_str6 << std::endl;
     rm_dup(test_str6);
     std::cout << test_str6 << std::endl;
-    
-    return 0;
 }
 
 void
