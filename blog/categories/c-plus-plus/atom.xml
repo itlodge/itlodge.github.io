@@ -4,7 +4,7 @@
   <title><![CDATA[Category: C++ | Yuanhang Zheng]]></title>
   <link href="http://itlodge.github.io/blog/categories/c-plus-plus/atom.xml" rel="self"/>
   <link href="http://itlodge.github.io/"/>
-  <updated>2013-09-01T07:36:17+08:00</updated>
+  <updated>2013-09-03T23:50:53+08:00</updated>
   <id>http://itlodge.github.io/</id>
   <author>
     <name><![CDATA[Yuanhang Zheng]]></name>
@@ -863,6 +863,185 @@ the two string.</p></li>
 </span><span class='line'>    <span class="n">BOOST_CHECK</span><span class="p">(</span><span class="n">is_anagram</span><span class="p">(</span><span class="s">&quot;abc&quot;</span><span class="p">,</span> <span class="s">&quot;abcd&quot;</span><span class="p">));</span>
 </span><span class='line'>    <span class="n">BOOST_CHECK</span><span class="p">(</span><span class="n">is_anagram</span><span class="p">(</span><span class="s">&quot;abc&quot;</span><span class="p">,</span> <span class="s">&quot;cab&quot;</span><span class="p">));</span>
 </span><span class='line'>    <span class="n">BOOST_CHECK</span><span class="p">(</span><span class="n">is_anagram</span><span class="p">(</span><span class="s">&quot;orchestra&quot;</span><span class="p">,</span> <span class="s">&quot;carthorse&quot;</span><span class="p">));</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><strong>1.5</strong> Write a method to replace all spaces in a string with &lsquo;%20&rsquo;.</p>
+
+<p>There is a <code>replace</code> method in class <code>std::string</code> , so I can use it
+directly. But if the string is a C-Style string, I have to resize the string
+and replace them one another. Here is the code using <code>replace</code>.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (careerup-1.5.cpp)</span> <a href='/code/careerup-1.5.cpp'>download</a></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#define BOOST_TEST_DYN_LINK</span>
+</span><span class='line'><span class="cp">#define BOOST_TEST_MODULE replace</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#include &lt;boost/test/unit_test.hpp&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;iostream&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">void</span>
+</span><span class='line'><span class="n">replace</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">str</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">replace_space</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">test_str</span> <span class="o">=</span> <span class="s">&quot;a b c&quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">replace</span><span class="p">(</span><span class="n">test_str</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">test_str</span><span class="p">,</span> <span class="s">&quot;a%20b%20c&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">void</span>
+</span><span class='line'><span class="n">replace</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">str</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">str</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39; &#39;</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">str</span><span class="p">.</span><span class="n">replace</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&quot;%20&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+</span><span class='line'>            <span class="n">i</span> <span class="o">+=</span> <span class="mi">2</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><strong>1.6</strong> Given an image represented by an NxN matrix, where each pixel in the
+image is 4 bytes, write a method to rotate the image by 90 degrees  Can you
+do this in place?</p>
+
+<p>The first time I looked at this problem, I think it&rsquo;s very simple and write
+down an equation <code>a[i][j] = a[n - j - 1][i]</code>. When I implemented the program
+using this equation, I found that I was totally wrong!</p>
+
+<p>Since you can&rsquo;t request another space to store the matrix that was unmodified,
+the modified value will affect the value to be changed. So we should think about
+other solutions. One effective solution is to divide the whole matrix into
+<code>N / 2</code> parts and rotate each parts by swapping the values four times.</p>
+
+<p>Here is the code.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (careerup-1.6.cpp)</span> <a href='/code/careerup-1.6.cpp'>download</a></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#define BOOST_TEST_DYN_LINK</span>
+</span><span class='line'><span class="cp">#define BOOST_TEST_MODULE rotate</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#include &lt;boost/test/unit_test.hpp&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;iostream&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">template</span> <span class="o">&lt;</span><span class="n">size_t</span> <span class="n">size</span><span class="o">&gt;</span>
+</span><span class='line'><span class="kt">void</span>
+</span><span class='line'><span class="n">rotate</span><span class="p">(</span><span class="kt">int</span> <span class="n">image</span><span class="p">[][</span><span class="n">size</span><span class="p">]);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">rotate_image</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">const</span> <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">test_img</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">n</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">test_img</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">result_img</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">n</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">result_img</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="n">j</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">rotate</span><span class="p">(</span><span class="n">test_img</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">test_img</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">result_img</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">template</span> <span class="o">&lt;</span><span class="n">size_t</span> <span class="n">size</span><span class="o">&gt;</span>
+</span><span class='line'><span class="kt">void</span>
+</span><span class='line'><span class="n">rotate</span><span class="p">(</span><span class="kt">int</span> <span class="n">image</span><span class="p">[][</span><span class="n">size</span><span class="p">])</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">wall</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">wall</span> <span class="o">&lt;</span> <span class="n">size</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span> <span class="n">wall</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kt">int</span> <span class="n">first</span> <span class="o">=</span> <span class="n">wall</span><span class="p">;</span>
+</span><span class='line'>        <span class="kt">int</span> <span class="n">last</span> <span class="o">=</span> <span class="n">size</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">wall</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">first</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">last</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="kt">int</span> <span class="n">offset</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">first</span><span class="p">;</span>
+</span><span class='line'>            <span class="kt">int</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">image</span><span class="p">[</span><span class="n">first</span><span class="p">][</span><span class="n">i</span><span class="p">];</span>
+</span><span class='line'>            <span class="n">image</span><span class="p">[</span><span class="n">first</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">image</span><span class="p">[</span><span class="n">last</span> <span class="o">-</span> <span class="n">offset</span><span class="p">][</span><span class="n">wall</span><span class="p">];</span>
+</span><span class='line'>            <span class="n">image</span><span class="p">[</span><span class="n">last</span> <span class="o">-</span> <span class="n">offset</span><span class="p">][</span><span class="n">wall</span><span class="p">]</span> <span class="o">=</span> <span class="n">image</span><span class="p">[</span><span class="n">last</span><span class="p">][</span><span class="n">last</span> <span class="o">-</span> <span class="n">offset</span><span class="p">];</span>
+</span><span class='line'>            <span class="n">image</span><span class="p">[</span><span class="n">last</span><span class="p">][</span><span class="n">last</span> <span class="o">-</span> <span class="n">offset</span><span class="p">]</span> <span class="o">=</span> <span class="n">image</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">last</span><span class="p">];</span>
+</span><span class='line'>            <span class="n">image</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">last</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 ]]></content>
