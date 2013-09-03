@@ -111,6 +111,30 @@ I implemented the last method here.
 
 {% include_code careerup-1.4.cpp %}
 
+**1.5** Write a method to replace all spaces in a string with '%20'.
+
+There is a ``replace`` method in class ``std::string`` , so I can use it
+directly. But if the string is a C-Style string, I have to resize the string
+and replace them one another. Here is the code using ``replace``.
+
+{% include_code careerup-1.5.cpp %}
+
+**1.6** Given an image represented by an NxN matrix, where each pixel in the
+image is 4 bytes, write a method to rotate the image by 90 degrees  Can you
+do this in place?
+
+The first time I looked at this problem, I think it's very simple and write
+down an equation ``a[i][j] = a[n - j - 1][i]``. When I implemented the program
+using this equation, I found that I was totally wrong!
+
+Since you can't request another space to store the matrix that was unmodified,
+the modified value will affect the value to be changed. So we should think about
+other solutions. One effective solution is to divide the whole matrix into
+``N / 2`` parts and rotate each parts by swapping the values four times.
+
+Here is the code.
+
+{% include_code careerup-1.6.cpp %}
 
 
 
