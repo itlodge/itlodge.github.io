@@ -125,7 +125,7 @@ do this in place?
 
 The first time I looked at this problem, I think it's very simple and write
 down an equation ``a[i][j] = a[n - j - 1][i]``. When I implemented the program
-using this equation, I found that I was totally wrong!
+using this equation, I found that I was totally **wrong**!
 
 Since you can't request another space to store the matrix that was unmodified,
 the modified value will affect the value to be changed. So we should think about
@@ -136,10 +136,37 @@ Here is the code.
 
 {% include_code careerup-1.6.cpp %}
 
+**1.7** Write an algorithm such that if an element in an MxN matrix is 0, its
+entire row and column is set to 0.
 
+I made the same mistake as problem **1.6**. I think we should just iterate the
+whole matrix and set its entire row and row to 0 when we met an element that is
+0. But this is **wrong**! It will also affect the elements that haven't been
+iterated.
 
+One solution is to use another matrix to record the original matrix. But this
+will need too much space.
 
+Actually, we just need two array of length ``M`` and ``N`` respectively and
+record whether there are an ``0`` in that row or column. If there are, set the
+entire row or column to 0.
 
+Here is the code.
 
+{% include_code careerup-1.7.cpp %}
 
+**1.8** Assume you have a method isSubstring which checks if one word is a
+substring of another. Given two strings, s1 and s2, write code to check if
+s2 is a rotation of s1 using only one call to isSubstring (i.e., "waterbottle"
+is a rotation of "erbottlewat").
 
+I am not so smart that I can't come up with the method to solve this problem
+after a long time. The answer amazed me.
+
+Just concatenate ``s1`` and check if ``s2`` is a substring of it. For example,
+``waterbottle`` is a substring of ``erbottlewaterbottlewat``, so it's a rotation
+of ``erbottlewat``.
+
+Here is the code.
+
+{% include_code careerup-1.8.cpp %}

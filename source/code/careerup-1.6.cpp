@@ -2,7 +2,6 @@
 #define BOOST_TEST_MODULE rotate
 
 #include <boost/test/unit_test.hpp>
-#include <iostream>
 
 template <size_t size>
 void
