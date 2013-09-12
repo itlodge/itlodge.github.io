@@ -12,7 +12,7 @@ main(int argc, char *argv[])
     num["two"] = 2;
 
     std::tr1::hash<string> hash_func = num.hash_function();
-    for (HashMap::const_iterator i = num.begin(); i != num.end(); i++) {
+    for (HashMap::const_iterator i = num.begin(); i != num.end(); ++i) {
         std::cout << i->first << " -> " << i->second
                   << "(hash=" << hash_func(i->first) << ")" << std::endl;
     }

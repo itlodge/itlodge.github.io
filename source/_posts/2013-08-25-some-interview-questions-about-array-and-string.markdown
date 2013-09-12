@@ -4,7 +4,7 @@ title: "Some interview questions about array and string"
 date: 2013-08-25 08:43
 comments: true
 sharing: true
-categories: interview, C++
+categories: C++
 ---
 
 Hash Table

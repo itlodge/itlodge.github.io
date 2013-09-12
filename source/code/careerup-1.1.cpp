@@ -25,8 +25,8 @@ BOOST_AUTO_TEST_CASE(has_unique)
 bool
 has_unique_char_normal(const std::string& str)
 {
-    for (int i = 0; i < str.length(); i++) {
-        for (int j = i + 1; j < str.length(); j++) {
+    for (int i = 0; i < str.length(); ++i) {
+        for (int j = i + 1; j < str.length(); ++j) {
             if (str[i] == str[j]) {
                 return false;
             }
@@ -41,7 +41,7 @@ has_unique_char_set(const std::string& str)
     typedef std::tr1::unordered_set<char> Set;
     Set set;
     
-    for (int i = 0; i < str.length(); i++) {
+    for (int i = 0; i < str.length(); ++i) {
         if (set.count(str[i]) == 0) {
             set.insert(str[i]);
         } else {

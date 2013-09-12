@@ -15,9 +15,9 @@ is_anagram(const std::string& lhs, const std::string& rhs)
     }
     bool rhs_is_marked[rhs_size];
     memset(rhs_is_marked, false, rhs_size * sizeof(bool));
-    for (int i = 0; i < lhs_size; i++) {
+    for (int i = 0; i < lhs_size; ++i) {
         int j;
-        for (j = 0; j < rhs_size; j++) {
+        for (j = 0; j < rhs_size; ++j) {
             if (rhs_is_marked[j]) {
                 continue;
             } else if (lhs[i] == rhs[j]) {

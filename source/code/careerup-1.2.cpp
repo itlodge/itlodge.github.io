@@ -23,10 +23,10 @@ reverse_str(char *str)
     int len = 0;
 
     while (*(str + len)) {
-        len++;
+        ++len;
     }
 
-    for (int i = 0; i < len / 2; i++) {
+    for (int i = 0; i < len / 2; ++i) {
         char temp = str[i];
         str[i] = str[len - i - 1];
         str[len - i - 1] = temp;
