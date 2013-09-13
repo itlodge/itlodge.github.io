@@ -4,7 +4,7 @@ title: "Implement a single LinkedList"
 date: 2013-09-12 09:56
 comments: true
 sharing: true
-categories: C++
+categories: C++, Interview
 ---
 
 LinkedList is a very common data structure. Three years ago, I could write
