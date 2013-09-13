@@ -20,8 +20,8 @@ BOOST_AUTO_TEST_CASE(normal)
                                      {0, 0, 0, 0, 0},
                                      {1, 0, 1, 0, 1}};
     clear(test_matrix);
-    for (int i = 0; i < m; i++) {
-        for (int j = 0; j < n; j++) {
+    for (int i = 0; i < m; ++i) {
+        for (int j = 0; j < n; ++j) {
             BOOST_CHECK_EQUAL(test_matrix[i][j], result_matrix[i][j]);
         }
     }
@@ -34,8 +34,8 @@ clear(int (&matrix)[row][col])
     bool row_zero[row] = {false};
     bool col_zero[col] = {false};
 
-    for (int i = 0; i < row; i++) {
-        for (int j = 0; j < col; j++) {
+    for (int i = 0; i < row; ++i) {
+        for (int j = 0; j < col; ++j) {
             if (matrix[i][j] == 0) {
                 row_zero[i] = true;
                 if (!col_zero[j]) {
@@ -45,16 +45,16 @@ clear(int (&matrix)[row][col])
             }
         }
     }
-    for (int i = 0; i < row; i++) {
+    for (int i = 0; i < row; ++i) {
         if (row_zero[i]) {
-            for (int j = 0; j < col; j++) {
+            for (int j = 0; j < col; ++j) {
                 matrix[i][j] = 0;
             }
         }
     }
-    for (int i = 0; i < col; i++) {
+    for (int i = 0; i < col; ++i) {
         if (col_zero[i]) {
-            for (int j = 0; j < row; j++) {
+            for (int j = 0; j < row; ++j) {
                 matrix[j][i] = 0;
             }
         }

@@ -17,7 +17,7 @@ BOOST_AUTO_TEST_CASE(replace_space)
 void
 replace(std::string& str)
 {
-    for (int i = 0; i < str.size(); i++) {
+    for (int i = 0; i < str.size(); ++i) {
         if (str[i] == ' ') {
             str.replace(i, 1, "%20", 3);
             i += 2;

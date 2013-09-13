@@ -26,7 +26,7 @@ has_unique_char_array(const std::string& str)
 {
     bool has_char[256] = {false};
 
-    for (int i = 0; i < str.length(); i++) {
+    for (int i = 0; i < str.length(); ++i) {
         if (has_char[str[i]]) {
             return false;
         } else {
@@ -41,7 +41,7 @@ has_unique_char_bit(const std::string& str)
 {
     int char_flag = 0;
 
-    for (int i = 0; i < str.length(); i++) {
+    for (int i = 0; i < str.length(); ++i) {
         if ((char_flag & (0x1 << (str[i] - 'a'))) == 0) {
             char_flag |= 0x1 << (str[i] - 'a');
         } else {

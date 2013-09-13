@@ -54,7 +54,7 @@ BOOST_AUTO_TEST_CASE(random_string)
 {
     char test_str6[20];    
     srand(time(0));
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < 20; ++i) {
         test_str6[i] = 'a' + rand() % 26;
     }
     std::cout << test_str6 << std::endl;
@@ -70,9 +70,9 @@ rm_dup(char *str)
     }
 
     int tail = 1;
-    for (int i = 1; i < strlen(str); i++) {
+    for (int i = 1; i < strlen(str); ++i) {
         int j;
-        for (j = 0; j < tail; j++) {
+        for (j = 0; j < tail; ++j) {
             if (str[i] == str[j]) {
                 break;
             }
