@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: C++, | Yuanhang Zheng]]></title>
-  <link href="http://itlodge.github.io/blog/categories/c-plus-plus/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Interview | Yuanhang Zheng]]></title>
+  <link href="http://itlodge.github.io/blog/categories/interview/atom.xml" rel="self"/>
   <link href="http://itlodge.github.io/"/>
   <updated>2013-09-13T08:36:47+08:00</updated>
   <id>http://itlodge.github.io/</id>
