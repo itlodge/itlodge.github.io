@@ -262,11 +262,7 @@ multitask :push do
     message = "Site updated at #{Time.now.utc}"
     system "git commit -m \"#{message}\""
     puts "\n## Pushing generated #{deploy_dir} website"
-<<<<<<< HEAD
     system "git push https://github.com/itlodge/itlodge.github.io.git #{deploy_branch} --force"
-=======
-    system "git push origin #{deploy_branch}"
->>>>>>> f75547f61fa38e43b5e07c410daac7558c9be59d
     puts "\n## Github Pages deploy complete"
   end
 end

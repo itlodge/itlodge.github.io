@@ -38,7 +38,15 @@ in the position ``index``.
 
 Here is the code.
 
-There class definition.
+The class definition.
 
-{% include_code careerup-list.h %}
+{% include_code careerup-list.h lang:cpp %}
+
+And the class implementation.
+
+{% include_code careerup-list.cpp %}
+
+Now this the test code(Using boost unit test framework).
+
+{% include_code careerup-list-test.cpp %}
 

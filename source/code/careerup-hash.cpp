@@ -2,7 +2,7 @@
 #include <tr1/unordered_map>
 
 int
-main(int argc, char *argv[])
+main(void)
 {
     using std::string;
     typedef std::tr1::unordered_map<string, int> HashMap;
