@@ -311,4 +311,69 @@ BOOST_AUTO_TEST_CASE(sort_sorted)
 
 BOOST_AUTO_TEST_SUITE_END()
 
+BOOST_AUTO_TEST_SUITE(test_remove_duplicate)
+
+BOOST_AUTO_TEST_CASE(remove_empty)
+{
+    LinkedList<int> list;
+    list.rm_dup();
+    BOOST_CHECK_EQUAL(list.size(), 0);
+}
+
+BOOST_AUTO_TEST_CASE(remove_one_element_list)
+{
+    LinkedList<int> list(2);
+    list.rm_dup();
+    BOOST_CHECK_EQUAL(list.size(), 1);
+    BOOST_CHECK_EQUAL(list[0], 2);
+}
+
+BOOST_AUTO_TEST_CASE(remove_all_duplicate)
+{
+    int arr[5] = {1, 1, 1, 1, 1};
+    LinkedList<int> list(arr, 5);
+    list.rm_dup();
+    BOOST_CHECK_EQUAL(list.size(), 1);
+    BOOST_CHECK_EQUAL(list[0], 1);
+}
+
+BOOST_AUTO_TEST_CASE(remove_one_duplicate)
+{
+    int arr[10] = {1, 2, 3, 4, 5, 6, 7, 2, 8, 9};
+    LinkedList<int> list(arr, 10);
+    list.rm_dup();
+    BOOST_CHECK_EQUAL(list.size(), 9);
+    boost::test_tools::output_test_stream out;
+
+    {
+        Cout_redirect guard(out.rdbuf());
+        std::cout << list;
+    }
+    BOOST_CHECK(out.is_equal("[1, 2, 3, 4, 5, 6, 7, 8, 9]"));
+}
+
+BOOST_AUTO_TEST_SUITE_END()
+
+BOOST_AUTO_TEST_SUITE(test_nth_to_last)
+
+int arr[5] = {1, 2, 3, 4, 5};
+LinkedList<int> list(arr, 5);
+
+BOOST_AUTO_TEST_CASE(last_but_not_least_one)
+{
+    BOOST_CHECK_EQUAL(list.nth_to_last(1), 4);
+}
+
+BOOST_AUTO_TEST_CASE(first_one)
+{
+    BOOST_CHECK_EQUAL(list.nth_to_last(4), 1);
+}
+
+BOOST_AUTO_TEST_CASE(normal)
+{
+    BOOST_CHECK_EQUAL(list.nth_to_last(2), 3);
+}
+
+BOOST_AUTO_TEST_SUITE_END()
+
 

@@ -54,20 +54,6 @@ LinkedList<T>::append(const T& value)
 }
 
 template <typename T>
-const T&
-LinkedList<T>::operator[](size_t index)
-{
-    assert(index >= 0 && index < this->size_);
-    int i = 0;
-    Node<T> *p = this->head_;
-    while (i < index) {
-        p = p->next();
-        ++i;
-    }
-    return p->value();
-}
-
-template <typename T>
 void
 LinkedList<T>::insert(size_t index, const T& value)
 {
@@ -211,3 +197,41 @@ LinkedList<T>::clean()
     }
 }
 
+template <typename T>
+const T&
+LinkedList<T>::get(size_t index) const
+{
+    assert(index >= 0 && index < this->size_);
+    int i = 0;
+    Node<T> *p = this->head_;
+    while (i < index) {
+        p = p->next();
+        ++i;
+    }
+    return p->value();
+}
+
+template <typename T>
+void
+LinkedList<T>::rm_dup()
+{
+    if (this->head_ == NULL || this->size_ <= 1) {
+        return;
+    }
+    for (Node<T> *pleft = this->head_;
+         pleft != NULL && pleft->next() != NULL;
+         pleft = pleft->next()) {
+        for (Node<T> *pright = pleft->next(), *pprev = pleft;
+             pright != NULL;) {
+            if (pleft->value() == pright->value()) {
+                pprev->next(pright->next());
+                delete pright;
+                --this->size_;
+                pright = pprev->next();
+            } else {
+                pprev = pright;
+                pright = pright->next();
+            }
+        }
+    }
+}

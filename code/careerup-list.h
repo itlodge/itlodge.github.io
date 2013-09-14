@@ -96,7 +96,8 @@ public:
     append(const T& value);
 
     const T&
-    operator[](size_t index);
+    operator[](size_t index) const
+    { return this->get(index); }
 
     void
     insert(size_t index, const T& value);
@@ -114,6 +115,13 @@ public:
     void
     sort()
     { this->head_ = merge_sort(this->head_, this->size_); }
+
+    void
+    rm_dup();
+
+    const T&
+    nth_to_last(size_t n) const
+    { return this->get(this->size_ - n - 1); }
 private:
     size_t size_;
     Node<T> *head_;
@@ -126,6 +134,9 @@ private:
 
     void
     clean();
+
+    const T&
+    get(size_t n) const;
 };
 
 #endif /* _CAREERUP-LIST_H_ */
