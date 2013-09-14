@@ -36,6 +36,19 @@ in the position ``index``.
 * ``void reverse()``, Reverse the whole LinkedList.
 * ``void sort()``, Sort the whole LinkedList using merge sort.
 
+There are some interview problems about LinkedList.
+
+**2.1** Write code to remove duplicates from an unsorted linked list. How would
+you solve this problem if a temporary buffer is not allowed?
+
+I solve it in the method ``rm_dup()``.
+
+**2.2** Implement an algorithm to find the nth to last element of a singly
+linked list.
+
+I solve it in the method ``nth_last()``.
+
+
 Here is the code.
 
 The class definition.
