@@ -1,9 +1,13 @@
-#include "careerup-list.h"
+#include "list.h"
 
 template <typename T>
 const LinkedList<T>&
 LinkedList<T>::operator=(const LinkedList<T>& list)
 {
+    // The same list
+    if (this->head_ == list.head_) {
+        return *this;
+    }
     this->clean();
     this->size_ = list.size_;
     Node<T> *pright = list.head_;
@@ -15,7 +19,6 @@ LinkedList<T>::operator=(const LinkedList<T>& list)
         pleft = pleft->next();
         pright = pright->next();
     }
-           
     return *this;
 }
 
@@ -111,7 +114,7 @@ template <typename T>
 void
 LinkedList<T>::reverse()
 {
-    if (this->head_ == NULL) {
+    if (this->size_ <= 1) {
         return;
     }
     Node<T> *p = this->head_;
@@ -215,7 +218,7 @@ template <typename T>
 void
 LinkedList<T>::rm_dup()
 {
-    if (this->head_ == NULL || this->size_ <= 1) {
+    if (this->size_ <= 1) {
         return;
     }
     for (Node<T> *pleft = this->head_;

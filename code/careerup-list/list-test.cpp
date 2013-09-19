@@ -2,7 +2,7 @@
 #define BOOST_TEST_MODULE "LinkedList test"
 #include <boost/test/unit_test.hpp>
 #include <boost/test/output_test_stream.hpp>
-#include "careerup-list.cpp"
+#include "list.cpp"
 
 class Cout_redirect {
 public:
@@ -70,6 +70,7 @@ BOOST_AUTO_TEST_CASE(create_and_assign)
     LinkedList<int> list2(a, 2);
 
     list1 = list2;
+    list1 = list1;
 
     BOOST_CHECK_EQUAL(list1.size(), 2);
     boost::test_tools::output_test_stream output;
@@ -226,6 +227,13 @@ BOOST_AUTO_TEST_CASE(reverse_empty)
     BOOST_CHECK_EQUAL(list.size(), 0);
 }
 
+BOOST_AUTO_TEST_CASE(reverse_one)
+{
+    LinkedList<int> list(2);
+    list.reverse();
+    BOOST_CHECK_EQUAL(list[0], 2);
+}
+
 BOOST_AUTO_TEST_CASE(reverse_short)
 {
     char a[5] = {'a', 'b', 'c', 'd', 'e'};
@@ -307,6 +315,22 @@ BOOST_AUTO_TEST_CASE(sort_sorted)
         std::cout << list;
     }
     BOOST_CHECK(out.is_equal("[1, 2, 3, 4, 5]"));
+}
+
+BOOST_AUTO_TEST_CASE(sort_one)
+{
+    LinkedList<int> list(2);
+    list.sort();
+    BOOST_CHECK_EQUAL(list[0], 2);
+}
+
+BOOST_AUTO_TEST_CASE(sort_two)
+{
+    int arr[2] = {2, 1};
+    LinkedList<int> list(arr, 2);
+    list.sort();
+    BOOST_CHECK_EQUAL(list[0], 1);
+    BOOST_CHECK_EQUAL(list[1], 2);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

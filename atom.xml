@@ -4,7 +4,7 @@
   <title><![CDATA[Yuanhang Zheng]]></title>
   <link href="http://itlodge.github.io/atom.xml" rel="self"/>
   <link href="http://itlodge.github.io/"/>
-  <updated>2013-09-14T18:32:17+08:00</updated>
+  <updated>2013-09-19T13:43:22+08:00</updated>
   <id>http://itlodge.github.io/</id>
   <author>
     <name><![CDATA[Yuanhang Zheng]]></name>
@@ -66,7 +66,7 @@ linked list.</p>
 
 <p>The class definition.</p>
 
-<figure class='code'><figcaption><span> (careerup-list.h)</span> <a href='http://itlodge.github.io/code/careerup-list.h'>download</a></figcaption>
+<figure class='code'><figcaption><span> (list.h)</span> <a href='http://itlodge.github.io/code/careerup-list/list.h'>download</a></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -209,6 +209,27 @@ linked list.</p>
 <span class='line-number'>140</span>
 <span class='line-number'>141</span>
 <span class='line-number'>142</span>
+<span class='line-number'>143</span>
+<span class='line-number'>144</span>
+<span class='line-number'>145</span>
+<span class='line-number'>146</span>
+<span class='line-number'>147</span>
+<span class='line-number'>148</span>
+<span class='line-number'>149</span>
+<span class='line-number'>150</span>
+<span class='line-number'>151</span>
+<span class='line-number'>152</span>
+<span class='line-number'>153</span>
+<span class='line-number'>154</span>
+<span class='line-number'>155</span>
+<span class='line-number'>156</span>
+<span class='line-number'>157</span>
+<span class='line-number'>158</span>
+<span class='line-number'>159</span>
+<span class='line-number'>160</span>
+<span class='line-number'>161</span>
+<span class='line-number'>162</span>
+<span class='line-number'>163</span>
 </pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#ifndef _CAREERUP_LIST_H_</span>
 </span><span class='line'><span class="cp">#define _CAREERUP_LIST_H_</span>
 </span><span class='line'>
@@ -217,6 +238,9 @@ linked list.</p>
 </span><span class='line'><span class="cp">#undef NDEBUG</span>
 </span><span class='line'><span class="cp">#include &lt;cassert&gt;</span>
 </span><span class='line'>
+</span><span class='line'><span class="cm">/* This class template is the Node of a singular linked list</span>
+</span><span class='line'><span class="cm"> * value_: the value store in the node.</span>
+</span><span class='line'><span class="cm"> * next_: the pointer that points to the next node. */</span>
 </span><span class='line'><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
 </span><span class='line'><span class="k">class</span> <span class="nc">Node</span> <span class="p">{</span>
 </span><span class='line'><span class="k">public</span><span class="o">:</span>
@@ -252,6 +276,7 @@ linked list.</p>
 </span><span class='line'>    <span class="n">next</span><span class="p">()</span> <span class="k">const</span>
 </span><span class='line'>    <span class="p">{</span> <span class="k">return</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">next_</span><span class="p">;</span> <span class="p">}</span>
 </span><span class='line'>
+</span><span class='line'>    <span class="c1">// Set the &#39;next_&#39; pointer to the pointer NEXT.</span>
 </span><span class='line'>    <span class="kt">void</span>
 </span><span class='line'>    <span class="n">next</span><span class="p">(</span><span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">next</span><span class="p">)</span>
 </span><span class='line'>    <span class="p">{</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">next_</span> <span class="o">=</span> <span class="n">next</span><span class="p">;</span> <span class="p">}</span>
@@ -267,6 +292,9 @@ linked list.</p>
 </span><span class='line'><span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span>
 </span><span class='line'><span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span><span class="p">,</span> <span class="k">const</span> <span class="n">LinkedList</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;</span><span class="p">);</span>
 </span><span class='line'>
+</span><span class='line'><span class="cm">/* The singular linked list class template,</span>
+</span><span class='line'><span class="cm"> * head_: a pointer pointing to the head of the list</span>
+</span><span class='line'><span class="cm"> * size_: the length of the list */</span>
 </span><span class='line'><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
 </span><span class='line'><span class="k">class</span> <span class="nc">LinkedList</span> <span class="p">{</span>
 </span><span class='line'><span class="k">public</span><span class="o">:</span>
@@ -276,9 +304,13 @@ linked list.</p>
 </span><span class='line'>    <span class="k">explicit</span> <span class="n">LinkedList</span><span class="p">(</span><span class="k">const</span> <span class="n">LinkedList</span><span class="o">&amp;</span> <span class="n">list</span><span class="p">)</span>
 </span><span class='line'>        <span class="o">:</span><span class="n">size_</span><span class="p">(</span><span class="n">list</span><span class="p">.</span><span class="n">size_</span><span class="p">),</span> <span class="n">head_</span><span class="p">(</span><span class="n">list</span><span class="p">.</span><span class="n">head_</span><span class="p">)</span>
 </span><span class='line'>    <span class="p">{</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Create from a head node of value VALUE.</span>
 </span><span class='line'>    <span class="k">explicit</span> <span class="n">LinkedList</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
 </span><span class='line'>        <span class="o">:</span><span class="n">size_</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">head_</span><span class="p">(</span><span class="k">new</span> <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
 </span><span class='line'>    <span class="p">{</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Create from an array VALUES of size SIZE.</span>
 </span><span class='line'>    <span class="k">explicit</span> <span class="n">LinkedList</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span> <span class="n">values</span><span class="p">[],</span> <span class="n">size_t</span> <span class="n">size</span><span class="p">)</span>
 </span><span class='line'>        <span class="o">:</span><span class="n">size_</span><span class="p">(</span><span class="n">size</span><span class="p">),</span> <span class="n">head_</span><span class="p">(</span><span class="nb">NULL</span><span class="p">)</span>
 </span><span class='line'>    <span class="p">{</span>
@@ -300,19 +332,24 @@ linked list.</p>
 </span><span class='line'>    <span class="o">~</span><span class="n">LinkedList</span><span class="p">()</span>
 </span><span class='line'>    <span class="p">{</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">clean</span><span class="p">();</span> <span class="p">}</span>
 </span><span class='line'>
+</span><span class='line'>    <span class="c1">// Output a list in the form [a, b, c, ...].</span>
 </span><span class='line'>    <span class="k">friend</span> <span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span>
 </span><span class='line'>    <span class="k">operator</span><span class="o">&lt;&lt;</span> <span class="o">&lt;&gt;</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span><span class="p">,</span> <span class="k">const</span> <span class="n">LinkedList</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;</span><span class="p">);</span>
 </span><span class='line'>
+</span><span class='line'>    <span class="c1">// Add an element of value VALUE to the back of the list.</span>
 </span><span class='line'>    <span class="kt">void</span>
 </span><span class='line'>    <span class="n">append</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">);</span>
 </span><span class='line'>
+</span><span class='line'>    <span class="c1">// Return the value of the element in the position of INDEX.</span>
 </span><span class='line'>    <span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span>
 </span><span class='line'>    <span class="k">operator</span><span class="p">[](</span><span class="n">size_t</span> <span class="n">index</span><span class="p">)</span> <span class="k">const</span>
 </span><span class='line'>    <span class="p">{</span> <span class="k">return</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">get</span><span class="p">(</span><span class="n">index</span><span class="p">);</span> <span class="p">}</span>
 </span><span class='line'>
+</span><span class='line'>    <span class="c1">// Insert an element of value VALUE into the position INDEX.</span>
 </span><span class='line'>    <span class="kt">void</span>
 </span><span class='line'>    <span class="n">insert</span><span class="p">(</span><span class="n">size_t</span> <span class="n">index</span><span class="p">,</span> <span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">);</span>
 </span><span class='line'>
+</span><span class='line'>    <span class="c1">// Remove the element in the position INDEX.</span>
 </span><span class='line'>    <span class="kt">void</span>
 </span><span class='line'>    <span class="n">remove</span><span class="p">(</span><span class="n">size_t</span> <span class="n">index</span><span class="p">);</span>
 </span><span class='line'>
@@ -323,13 +360,18 @@ linked list.</p>
 </span><span class='line'>    <span class="kt">void</span>
 </span><span class='line'>    <span class="n">reverse</span><span class="p">();</span>
 </span><span class='line'>
+</span><span class='line'>    <span class="c1">// Sort the list in the ascending order according to the type</span>
+</span><span class='line'>    <span class="c1">// of the value of the elements.</span>
 </span><span class='line'>    <span class="kt">void</span>
 </span><span class='line'>    <span class="n">sort</span><span class="p">()</span>
 </span><span class='line'>    <span class="p">{</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">head_</span> <span class="o">=</span> <span class="n">merge_sort</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">head_</span><span class="p">,</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">size_</span><span class="p">);</span> <span class="p">}</span>
 </span><span class='line'>
+</span><span class='line'>    <span class="c1">// Remove duplicate elements.</span>
 </span><span class='line'>    <span class="kt">void</span>
 </span><span class='line'>    <span class="n">rm_dup</span><span class="p">();</span>
 </span><span class='line'>
+</span><span class='line'>    <span class="c1">// Return the nth to last element. i.e, 2th to last element of</span>
+</span><span class='line'>    <span class="c1">// list 1-&gt;2-&gt;3-&gt;4 is 2.</span>
 </span><span class='line'>    <span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span>
 </span><span class='line'>    <span class="n">nth_to_last</span><span class="p">(</span><span class="n">size_t</span> <span class="n">n</span><span class="p">)</span> <span class="k">const</span>
 </span><span class='line'>    <span class="p">{</span> <span class="k">return</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">get</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">size_</span> <span class="o">-</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span> <span class="p">}</span>
@@ -356,7 +398,7 @@ linked list.</p>
 
 <p>And the class implementation.</p>
 
-<figure class='code'><figcaption><span> (careerup-list.cpp)</span> <a href='http://itlodge.github.io/code/careerup-list.cpp'>download</a></figcaption>
+<figure class='code'><figcaption><span> (list.cpp)</span> <a href='http://itlodge.github.io/code/careerup-list/list.cpp'>download</a></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -594,12 +636,19 @@ linked list.</p>
 <span class='line-number'>235</span>
 <span class='line-number'>236</span>
 <span class='line-number'>237</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include &quot;careerup-list.h&quot;</span>
+<span class='line-number'>238</span>
+<span class='line-number'>239</span>
+<span class='line-number'>240</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include &quot;list.h&quot;</span>
 </span><span class='line'>
 </span><span class='line'><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
 </span><span class='line'><span class="k">const</span> <span class="n">LinkedList</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;</span>
 </span><span class='line'><span class="n">LinkedList</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">LinkedList</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;</span> <span class="n">list</span><span class="p">)</span>
 </span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="c1">// The same list</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">head_</span> <span class="o">==</span> <span class="n">list</span><span class="p">.</span><span class="n">head_</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
 </span><span class='line'>    <span class="k">this</span><span class="o">-&gt;</span><span class="n">clean</span><span class="p">();</span>
 </span><span class='line'>    <span class="k">this</span><span class="o">-&gt;</span><span class="n">size_</span> <span class="o">=</span> <span class="n">list</span><span class="p">.</span><span class="n">size_</span><span class="p">;</span>
 </span><span class='line'>    <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">pright</span> <span class="o">=</span> <span class="n">list</span><span class="p">.</span><span class="n">head_</span><span class="p">;</span>
@@ -611,7 +660,6 @@ linked list.</p>
 </span><span class='line'>        <span class="n">pleft</span> <span class="o">=</span> <span class="n">pleft</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">();</span>
 </span><span class='line'>        <span class="n">pright</span> <span class="o">=</span> <span class="n">pright</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">();</span>
 </span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>
 </span><span class='line'>    <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
@@ -707,7 +755,7 @@ linked list.</p>
 </span><span class='line'><span class="kt">void</span>
 </span><span class='line'><span class="n">LinkedList</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">reverse</span><span class="p">()</span>
 </span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">head_</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">size_</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>        <span class="k">return</span><span class="p">;</span>
 </span><span class='line'>    <span class="p">}</span>
 </span><span class='line'>    <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">head_</span><span class="p">;</span>
@@ -811,7 +859,7 @@ linked list.</p>
 </span><span class='line'><span class="kt">void</span>
 </span><span class='line'><span class="n">LinkedList</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">rm_dup</span><span class="p">()</span>
 </span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">head_</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">size_</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">size_</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>        <span class="k">return</span><span class="p">;</span>
 </span><span class='line'>    <span class="p">}</span>
 </span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">pleft</span> <span class="o">=</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">head_</span><span class="p">;</span>
@@ -836,7 +884,7 @@ linked list.</p>
 
 <p>Now this the test code(Using boost unit test framework).</p>
 
-<figure class='code'><figcaption><span> (careerup-list-test.cpp)</span> <a href='http://itlodge.github.io/code/careerup-list-test.cpp'>download</a></figcaption>
+<figure class='code'><figcaption><span> (list-test.cpp)</span> <a href='http://itlodge.github.io/code/careerup-list/list-test.cpp'>download</a></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -1214,11 +1262,35 @@ linked list.</p>
 <span class='line-number'>375</span>
 <span class='line-number'>376</span>
 <span class='line-number'>377</span>
+<span class='line-number'>378</span>
+<span class='line-number'>379</span>
+<span class='line-number'>380</span>
+<span class='line-number'>381</span>
+<span class='line-number'>382</span>
+<span class='line-number'>383</span>
+<span class='line-number'>384</span>
+<span class='line-number'>385</span>
+<span class='line-number'>386</span>
+<span class='line-number'>387</span>
+<span class='line-number'>388</span>
+<span class='line-number'>389</span>
+<span class='line-number'>390</span>
+<span class='line-number'>391</span>
+<span class='line-number'>392</span>
+<span class='line-number'>393</span>
+<span class='line-number'>394</span>
+<span class='line-number'>395</span>
+<span class='line-number'>396</span>
+<span class='line-number'>397</span>
+<span class='line-number'>398</span>
+<span class='line-number'>399</span>
+<span class='line-number'>400</span>
+<span class='line-number'>401</span>
 </pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#define BOOST_TEST_DYN_LINK</span>
 </span><span class='line'><span class="cp">#define BOOST_TEST_MODULE &quot;LinkedList test&quot;</span>
 </span><span class='line'><span class="cp">#include &lt;boost/test/unit_test.hpp&gt;</span>
 </span><span class='line'><span class="cp">#include &lt;boost/test/output_test_stream.hpp&gt;</span>
-</span><span class='line'><span class="cp">#include &quot;careerup-list.cpp&quot;</span>
+</span><span class='line'><span class="cp">#include &quot;list.cpp&quot;</span>
 </span><span class='line'>
 </span><span class='line'><span class="k">class</span> <span class="nc">Cout_redirect</span> <span class="p">{</span>
 </span><span class='line'><span class="k">public</span><span class="o">:</span>
@@ -1286,6 +1358,7 @@ linked list.</p>
 </span><span class='line'>    <span class="n">LinkedList</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">list2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
 </span><span class='line'>
 </span><span class='line'>    <span class="n">list1</span> <span class="o">=</span> <span class="n">list2</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">list1</span> <span class="o">=</span> <span class="n">list1</span><span class="p">;</span>
 </span><span class='line'>
 </span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">list1</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">2</span><span class="p">);</span>
 </span><span class='line'>    <span class="n">boost</span><span class="o">::</span><span class="n">test_tools</span><span class="o">::</span><span class="n">output_test_stream</span> <span class="n">output</span><span class="p">;</span>
@@ -1442,6 +1515,13 @@ linked list.</p>
 </span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">list</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">reverse_one</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">LinkedList</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">list</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">list</span><span class="p">.</span><span class="n">reverse</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">list</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
 </span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">reverse_short</span><span class="p">)</span>
 </span><span class='line'><span class="p">{</span>
 </span><span class='line'>    <span class="kt">char</span> <span class="n">a</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="sc">&#39;a&#39;</span><span class="p">,</span> <span class="sc">&#39;b&#39;</span><span class="p">,</span> <span class="sc">&#39;c&#39;</span><span class="p">,</span> <span class="sc">&#39;d&#39;</span><span class="p">,</span> <span class="sc">&#39;e&#39;</span><span class="p">};</span>
@@ -1523,6 +1603,22 @@ linked list.</p>
 </span><span class='line'>        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">list</span><span class="p">;</span>
 </span><span class='line'>    <span class="p">}</span>
 </span><span class='line'>    <span class="n">BOOST_CHECK</span><span class="p">(</span><span class="n">out</span><span class="p">.</span><span class="n">is_equal</span><span class="p">(</span><span class="s">&quot;[1, 2, 3, 4, 5]&quot;</span><span class="p">));</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">sort_one</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">LinkedList</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">list</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">list</span><span class="p">.</span><span class="n">sort</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">list</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">sort_two</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">arr</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">};</span>
+</span><span class='line'>    <span class="n">LinkedList</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">list</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">list</span><span class="p">.</span><span class="n">sort</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">list</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">list</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">2</span><span class="p">);</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
 </span><span class='line'><span class="n">BOOST_AUTO_TEST_SUITE_END</span><span class="p">()</span>
