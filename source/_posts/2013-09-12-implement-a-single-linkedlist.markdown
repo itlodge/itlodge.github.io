@@ -53,13 +53,13 @@ Here is the code.
 
 The class definition.
 
-{% include_code careerup-list.h lang:cpp %}
+{% include_code careerup-list/list.h lang:cpp %}
 
 And the class implementation.
 
-{% include_code careerup-list.cpp %}
+{% include_code careerup-list/list.cpp %}
 
 Now this the test code(Using boost unit test framework).
 
-{% include_code careerup-list-test.cpp %}
+{% include_code careerup-list/list-test.cpp %}
 
