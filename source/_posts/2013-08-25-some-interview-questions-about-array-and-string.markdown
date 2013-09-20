@@ -12,7 +12,7 @@ Hash Table
 In C++, the namespace``std::tr1`` contains lots of hash tables. We can play
 with it.
 
-{% include_code careerup-hash.cpp %}
+{% include_code careerup-array/careerup-hash.cpp %}
 
 Questions
 -----------
@@ -29,7 +29,7 @@ the string once.
 
 Here is the code.
 
-{% include_code careerup-1.1.cpp %}
+{% include_code careerup-array/careerup-1.1.cpp %}
 
 However, there are two more effecient methods.
 
@@ -42,7 +42,7 @@ characters in the string.
 
 Here is the code.
 
-{% include_code careerup-1.1-answer.cpp %}
+{% include_code careerup-array/careerup-1.1-answer.cpp %}
 
 **1.2.** Write code to reverse a C-Style String(C-String means that "abcd" is
 represented as five characters, including the null character)
@@ -58,12 +58,12 @@ This needs iterate half of the string.
 
 In sumary, this will need O(1.5n) -> O(n) time complexity. Here is the code.
 
-{% include_code careerup-1.2.cpp %}
+{% include_code careerup-array/careerup-1.2.cpp %}
 
 However, the answer is using pointer instead of index. But the algorithm and
 the time complexity are the same. Here is the code.
 
-{% include_code careerup-1.2-answer.cpp %}
+{% include_code careerup-array/careerup-1.2-answer.cpp %}
 
 This code has several problems. First, the variable ``end`` and ``tmp`` should
 be defined in the ``if`` block. Otherwise, if ``str`` is ``NULL``, the
@@ -83,12 +83,12 @@ iterate the whole string and check from the former characters to find duplicate
 character. If there is duplicate, remove it by moving the rest characters front.
 Here is the code.
 
-{% include_code careerup-1.3.cpp %}
+{% include_code careerup-array/careerup-1.3.cpp %}
 
 The algorithm is ok but the program is too slow. In fact, the last ``for`` loop
 is not necessary. Here is the improved version according to the answer.
 
-{% include_code careerup-1.3-answer.cpp %}
+{% include_code careerup-array/careerup-1.3-answer.cpp %}
 
 **1.4** Write a method to decide if two strings are anagrams or not.
 
@@ -109,7 +109,7 @@ the two string.
 
 I implemented the last method here.
 
-{% include_code careerup-1.4.cpp %}
+{% include_code careerup-array/careerup-1.4.cpp %}
 
 **1.5** Write a method to replace all spaces in a string with '%20'.
 
@@ -117,7 +117,7 @@ There is a ``replace`` method in class ``std::string`` , so I can use it
 directly. But if the string is a C-Style string, I have to resize the string
 and replace them one another. Here is the code using ``replace``.
 
-{% include_code careerup-1.5.cpp %}
+{% include_code careerup-array/careerup-1.5.cpp %}
 
 **1.6** Given an image represented by an NxN matrix, where each pixel in the
 image is 4 bytes, write a method to rotate the image by 90 degrees  Can you
@@ -134,7 +134,7 @@ other solutions. One effective solution is to divide the whole matrix into
 
 Here is the code.
 
-{% include_code careerup-1.6.cpp %}
+{% include_code careerup-array/careerup-1.6.cpp %}
 
 **1.7** Write an algorithm such that if an element in an MxN matrix is 0, its
 entire row and column is set to 0.
@@ -153,7 +153,7 @@ entire row or column to 0.
 
 Here is the code.
 
-{% include_code careerup-1.7.cpp %}
+{% include_code careerup-array/careerup-1.7.cpp %}
 
 **1.8** Assume you have a method isSubstring which checks if one word is a
 substring of another. Given two strings, s1 and s2, write code to check if
@@ -169,4 +169,4 @@ of ``erbottlewat``.
 
 Here is the code.
 
-{% include_code careerup-1.8.cpp %}
+{% include_code careerup-array/careerup-1.8.cpp %}
