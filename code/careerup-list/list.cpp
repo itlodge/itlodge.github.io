@@ -11,13 +11,15 @@ LinkedList<T>::operator=(const LinkedList<T>& list)
     this->clean();
     this->size_ = list.size_;
     Node<T> *pright = list.head_;
-    this->head_ = new Node<T>(pright->value());
-    Node<T> *pleft = this->head_;
-    pright = pright->next();
-    while (pright != NULL) {
-        pleft->next(new Node<T>(pright->value()));
-        pleft = pleft->next();
+    if (pright != NULL) {
+        this->head_ = new Node<T>(pright->value());
         pright = pright->next();
+        Node<T> *pleft = this->head_;
+        while (pright != NULL) {
+            pleft->next(new Node<T>(pright->value()));
+            pleft = pleft->next();
+            pright = pright->next();
+        }
     }
     return *this;
 }
@@ -198,6 +200,7 @@ LinkedList<T>::clean()
         p = p->next();
         delete to_delete;
     }
+    this->head_ = NULL;
 }
 
 template <typename T>

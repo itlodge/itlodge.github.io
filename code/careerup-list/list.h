@@ -70,8 +70,21 @@ public:
         :size_(0), head_(NULL)
     { }
     explicit LinkedList(const LinkedList& list)
-        :size_(list.size_), head_(list.head_)
-    { }
+        :size_(list.size_), head_(NULL)
+    {
+        Node<T> *p = list.head_;
+        if (p != NULL) {
+            Node<T> *node = new Node<T>(p->value());
+            this->head_ = node;
+            p = p->next();
+        }
+        Node<T> *thisp = this->head_;
+        while (p != NULL) {
+            Node<T> *node = new Node<T>(p->value());
+            thisp->next(node);
+            thisp = thisp->next();
+        }
+    }
 
     // Create from a head node of value VALUE.
     explicit LinkedList(const T& value)
@@ -82,18 +95,17 @@ public:
     explicit LinkedList(const T values[], size_t size)
         :size_(size), head_(NULL)
     {
-        if (size <= 0) {
-            return;
-        } else {
+        if (size > 0) {
             this->head_ = new Node<T>(values[0]);
-        }
-        Node<T> *p = this->head_;
-        for (size_t i = 1; i < size; ++i) {
-            Node<T> *node = new Node<T>(values[i]);
-            p->next(node);
-            p = p->next();
+            Node<T> *p = this->head_;
+            for (size_t i = 1; i < size; ++i) {
+                Node<T> *node = new Node<T>(values[i]);
+                p->next(node);
+                p = p->next();
+            }
         }
     }
+    
     const LinkedList&
     operator=(const LinkedList& list);
 

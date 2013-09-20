@@ -4,20 +4,6 @@
 #include <boost/test/output_test_stream.hpp>
 #include "list.cpp"
 
-class Cout_redirect {
-public:
-    explicit Cout_redirect(std::streambuf *buf)
-        :old(std::cout.rdbuf(buf))
-    { }
-    ~Cout_redirect()
-    { std::cout.rdbuf(old); }
-private:
-    Cout_redirect(const Cout_redirect&);
-    const Cout_redirect&
-    operator=(const Cout_redirect&);
-    std::streambuf *old;
-};
-
 BOOST_AUTO_TEST_SUITE(test_create)
 
 BOOST_AUTO_TEST_CASE(create_empty)
@@ -54,11 +40,25 @@ BOOST_AUTO_TEST_CASE(create_with_an_array)
     int arr[5] = {1, 2, 3, 4, 5};
     LinkedList<int> list(arr, 5);
     boost::test_tools::output_test_stream output;
-    {
-        Cout_redirect guard(output.rdbuf());
-        std::cout << list;
-    }
+    output << list;
     BOOST_CHECK(output.is_equal("[1, 2, 3, 4, 5]"));
+}
+
+BOOST_AUTO_TEST_CASE(create_copy_empty)
+{
+    LinkedList<int> *list1 = new LinkedList<int>();
+    LinkedList<int> list2(*list1);
+    delete list1;
+    BOOST_CHECK_EQUAL(list2.size(), 0);
+}
+
+BOOST_AUTO_TEST_CASE(create_copy_one)
+{
+    LinkedList<int> *list1 = new LinkedList<int>(3);
+    LinkedList<int> list2(*list1);
+    delete list1;
+    BOOST_CHECK_EQUAL(list2.size(), 1);
+    BOOST_CHECK_EQUAL(list2[0], 3);
 }
 
 BOOST_AUTO_TEST_CASE(create_and_assign)
@@ -74,11 +74,18 @@ BOOST_AUTO_TEST_CASE(create_and_assign)
 
     BOOST_CHECK_EQUAL(list1.size(), 2);
     boost::test_tools::output_test_stream output;
-    {
-        Cout_redirect guard(output.rdbuf());
-        std::cout << list1;
-    }
+    output << list1;
     BOOST_CHECK(output.is_equal("[4, 5]"));
+}
+
+BOOST_AUTO_TEST_CASE(assign_empty)
+{
+    LinkedList<int> list1(2);
+    LinkedList<int> list2;
+    list1 = list2;
+    BOOST_CHECK_EQUAL(list1.size(), 0);
+    list1 = list1;
+    BOOST_CHECK_EQUAL(list1.size(), 0);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
@@ -89,10 +96,7 @@ BOOST_AUTO_TEST_CASE(ouput_empty)
 {
     LinkedList<int> list;
     boost::test_tools::output_test_stream output;
-    {
-        Cout_redirect guard(output.rdbuf());
-        std::cout << list;
-    }
+    output << list;
     BOOST_CHECK(output.is_equal("[]"));
 }
 
@@ -100,17 +104,10 @@ BOOST_AUTO_TEST_CASE(output_one)
 {
     LinkedList<int> list(2);
     boost::test_tools::output_test_stream output;
-
-    {
-        Cout_redirect guard(output.rdbuf());
-        std::cout << list;
-    }
+    output << list;
     BOOST_CHECK(output.is_equal("[2]"));
     
-    {
-        Cout_redirect guard(output.rdbuf());
-        std::cout << list[0];
-    }
+    output << list[0];
     BOOST_CHECK(output.is_equal("2"));
 }
 
@@ -125,11 +122,7 @@ BOOST_AUTO_TEST_CASE(append_to_empty)
     list.append(1);
 
     boost::test_tools::output_test_stream out;
-
-    {
-        Cout_redirect guard(out.rdbuf());
-        std::cout << list;
-    }
+    out << list;
     BOOST_CHECK(out.is_equal("[1]"));
     BOOST_CHECK_EQUAL(list.size(), 1);
 }
@@ -142,11 +135,7 @@ BOOST_AUTO_TEST_CASE(append_to_normal)
     list.append(2);
 
     boost::test_tools::output_test_stream out;
-
-    {
-        Cout_redirect guard(out.rdbuf());
-        std::cout << list;
-    }
+    out << list;
     BOOST_CHECK(out.is_equal("[1, 1, 1, 1, 1, 2]"));
     BOOST_CHECK_EQUAL(list.size(), 6);
 }
@@ -170,11 +159,7 @@ BOOST_AUTO_TEST_CASE(insert_bound)
     list.insert(1, 1);
     list.insert(3, 3);
     boost::test_tools::output_test_stream out;
-
-    {
-        Cout_redirect guard(out.rdbuf());
-        std::cout << list;
-    }
+    out << list;
     BOOST_CHECK_EQUAL(list.size(), 4);
     BOOST_CHECK(out.is_equal("[0, 1, 2, 3]"));
 }
@@ -197,11 +182,7 @@ BOOST_AUTO_TEST_CASE(remove_bound)
     list.remove(0);
     list.remove(3);
     boost::test_tools::output_test_stream out;
-
-    {
-        Cout_redirect guard(out.rdbuf());
-        std::cout << list;
-    }
+    out << list;
     BOOST_CHECK(out.is_equal("[2, 3, 4]"));
     BOOST_CHECK_EQUAL(list.size(), 3);
 }
@@ -240,11 +221,7 @@ BOOST_AUTO_TEST_CASE(reverse_short)
     LinkedList<char> list(a, 5);
     list.reverse();
     boost::test_tools::output_test_stream out;
-
-    {
-        Cout_redirect guard(out.rdbuf());
-        std::cout << list;
-    }
+    out << list;
     BOOST_CHECK(out.is_equal("[e, d, c, b, a]"));
 }
 
@@ -265,11 +242,7 @@ BOOST_AUTO_TEST_CASE(sort_char)
     LinkedList<char> list(c, 10);
     list.sort();
     boost::test_tools::output_test_stream out;
-
-    {
-        Cout_redirect guard(out.rdbuf());
-        std::cout << list;
-    }
+    out << list;
     BOOST_CHECK(out.is_equal("[a, c, d, e, e, h, n, o, r, t]"));
 }
 
@@ -280,11 +253,7 @@ BOOST_AUTO_TEST_CASE(sort_string)
     LinkedList<std::string> list(str, 10);
     list.sort();
     boost::test_tools::output_test_stream out;
-
-    {
-        Cout_redirect guard(out.rdbuf());
-        std::cout << list;
-    }
+    out << list;
     BOOST_CHECK(out.is_equal("[a, for, function, is, merge, sort, string, \
 test, this, to]"));
 }
@@ -295,25 +264,15 @@ BOOST_AUTO_TEST_CASE(sort_sorted)
     LinkedList<int> list(arr, 5);
     list.sort();
     boost::test_tools::output_test_stream out;
-
-    {
-        Cout_redirect guard(out.rdbuf());
-        std::cout << list;
-    }
+    out << list;
     BOOST_CHECK(out.is_equal("[1, 2, 3, 4, 5]"));
 
     list.reverse();
-    {
-        Cout_redirect guard(out.rdbuf());
-        std::cout << list;
-    }
+    out << list;
     BOOST_CHECK(out.is_equal("[5, 4, 3, 2, 1]"));
     
     list.sort();
-    {
-        Cout_redirect guard(out.rdbuf());
-        std::cout << list;
-    }
+    out << list;
     BOOST_CHECK(out.is_equal("[1, 2, 3, 4, 5]"));
 }
 
@@ -368,11 +327,7 @@ BOOST_AUTO_TEST_CASE(remove_one_duplicate)
     list.rm_dup();
     BOOST_CHECK_EQUAL(list.size(), 9);
     boost::test_tools::output_test_stream out;
-
-    {
-        Cout_redirect guard(out.rdbuf());
-        std::cout << list;
-    }
+    out << list;
     BOOST_CHECK(out.is_equal("[1, 2, 3, 4, 5, 6, 7, 8, 9]"));
 }
 
