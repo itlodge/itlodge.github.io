@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Implement a single LinkedList"
+title: "Implement a singular LinkedList"
 date: 2013-09-12 09:56
 comments: true
 sharing: true
@@ -8,8 +8,8 @@ categories: C++ Interview
 ---
 
 LinkedList is a very common data structure. Three years ago, I could write
-a single LinkedList very quickly in C/C++. But the code is ugly and very
-ineffecient. Now I am going to implement a single LinkedList in C++ in order
+a singular LinkedList very quickly in C/C++. But the code is ugly and very
+ineffecient. Now I am going to implement a singular LinkedList in C++ in order
 to cracking the interview.
 
 Here is the specification of my LinkedList.
