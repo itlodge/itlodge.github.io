@@ -6,8 +6,8 @@
 	<title>Yuanhang Zheng</title>
     <meta name="author" content="Yuanhang Zheng">
     
-	<meta name="description" content="Published on: Aug 9th, 2013 Tags: C++ We all know that pass by value is not effecient.So we use pass by pointer
-in C.However, in C++, we prefer pass &hellip;">
+	<meta name="description" content="Published on: Aug 9th, 2013 Tags: C++ Once I loved C very much and I thought it&rsquo;s the best programming language
+in the world. I used to argue &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -96,6 +96,184 @@ in C.However, in C++, we prefer pass &hellip;">
 <!-- begin toload --> 
     <div id="content" class="inner">
         
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2013/08/09/understanding-encapsulation/">
+		
+			Understanding Encapsulation</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-09T21:38:00+08:00" pubdate data-updated="true">Aug 9<span>th</span>, 2013</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/c-plus-plus/'>C++</a>
+
+
+</div>
+    </div>
+		<p>Once I loved <em>C</em> very much and I thought it&rsquo;s the best programming language
+in the world. I used to argue that <em>C</em> can be used to implement the
+object-oriented design with <code>struct</code>. I used to argue that <code>private</code> and
+<code>public</code> is useless in <em>C++</em>. However, now I know I was wrong.</p>
+
+<h2>Why we need private</h2>
+
+<p>It&rsquo;s related to a very important concept in C++, that is, <strong>encapsulation</strong>.</p>
+
+<p><strong>Encapsulation is not invisibility. It&rsquo;s maintainability.</strong></p>
+
+<p>Suppose a class is very popular and is used by many projects. For example,
+the <code>string</code> class. If every members in this class is <code>public</code>, the clients
+can use many interfaces to manipulate <code>string</code>. One day, when the <code>string</code>
+class is going to be modified(some members&#8217; name change), then lots of clients
+have to modify there code. This is painful! If we declare some of the members
+<code>private</code> and change the name of the private members, only the implementations
+in the public member functions should be modified. None of the clients need to
+change their codes.</p>
+
+<p>Therefore, <strong>public means unchangable and public means unencapsulated</strong>.</p>
+
+<p>The public member functions should not be changed in the future. Since you don&rsquo;t
+know how your clients will use your class, don&rsquo;t expose the members that may be
+changed in the future to the clients.</p>
+
+<h2>Prefer non-member non-friend functions to member functions</h2>
+
+<p>Consider the following class.</p>
+
+<pre><code>class Person {
+public:
+    explicit Person()
+    { }
+    ~Person()
+    { }
+    void
+    say_age() const
+    { printf("%d\n", age); }
+    void
+    say_name() const
+    { printf("%s\n", name.c_str()); }
+private:
+    Person(const Person&amp;);
+    const Person&amp;
+    operator=(const Person&amp;);
+    int age;
+    std::string name;
+};
+</code></pre>
+
+<p>Somebody may want to use the functions together, so we add another member
+function.</p>
+
+<pre><code>class Person {
+public:
+    explicit Person()
+    { }
+    ~Person()
+    { }
+    void
+    say_age() const
+    { printf("%d\n", age); }
+    void
+    say_name() const
+    { printf("%s\n", name.c_str()); }
+    void
+    say() const
+    {
+        say_age();
+        say_name();
+    }
+private:
+    Person(const Person&amp;);
+    const Person&amp;
+    operator=(const Person&amp;);
+    int age;
+    std::string name;
+};
+</code></pre>
+
+<p>This is straightforward, especially for those Java and C# programmers. Every
+functions should be in a class and everything is object. It&rsquo;s obvious, right?</p>
+
+<p>However, e have another option, that is, using the non-member function.</p>
+
+<pre><code>class Person {
+public:
+    explicit Person()
+    { }
+    ~Person()
+    { }
+    void
+    say_age() const
+    { printf("%d\n", age); }
+    void
+    say_name() const
+    { printf("%s\n", name.c_str()); }
+private:
+    Person(const Person&amp;);
+    const Person&amp;
+    operator=(const Person&amp;);
+    int age;
+    std::string name;
+};
+
+void
+person_say(const Person&amp; p)
+{
+    p.say_age();
+    p.say_name();
+}
+</code></pre>
+
+<p>Which is better? It seems that they are the same.</p>
+
+<p>We should use the non-member function instead of the member function.</p>
+
+<p>As we all know, <strong>the less the public member functions and the friend </strong>
+ <strong>functions, the greater encapsulation is</strong>, since member functions and
+friend functions are the only interface that can access the private members.</p>
+
+<p>In this example, if we add another public member function, we decrease the
+encapsulation of the class since this member function can access the private
+members of the class. But if we use the non-member non-friend function, it
+won&rsquo;t have impact with the class because it&rsquo;s the function outside.</p>
+
+<p>Does it explain that <em>C++</em> is not so object-oriented? From Java or C#, those
+programmers will say that everything is object and classes are everywhere.
+However, they are wrong. Object-oriented princiles state that <strong>data should be</strong>
+<strong>encapsulated as possible</strong>. Therefore, prefering non-member non-friend
+functions is more <em>object-oriented</em>.</p>
+
+<p>Until now, I can say that I really understand the meaning of encapsulation and
+why it&rsquo;s so important in object-oriented programming.</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2013/08/09/understanding-encapsulation//blog/page/3/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -356,425 +534,6 @@ a tour <strong>alone</strong>.</p>
 <div class="meta">
 	
 		<span class="comments"><a href="/blog/2013/08/03/a-tour-to-the-badaling-great-wall//blog/page/3/index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2013/08/01/cpp-resource-management/">
-		
-			Cpp Resource Management</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-01T22:16:00+08:00" pubdate data-updated="true">Aug 1<span>st</span>, 2013</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/c-plus-plus/'>C++</a>
-
-
-</div>
-    </div>
-		<p>I always forget freeing a memory that allocated from the heap.And I always
-forget closing the file handler.</p>
-
-<p>Resources include file descriptors, mutex locks, fonts, brushes, database
-connections and network sockets.</p>
-
-<p>I think less programmers can remember closing a file handler, especially
-in a large project.</p>
-
-<p>Nowadays, many programming languages have the garbage collection function.
-In C++, since the destructor will be automatically called, we can release
-the resources automatically if we put the resource into an object.</p>
-
-<p>How can do that?Use the <em>smart pointer</em>:<code>std::auto_ptr</code>.</p>
-
-<pre><code>#include &lt;cstdio&gt;
-#include &lt;memory&gt;
-
-int
-main(int argc, char **argv)
-{
-    int *num = NULL;
-    {
-        num = new int();
-        std::auto_ptr&lt;int&gt; ap(num);
-    }
-    // delete num;
-
-    return 0;
-}
-</code></pre>
-
-<p>If trying to delete num after the block, that will be a double free error.</p>
-
-<p>Reference from <a href="http://www.cplusplus.com/reference/memory/auto_ptr/">cplusplus.com</a>, <code>auto_ptr</code> is deprecated in C++11 and is replaced by <code>unique_ptr</code>.
-But they are similar.</p>
-
-<p>However, multiple <code>auto_ptr</code> cannot contain the same object.</p>
-
-<p>Here is the test program.</p>
-
-<pre><code>#include &lt;cstdio&gt;
-#include &lt;memory&gt;
-
-int
-main(int argc, char **argv)
-{
-    int *num = NULL;
-    {
-        num = new int();
-        std::auto_ptr&lt;int&gt; ap1(num);
-        std::auto_ptr&lt;int&gt; ap2(ap1);
-
-        printf("%p\n", &amp;ap1);
-        ap1 = ap2;
-        printf("%p\n", &amp;ap2);
-    }
-    // delete num;
-
-    return 0;
-}
-</code></pre>
-
-<p>And here is the gdb debug output information.</p>
-
-<pre><code>Temporary breakpoint 1, main (argc=1, argv=0x7fffffffe6e8) at test.cpp:7
-7       int *num = NULL;
-(gdb) n
-9       num = new int();
-(gdb) n
-10      std::auto_ptr&lt;int&gt; ap1(num);
-(gdb) n
-11      std::auto_ptr&lt;int&gt; ap2(ap1);
-(gdb) p ap1
-$1 = {_M_ptr = 0x601010}
-(gdb) p ap2
-$2 = {_M_ptr = 0x7fff00000001}
-(gdb) n
-13      printf("%p\n", &amp;ap1);
-(gdb) p ap1
-$3 = {_M_ptr = 0x0}
-(gdb) p ap2
-$4 = {_M_ptr = 0x601010}
-(gdb) n
-0x7fffffffe5e0
-14      ap1 = ap2;
-(gdb) p ap1
-$5 = {_M_ptr = 0x0}
-(gdb) p ap2
-$6 = {_M_ptr = 0x601010}
-(gdb) n
-15      printf("%p\n", &amp;ap2);
-(gdb) p ap1
-$7 = {_M_ptr = 0x601010}
-(gdb) p ap2
-$8 = {_M_ptr = 0x0}
-(gdb) 
-</code></pre>
-
-<p>But there are another smart pointer that can do this.It&rsquo;s the
-<code>std::tr1::shared_ptr</code>.Mutiple shared_ptr can contain the same object.</p>
-
-<p>The testing program is as follow.</p>
-
-<pre><code>#include &lt;cstdio&gt;
-#include &lt;tr1/memory&gt;
-
-int
-main(int argc, char **argv)
-{
-    int *num = NULL;
-    {
-        num = new int();
-        std::tr1::shared_ptr&lt;int&gt; ap1(num);
-        std::tr1::shared_ptr&lt;int&gt; ap2(ap1);
-
-        printf("%p\n", &amp;ap1);
-        ap1 = ap2;
-        printf("%p\n", &amp;ap2);
-    }
-
-    return 0;
-}
-</code></pre>
-
-<p>And the gdb debug information is:</p>
-
-<pre><code>Temporary breakpoint 1, main (argc=1, argv=0x7fffffffe6e8) at test.cpp:7
-7       int *num = NULL;
-(gdb) n
-9       num = new int();
-(gdb) n
-10      std::tr1::shared_ptr&lt;int&gt; ap1(num);
-(gdb) n
-11      std::tr1::shared_ptr&lt;int&gt; ap2(ap1);
-(gdb) n
-13      printf("%p\n", &amp;ap1);
-(gdb) p ap1
-$1 = std::tr1::shared_ptr (count 2, weak 0) 0x602010
-(gdb) p ap2
-$2 = std::tr1::shared_ptr (count 2, weak 0) 0x602010
-(gdb) n
-0x7fffffffe5d0
-14      ap1 = ap2;
-(gdb) n
-15      printf("%p\n", &amp;ap2);
-(gdb) p ap1
-$3 = std::tr1::shared_ptr (count 2, weak 0) 0x602010
-(gdb) p ap2
-$4 = std::tr1::shared_ptr (count 2, weak 0) 0x602010
-</code></pre>
-
-<p>We can see that both of <code>ap1</code> and <code>ap2</code> point to the same object.</p>
-
-<p>The <code>auto_ptr</code> and <code>shared_ptr</code> use <code>delete</code> but not <code>delete[]</code>,
-so they don&rsquo;t support array.But the <code>unique_ptr</code> support.</p>
-
-<p>Sometimes, the resource may be a mutex, and we don&rsquo;t want to remember
-unlocking the mutex every time we lock it.So a resource management object
-may be:</p>
-
-<pre><code>#include &lt;cstdio&gt;
-
-typedef int Mutex;
-
-void
-lock(Mutex *p)
-{
-    printf("Locking...\n");
-}
-
-void
-unlock(Mutex *p)
-{
-    printf("Unlocked\n");
-}
-
-class Lock {
-public:
-    explicit Lock(Mutex *p)
-        :pMutex(p)
-    {
-        lock(pMutex);
-    }
-    ~Lock()
-    {
-        unlock(pMutex);
-    }
-private:
-    Mutex *pMutex;
-};
-
-int
-main(int argc, char **argv)
-{
-    Mutex m;
-    {
-        Lock ml(&amp;m);
-    }
-
-    return 0;
-}
-</code></pre>
-
-<p>However, when we copy the <code>Lock</code> object, problems appear.</p>
-
-<pre><code>Lock ml2(ml);
-</code></pre>
-
-<p>The default copy constructor will directly copy the pointer <code>pMutex</code> to
-the target object.So we should let the object uncopyable.</p>
-
-<pre><code>private:
-Lock(const Lock&amp;);
-Lock&amp;
-operator=(const Lock&amp;);
-
-Mutex *pMutex;
-</code></pre>
-
-<p>Multiple objects can use the same resource, so the resource may be existed
-until the last object has been destroyed.The <code>tr1::shared_ptr</code> provide a
-<code>deleter</code> and its <strong>shared ability</strong> to solve this problem.</p>
-
-<pre><code>class Lock {
-public:
-    explicit Lock(Mutex *p)
-        :pMutex(p, unlock)
-    {
-        lock(pMutex.get());
-    }
-private:
-    Lock(const Lock&amp;);
-    Lock&amp;
-    operator=(const Lock&amp;);
-
-    std::tr1::shared_ptr&lt;Mutex&gt; pMutex;
-};
-</code></pre>
-
-<h2>Provide access to raw resources</h2>
-
-<p>Sometimes we may only want to access the raw resource but the object that
-contains the resource.For example:</p>
-
-<pre><code>#include &lt;cstdio&gt;
-#include &lt;tr1/memory&gt;
-
-typedef int Mutex;
-
-static Mutex *
-createMutex()
-{
-    static Mutex *p = new Mutex();
-
-    return p;
-}
-
-int
-main(int argc, char **argv)
-{
-    std::tr1::shared_ptr&lt;Mutex&gt; pMutex;
-
-    printf("%d\n", pMutex);
-
-    return 0;
-}
-</code></pre>
-
-<p>Therefore, we must provide a method to access the raw resource.Like this.</p>
-
-<pre><code>    printf("%d\n", pMutex.get());
-</code></pre>
-
-<p>There are two ways, one is explicit and the other is implicit.</p>
-
-<pre><code>class MutexManager {
-public:
-    explicit MutexManager(Mutex* p)
-        :p_(p)
-    { }
-    ~MutexManager()
-    {
-        delete p_;
-    }
-    Mutex
-    get() const
-    {
-        return *p_;
-    }
-private:
-    Mutex *p_;
-};
-
-int
-main(int argc, char **argv)
-{
-    MutexManager mm(createMutex());
-
-    printf("%d\n", mm.get());
-
-    return 0;
-}
-</code></pre>
-
-<p>This one above is exciplit conversion.And this one below is implicit.</p>
-
-<pre><code>class MutexManager {
-public:
-    explicit MutexManager(Mutex* p)
-        :p_(p)
-    { }
-    ~MutexManager()
-    {
-        delete p_;
-    }
-    operator Mutex() const
-    {
-        return *p_;
-    }
-private:
-    Mutex *p_;
-};
-
-void
-print(Mutex m)
-{
-    printf("%d\n", m);
-}
-
-int
-main(int argc, char **argv)
-{
-    MutexManager mm(createMutex());
-
-    print(mm);
-
-    return 0;
-}
-</code></pre>
-
-<p>It&rsquo;s obviously that the explicit method is safer and the implicit method is
-more convenient for clients.</p>
-
-<h2>Keep new and delete in the same form</h2>
-
-<p>We all know that the following code is wrong.</p>
-
-<pre><code>std::string *str = new std::string[10];
-delete str;
-</code></pre>
-
-<p>We should use <code>delete []str;</code> instead of <code>delete str;</code>.</p>
-
-<p>But how about this?</p>
-
-<pre><code>#include &lt;iostream&gt;
-
-typedef std::string Lines[4];
-
-int
-main(int argc, char **argv)
-{
-    std::string *p = new Lines;
-    delete p;
-
-    return 0;
-}
-</code></pre>
-
-<p>If let me delete the pointer p, I will use this <code>delete p;</code>.But I am wrong.
-I shouldn&rsquo;t look at the left of the pointer, that is, <code>std::string</code>.I should
-look at the right of the <code>new</code>, that is, <code>Lines</code>.So, in this case, we
-should use <code>delete []p;</code>.</p>
-
-<p>Avoid typedef for array types, use <code>vector</code> instead.</p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2013/08/01/cpp-resource-management//blog/page/3/index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>

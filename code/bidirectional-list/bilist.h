@@ -1,3 +1,6 @@
+#ifndef _BILIST_H_
+#define _BILIST_H_
+
 #include <iostream>
 #include <cassert>
 
@@ -105,4 +108,4 @@ private:
     clean();
 };
 
-    
+#endif /* _BILIST_H_ */    
