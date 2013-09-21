@@ -4,7 +4,7 @@ title: "Implement a bidirectional linked list"
 date: 2013-09-21 12:11
 comments: true
 sharing: true
-categories: Interview C++
+categories: Data_structure Interview
 ---
 
 A bidirectional linked list is the same as a singular linked list except that

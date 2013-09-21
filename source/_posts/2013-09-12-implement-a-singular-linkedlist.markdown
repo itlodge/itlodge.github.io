@@ -4,7 +4,7 @@ title: "Implement a singular LinkedList"
 date: 2013-09-12 09:56
 comments: true
 sharing: true
-categories: C++ Interview
+categories: Data_structure Interview
 ---
 
 LinkedList is a very common data structure. Three years ago, I could write
@@ -53,13 +53,13 @@ Here is the code.
 
 The class definition.
 
-{% include_code careerup-list/list.h lang:cpp %}
+{% include_code singular-list/list.h lang:cpp %}
 
 And the class implementation.
 
-{% include_code careerup-list/list.cpp %}
+{% include_code singular-list/list.cpp %}
 
 Now this the test code(Using boost unit test framework).
 
-{% include_code careerup-list/list-test.cpp %}
+{% include_code singular-list/list-test.cpp %}
 
