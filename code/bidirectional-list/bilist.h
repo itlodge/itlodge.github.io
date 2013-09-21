@@ -38,6 +38,10 @@ public:
     next(Node<T> *next)
     { this->next_ = next; }
 
+    void
+    prev(Node<T> *prev)
+    { this->prev_ = prev; }
+
     friend std::ostream&
     operator<<(std::ostream& os, const Node<T>& node)
     { return os << node.value_; }
@@ -84,6 +88,15 @@ public:
 
     const T&
     operator[](const size_t& index);
+
+    void
+    append(const T& value);
+
+    void
+    insert(size_t index, const T& value);
+
+    void
+    remove(size_t index);
 private:
     Node<T> *head_;
     size_t size_;

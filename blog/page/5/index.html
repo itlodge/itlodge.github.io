@@ -6,7 +6,7 @@
 	<title>Yuanhang Zheng</title>
     <meta name="author" content="Yuanhang Zheng">
     
-	<meta name="description" content="Published on: Jul 23rd, 2013 Tags: C++ This is an old topic. For constants Consider a macro below. #define PI 3.14 There are several drawbacks when &hellip;">
+	<meta name="description" content="Published on: Jul 24th, 2013 Tags: C++ Const pointer const is versatile.I am always confused by the following syntax. const char *str = "Hello"; // &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -95,6 +95,191 @@
 <!-- begin toload --> 
     <div id="content" class="inner">
         
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2013/07/24/const-anyway/">
+		
+			Const Anyway!</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-24T20:01:00+08:00" pubdate data-updated="true">Jul 24<span>th</span>, 2013</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/c-plus-plus/'>C++</a>
+
+
+</div>
+    </div>
+		<h2>Const pointer</h2>
+
+<p><code>const</code> is versatile.I am always confused by the following syntax.</p>
+
+<pre><code>const char *str = "Hello";    // const data, non-const pointer
+char * const str = "Hello";    // const pointer, non-const data
+</code></pre>
+
+<p>Now there is a tip to remember it.</p>
+
+<p>If <code>const</code> appears to the right of the asterisk, the pointer is
+constant.If <code>const</code> appears to the left of the asterisk, the data
+is constant.</p>
+
+<p>So the following two statements are the same.</p>
+
+<pre><code>const char *str = "Hello";
+char const *str = "Hello";
+</code></pre>
+
+<p>In STL, <code>iterator</code> is just like a <code>T *</code> pointer.
+* <code>const std::vector&lt;int&gt;::iterator iter</code> is just like <code>T * const iter</code>.
+* <code>std::vector&lt;int&gt;::const_iterator cIter</code> is just like <code>const T *iter</code>.</p>
+
+<p>So, in a loop, if we don&rsquo;t want to modify the data, use <code>const_iterator</code>.</p>
+
+<h2>Const member function</h2>
+
+<p>Sometimes, we have two version member functions.One is const and the other is
+not.</p>
+
+<pre><code>#include &lt;string&gt;
+#include &lt;iostream&gt;
+
+class Str {
+public:
+    Str(std::string str)
+    :data(str)
+    { }
+
+    const char&amp;
+    operator[](std::size_t pos) const    // Const objects use this
+    {
+        return data[pos];
+    }
+
+    char&amp;
+    operator[](std::size_t pos)    // Non-const objects use this
+    {
+        return data[pos];
+    }
+
+private:
+    std::string data;
+};
+
+void
+print(const Str&amp; const_str)
+{
+    std::cout &lt;&lt; const_str[1] &lt;&lt; std::endl;
+}
+
+int
+main(int argc, char **argv)
+{
+    Str nonconst_str("abc");
+    std::cout &lt;&lt; nonconst_str[1] &lt;&lt; std::endl;
+    nonconst_str[1] = 'a';
+
+    print(nonconst_str);
+
+    return 0;
+}
+</code></pre>
+
+<p>In <code>main</code>, <code>nonconst_str</code> is a non-const object and it can be modified
+by <code>[]</code>.In <code>print</code>, <code>const Str&amp; const_str</code> means
+<strong>pass parameters by reference-to-const</strong>, so <code>const_str</code> is a const object.</p>
+
+<p>We observe that the <code>const</code> keyword is after the closing parenthesis of the
+argument list.This means the function is a const member function.</p>
+
+<p>Reference to <a href="http://msdn.microsoft.com/en-us/library/6ke686zh.aspx">MSDN</a>,
+<strong>A constant member function cannot modify any non-static members or call any</strong>
+<strong>member functions that aren&rsquo;t constant.</strong>That is, the cons member function
+can&rsquo;t modify the object that it is called.</p>
+
+<p>The above philosophy is called <strong>bitwise constness</strong> or <strong>physical constness</strong>.
+There are another philosophy called <strong>logical constness</strong>.Adherents to this
+philosophy argue that <strong>a const member function might modify some of the bits</strong>
+<strong>in the object on which it&rsquo;s invoked, but only in ways that clients cannot</strong>
+<strong>detect</strong>.</p>
+
+<p>For example, if we add a new member function <code>length()</code> to the above class.</p>
+
+<pre><code>    std::size_t
+    length() const
+    {
+        len = data.length();
+
+        return len;
+    }
+
+private:
+    std::string data;
+    std::size_t len;
+</code></pre>
+
+<p>This will generate the following compiled error.</p>
+
+<pre><code>test.cpp:25:6: error: assignment of member ‘Str::len’ in read-only object
+  len = data.length();
+      ^
+</code></pre>
+
+<p>Since member variable <code>len</code> has been modified and the compiler use the
+<strong>bitwise const</strong>, error produces.However, return and object&rsquo;s length seems
+not modify the object it is called.</p>
+
+<p>To solved this problem, use the <strong>mutable</strong> keyword.It can free non-static
+data members from bitwise constness constraints.</p>
+
+<pre><code>mutable std::size_t len;
+</code></pre>
+
+<p>I beleive in code reusing forever!In the above example, the duplicate code
+in the two <code>operator[]</code> functions can be merged into one.</p>
+
+<p>Only then non-const function should be modified.</p>
+
+<pre><code>char&amp;
+operator[](std::size_t pos)    // Non-const objects use this
+{
+    return const_cast&lt;char&amp;&gt;(static_cast&lt;const Str&amp;&gt;(*this)[pos]);
+}
+</code></pre>
+
+<p><code>static_cast&lt;const Str&amp;&gt;</code>will make <code>*this</code>const and then it can call
+<code>operator[]</code>.Finally, <code>const_cast</code> is used the free the const constraint.</p>
+
+<p>This is all about <code>const</code>, it&rsquo;s an amazing keyword.For readable and efficient
+code, use it anyway.</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2013/07/24/const-anyway//blog/page/5/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -521,163 +706,12 @@ interested in this great programming language.</p>
 </div>
 </article>
 
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2013/06/30/ruby-getting-started/">
-		
-			Ruby-getting Started</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-30T22:54:00+08:00" pubdate data-updated="true">Jun 30<span>th</span>, 2013</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/ruby/'>Ruby</a>
-
-
-</div>
-    </div>
-		<h1>Running ruby</h1>
-
-<h2>Interactive</h2>
-
-<p>In the past, I always tested some ruby statements with <code>irb</code>. Now I can
-test a small ruby program in the following way.</p>
-
-<pre><code>[monkey@itlodge octopress]$ ruby
-str = "abc"
-puts str
-Ctrl+d
-abc
-</code></pre>
-
-<p>After hit <code>ruby</code>, it allows me to type as many code as possible.Finally,
-press <code>Ctrl+d</code> will end the input and it will evaluate the code.</p>
-
-<h2>Programs</h2>
-
-<p>When writing a script, we always use <code>#!</code> and specific which language used
-to run the code.This is the Unix <a href="http://en.wikipedia.org/wiki/Shebang_%28Unix%29">Shebang</a> notation.For example:</p>
-
-<pre><code>#!/usr/bin/ruby -w
-puts "abc"
-</code></pre>
-
-<p>From the man page, I know that the <code>-w</code> option means <em>Enables verbose mode
-without printing version message at the beginning</em>.</p>
-
-<p>But, many guys like this style:</p>
-
-<pre><code>#!/usr/bin/env ruby
-puts "abc"
-</code></pre>
-
-<p>From the man page, I know that the <code>env</code> is a program that <em>run a program in
-a modified environment</em>.So it can search the <code>$PATH</code> and find the <code>ruby</code>
-program to run.</p>
-
-<h1>Ruby documentation</h1>
-
-<p>The site <a href="http://www.ruby-doc.org">ruby-doc.org</a> contains a complete set of the
-RDoc documentation for Ruby.</p>
-
-<p>The <code>ri</code> tool is very useful for looking up documentation.If you want to find
-the documentation for a class, just type <code>ri ClassName</code>. For example:</p>
-
-<pre><code>[monkey@itlodge ~]$ ri Vector
-= Vector &lt; Object
-
-------------------------------------------------------------------------------
-= Includes:
-Enumerable (from ruby core)
-
-(from ruby core)
-------------------------------------------------------------------------------
-The Vector class represents a mathematical vector, which is useful in its own
-right, and also constitutes a row or column of a Matrix.
-
-== Method Catalogue
-
-To create a Vector:
-*   Vector.[](*array)                   
-*   Vector.elements(array, copy = true) 
-
-To access elements:
-*   [](i)                               
-
-To enumerate the elements:
-*  #each2(v)                            
-*  #collect2(v)                         
-:
-</code></pre>
-
-<p>If you want to find the documentation for a method, just type
-<code>ri method's name</code>.For example:</p>
-
-<pre><code>[monkey@itlodge ~]$ ri sleep
-= .sleep
-
-(from ruby core)
-=== Implementation from Kernel
-------------------------------------------------------------------------------
-  sleep([duration])    -&gt; fixnum
-
-
-------------------------------------------------------------------------------
-
-Suspends the current thread for duration seconds (which may be
-any number, including a Float with fractional seconds). Returns the actual
-number of seconds slept (rounded), which may be less than that asked for if
-another thread calls Thread#run. Called without an argument, sleep() will
-sleep forever.
-
-  Time.new    #=&gt; 2008-03-08 19:56:19 +0900
-  sleep 1.2   #=&gt; 1
-  Time.new    #=&gt; 2008-03-08 19:56:20 +0900
-  sleep 1.9   #=&gt; 2
-  Time.new    #=&gt; 2008-03-08 19:56:22 +0900
-
-
-:
-</code></pre>
-
-<p>A method&rsquo;s name may be the same in different classes or modules.In this case,
-<code>ri</code> will list all of them.If you type <code>ri ClassName.method's name</code>, it
-will show only the documentation of the corresponding class&rsquo;s.</p>
-
-<p>More contributions, more reputations.If a class or module hasn&rsquo;t yet documented
-in RDoc, send an email to <code>suggestions@ruby-doc.org</code> to ask them to add.</p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2013/06/30/ruby-getting-started//blog/page/5/index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
 <nav id="pagenavi">
     
         <a href="/blog/page/4/" class="prev">Prev</a>
     
+    
+        <a href="/blog/page/6/" class="next">Next</a>
     
     <div class="center"><a href="/blog/archives">Blog Archives</a></div>
 </nav>

@@ -46,7 +46,7 @@ BiLinkedList<T>::operator=(const BiLinkedList<T>& blist)
     Node<T> *p = blist.head_;
     if (p != NULL) {
         this->head_ = new Node<T>(p->value());
-	Node<T> *thisp = this->head_;
+        Node<T> *thisp = this->head_;
         p = p->next();
         while (p != NULL) {
             Node<T> *node = new Node<T>(p->value(), thisp);
@@ -86,6 +86,85 @@ BiLinkedList<T>::operator[](const size_t& index)
         p = p->next();
     }
     return p->value();
+}
+
+template <typename T>
+void
+BiLinkedList<T>::append(const T& value)
+{
+    Node<T> *p = this->head_;
+    if (p == NULL) {
+        this->head_ = new Node<T>(value);
+    } else {
+        while (p->next() != NULL) {
+            p = p->next();
+        }
+        Node<T> *node = new Node<T>(value, p);
+        p->next(node);
+    }
+    ++this->size_;
+}
+
+template <typename T>
+void
+BiLinkedList<T>::insert(size_t index, const T& value)
+{
+    assert(index >= 0 && index <= this->size_);
+    if (index == 0) {
+        Node<T> *node = new Node<T>(value, NULL, this->head_);
+        if (this->head_ != NULL) {
+            this->head_->prev(node);
+        }
+        this->head_ = node;
+    } else if (index == this->size_) {
+        Node<T> *p = this->head_;
+        while (p->next() != NULL) {
+            p = p->next();
+        }
+        Node<T> *node = new Node<T>(value, p);
+        p->next(node);
+    } else {
+        Node<T> *p = this->head_;
+        size_t i = 1;
+        while (i < index) {
+            p = p->next();
+            ++i;
+        }
+        Node<T> *node = new Node<T>(value, p, p->next());
+        p->next()->prev(node);
+        p->next(node);
+    }
+    ++this->size_;
+}
+
+template <typename T>
+void
+BiLinkedList<T>::remove(size_t index)
+{
+    if (this->head_ == NULL) {
+        return;
+    }
+    if (index == 0) {
+        Node<T> *to_delete = this->head_;
+        Node<T> *p = this->head_->next();
+        p->prev(NULL);
+        delete to_delete;
+        this->head_ = p;
+    } else {
+        size_t i = 0;
+        Node<T> *p = this->head_;
+        while (i < index - 1) {
+            p = p->next();
+            ++i;
+        }
+        Node<T> *to_delete = p->next();
+        p->next(to_delete->next());
+        if (p->next() != NULL) {
+            p->next()->prev(p);
+        }
+        delete to_delete;
+    }
+    --this->size_;
 }
 
 template <typename T>
