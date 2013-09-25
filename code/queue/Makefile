@@ -2,9 +2,9 @@ CXX = g++
 FLAGS = -Wall -o2 -g
 LIBS = -lboost_unit_test_framework
 
-SRC = list.cpp list-test.cpp
+SRC = queue.cpp queue-test.cpp
 OBJS = $(SRC:.cpp=.o)
-TARGET = list-test
+TARGET = queue-test
 
 %.o: %.cpp
 	$(CXX) $(FLAGS) -c $< -o $@

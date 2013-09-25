@@ -199,6 +199,7 @@ LinkedList<T>::clean()
         Node<T> *to_delete = p;
         p = p->next();
         delete to_delete;
+        --this->size_;
     }
     this->head_ = NULL;
 }

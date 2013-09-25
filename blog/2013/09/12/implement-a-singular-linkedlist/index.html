@@ -745,6 +745,7 @@ linked list.</p>
 <span class='line-number'>241</span>
 <span class='line-number'>242</span>
 <span class='line-number'>243</span>
+<span class='line-number'>244</span>
 </pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include &quot;list.h&quot;</span>
 </span><span class='line'>
 </span><span class='line'><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
@@ -946,6 +947,7 @@ linked list.</p>
 </span><span class='line'>        <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">to_delete</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
 </span><span class='line'>        <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">();</span>
 </span><span class='line'>        <span class="k">delete</span> <span class="n">to_delete</span><span class="p">;</span>
+</span><span class='line'>        <span class="o">--</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">size_</span><span class="p">;</span>
 </span><span class='line'>    <span class="p">}</span>
 </span><span class='line'>    <span class="k">this</span><span class="o">-&gt;</span><span class="n">head_</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
 </span><span class='line'><span class="p">}</span>
@@ -1351,7 +1353,7 @@ linked list.</p>
 <span class='line-number'>355</span>
 <span class='line-number'>356</span>
 </pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#define BOOST_TEST_DYN_LINK</span>
-</span><span class='line'><span class="cp">#define BOOST_TEST_MODULE &quot;LinkedList test&quot;</span>
+</span><span class='line'><span class="cp">#define BOOST_TEST_MAIN</span>
 </span><span class='line'><span class="cp">#include &lt;boost/test/unit_test.hpp&gt;</span>
 </span><span class='line'><span class="cp">#include &lt;boost/test/output_test_stream.hpp&gt;</span>
 </span><span class='line'><span class="cp">#include &quot;list.cpp&quot;</span>

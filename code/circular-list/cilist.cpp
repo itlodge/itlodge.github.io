@@ -129,6 +129,7 @@ CiLinkedList<T>::clean()
     while (p != NULL) {
         if (this->size_ == 1) {
             delete p;
+            --this->size_;
             break;
         } else if (p == this->head_) {
             Node<T> *temp = p;
@@ -138,6 +139,7 @@ CiLinkedList<T>::clean()
             Node<T> *to_delete = p;
             p = p->next();
             delete to_delete;
+            --this->size_;
         }
     }
     this->head_ = NULL;

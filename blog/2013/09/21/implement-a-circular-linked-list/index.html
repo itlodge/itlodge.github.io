@@ -478,6 +478,8 @@ but it&rsquo;s not random accessible.</li>
 <span class='line-number'>145</span>
 <span class='line-number'>146</span>
 <span class='line-number'>147</span>
+<span class='line-number'>148</span>
+<span class='line-number'>149</span>
 </pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include &quot;cilist.h&quot;</span>
 </span><span class='line'>
 </span><span class='line'><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
@@ -609,6 +611,7 @@ but it&rsquo;s not random accessible.</li>
 </span><span class='line'>    <span class="k">while</span> <span class="p">(</span><span class="n">p</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">size_</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>            <span class="k">delete</span> <span class="n">p</span><span class="p">;</span>
+</span><span class='line'>            <span class="o">--</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">size_</span><span class="p">;</span>
 </span><span class='line'>            <span class="k">break</span><span class="p">;</span>
 </span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">p</span> <span class="o">==</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">head_</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>            <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">temp</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
@@ -618,6 +621,7 @@ but it&rsquo;s not random accessible.</li>
 </span><span class='line'>            <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">to_delete</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
 </span><span class='line'>            <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">();</span>
 </span><span class='line'>            <span class="k">delete</span> <span class="n">to_delete</span><span class="p">;</span>
+</span><span class='line'>            <span class="o">--</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">size_</span><span class="p">;</span>
 </span><span class='line'>        <span class="p">}</span>
 </span><span class='line'>    <span class="p">}</span>
 </span><span class='line'>    <span class="k">this</span><span class="o">-&gt;</span><span class="n">head_</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>

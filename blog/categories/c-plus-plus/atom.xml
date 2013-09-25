@@ -4,7 +4,7 @@
   <title><![CDATA[Category: C++ | Yuanhang Zheng]]></title>
   <link href="http://itlodge.github.io/blog/categories/c-plus-plus/atom.xml" rel="self"/>
   <link href="http://itlodge.github.io/"/>
-  <updated>2013-09-21T22:02:30+08:00</updated>
+  <updated>2013-09-25T23:38:17+08:00</updated>
   <id>http://itlodge.github.io/</id>
   <author>
     <name><![CDATA[Yuanhang Zheng]]></name>
@@ -12,6 +12,102 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[My C++ coding style]]></title>
+    <link href="http://itlodge.github.io/blog/2013/09/25/my-c-plus-plus-coding-style/"/>
+    <updated>2013-09-25T19:30:00+08:00</updated>
+    <id>http://itlodge.github.io/blog/2013/09/25/my-c-plus-plus-coding-style</id>
+    <content type="html"><![CDATA[<p>Every programmer has his/her own coding style. Time goes by, and my coding
+style is changing. There following is my note on c++ coding style. I will
+explain why I want to coding in that style.</p>
+
+<p>Why do I care about my coding style so much? Because I am a virgo.</p>
+
+<ul>
+<li><strong>Always use <code>this</code> to refer to members in a member function.</strong></li>
+</ul>
+
+
+<p>This seems ridiculous. But I prefer. In a member function, there may be
+various kinds of variables, such as memeber variables, global variables
+and local variables. If we don&rsquo;t use <code>this</code> to refer to the member
+variables, we will confused when we met a variable. Is it a local variable
+or a member variable? For example, there is a statement in a member function.</p>
+
+<pre><code>size_ = size + 1;
+</code></pre>
+
+<p>How can you know what this statement exactly means? Which <code>size</code> is the
+class&rsquo;s size? However, if we write this statement as this,</p>
+
+<pre><code>this-&gt;size_ = size + 1;
+</code></pre>
+
+<p>we can know that we set the class&rsquo;s size be the value of local variable <code>size</code>
+plus one. This code is readable and it can relieve the code reader&rsquo;s headache.</p>
+
+<p>The same rule can apply to the member functions. When refering to a member
+function, always use <code>this</code>.</p>
+
+<pre><code>int *p = this-&gt;next();
+</code></pre>
+
+<p>Someone may argue that using <code>this</code> will let use write more code. My
+experience told me that the whole world is balanced. You make yourself happy
+and your code will make the code readers headache. Instead, you write readable
+codes with some extra typing and you will make the code readers happy. This is
+a balance and you can balance yourself. I am a so kind man and I always want
+those who read my codes be happy. So I will use <code>this</code> always.</p>
+
+<p>Note: In PHP, you must use <code>$this</code> to refer to members. In Python, you must
+use <code>self</code> to refer to members.</p>
+
+<ul>
+<li><strong>Always leave the return type name in a single line.</strong></li>
+</ul>
+
+
+<p>I used to leave the return type name on the left of a function name. The first
+time I saw some programmers put them in a single line is the
+<a href="http://en.wikipedia.org/wiki/Pintos">Pintos</a> project. I thought it&rsquo;s ugly.
+But after I worked on the code of <a href="http://en.wikipedia.org/wiki/Gold_(linker">Gold</a>),
+I changed my mind. I followed the author&rsquo;s style, even in a main function.</p>
+
+<pre><code>int
+main(int argc, char *argv[]) { }
+</code></pre>
+
+<p>Why do I leave the return value in a line? Because, in many large project, most
+of the names of the return types are very long, most of the function names are
+very long and most of functions has several parameters which have a long type
+name. For example,</p>
+
+<pre><code>std::map&lt;size_t, LinkedList&lt;T&gt; *&gt; *
+get_map(const std::string&amp; name, bool is_global=true) const;
+</code></pre>
+
+<p>If you don&rsquo;t leave the return type name in a single line, the function
+declaration will becomes</p>
+
+<pre><code>std::map&lt;size_t, LinkedList&lt;T&gt; *&gt; * get_map(const std::string&amp; name, bool is_global=true) const;
+</code></pre>
+
+<p>which is very very ugly!</p>
+
+<p>If we leave the return type name in a single line, the code readers will see
+the return type of the function more quickly. So the code will be more readable.</p>
+
+<p>Someone may argue that it looks more beautiful to leave the return type name on
+the left of the function name when the type name is short like this.</p>
+
+<pre><code>int get(size_t index);
+</code></pre>
+
+<p>This may be right. But most of the return type name is long in a large project.
+So for consistence, I always leave them in a single line.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Some interview questions about array and string]]></title>
@@ -1692,109 +1788,6 @@ functions is more <em>object-oriented</em>.</p>
 
 <p>Until now, I can say that I really understand the meaning of encapsulation and
 why it&rsquo;s so important in object-oriented programming.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Always pass parameters by reference-to-const]]></title>
-    <link href="http://itlodge.github.io/blog/2013/08/09/always-pass-parameters-by-reference-to-const/"/>
-    <updated>2013-08-09T03:42:00+08:00</updated>
-    <id>http://itlodge.github.io/blog/2013/08/09/always-pass-parameters-by-reference-to-const</id>
-    <content type="html"><![CDATA[<p>We all know that <em>pass by value</em> is not effecient.So we use <em>pass by pointer</em>
-in C.However, in C++, we prefer <strong>pass by referece-to-const</strong>.</p>
-
-<p>Here is an example.</p>
-
-<pre><code>#include &lt;iostream&gt;
-#include &lt;cstdio&gt;
-
-class Dog {
-public:
-    Dog()
-    {
-        printf("Calling Dog's constructor\n");
-    }
-    Dog(const Dog&amp; d)
-    {
-        printf("Calling Dog's copy constructor\n");
-        this-&gt;name = d.name;
-    }
-    virtual ~Dog()
-    {
-        printf("Calling Dog's destructor\n");
-    }
-private:
-    std::string name;
-};
-
-void
-walk_the_dog(Dog d)
-{
-
-}
-
-int
-main(int argc, char **argv)
-{
-    Dog dog;
-    walk_the_dog(dog);
-
-    return 0;
-}
-</code></pre>
-
-<p>The running result is as follows:</p>
-
-<pre><code>Calling Dog's constructor
-Calling Dog's copy constructor
-Calling Dog's destructor
-Calling Dog's destructor
-</code></pre>
-
-<p>Now, let&rsquo;s analysis this <em>passing by value</em> process.
-First, <code>Dog dog;</code> will call the constructor. Then, since the function
-<code>walk_the_dog</code> pass the parameter <code>d</code> by value, it will call the copy
-constructor. Before exiting the function, it will call the destructor of <code>Dog</code>
-to destroy the parameter <code>d</code>. In the end, before exiting the main function,
-the destructor of <code>Dog</code> will be called again to destroy the <code>dog</code> object.</p>
-
-<p>Now, it seems that <em>passing by value</em> will result in a call to copy constructor
-and a call to destructor. But, in fact, it will result in two call to copy
-constructor and two call to destructor. Note that there are a <code>string</code> object
-as the member of the class <code>Dog</code>, so there will be an extra call the copy
-constructor and destructor of the <code>string</code> object.</p>
-
-<p>Obviously, the cost of <em>passing by value</em> is very expensive.
-How is <em>passing by reference-to-const</em>?</p>
-
-<pre><code>void
-walk_the_dog(const Dog&amp; d)
-{
-
-}
-</code></pre>
-
-<p>Just modify a bit and the result will be:</p>
-
-<pre><code>Calling Dog's constructor
-Calling Dog's destructor
-</code></pre>
-
-<p>Note that the <code>const</code> is very important. If there is not a <code>const</code>, the
-compiler will put the object in the writable part of the memory so that it
-cannot be shared by other functions. If declared as <code>const</code>, the object
-will be put into the readonly part of the memory and can be shared by lots
-of functions so that the program need less memory.</p>
-
-<p>The implementation of reference is using the pointer in C. Therefore, it may
-be more effecient to pass the built-in type parameters by value than referece.
-It&rsquo;s true. If the parameter is an object of type <code>char</code>, which occupies
-1 byte. But a pointer ocuppies 4 bytes in a 32-bit machine. So we should prefer
-passing by value when the parameter is of built-in type? No, we should always
-pass the parameters by reference-to-const, since <strong>the compiler will always</strong>
-<strong>put the pointer in the register!</strong></p>
-
-<p>Finally, just remember, <strong>always pass the parameters by reference-to-const</strong>.</p>
 ]]></content>
   </entry>
   
