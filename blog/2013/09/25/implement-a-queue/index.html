@@ -492,8 +492,6 @@ back of the queue.</li>
 <span class='line-number'>129</span>
 <span class='line-number'>130</span>
 <span class='line-number'>131</span>
-<span class='line-number'>132</span>
-<span class='line-number'>133</span>
 </pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include &quot;queue.h&quot;</span>
 </span><span class='line'>
 </span><span class='line'><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
@@ -555,8 +553,6 @@ back of the queue.</li>
 </span><span class='line'>            <span class="k">delete</span> <span class="n">to_delete</span><span class="p">;</span>
 </span><span class='line'>        <span class="p">}</span>
 </span><span class='line'>        <span class="k">this</span><span class="o">-&gt;</span><span class="n">tail_</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">this</span><span class="o">-&gt;</span><span class="n">clean</span><span class="p">();</span>
 </span><span class='line'>    <span class="p">}</span>
 </span><span class='line'>    <span class="k">this</span><span class="o">-&gt;</span><span class="n">size_</span> <span class="o">=</span> <span class="n">queue</span><span class="p">.</span><span class="n">size_</span><span class="p">;</span>
 </span><span class='line'>    <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>

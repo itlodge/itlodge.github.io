@@ -59,8 +59,6 @@ Queue<T>::operator=(const Queue<T>& queue)
             delete to_delete;
         }
         this->tail_->next(NULL);
-    } else {
-        this->clean();
     }
     this->size_ = queue.size_;
     return *this;
