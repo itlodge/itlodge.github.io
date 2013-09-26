@@ -6,8 +6,8 @@
 	<title>Yuanhang Zheng</title>
     <meta name="author" content="Yuanhang Zheng">
     
-	<meta name="description" content="Published on: Sep 26th, 2013 Tags: Data_structure,, Interview A stack is based on the Linked List. The most explicit feature of a stack
-is FILO( &hellip;">
+	<meta name="description" content="Published on: Sep 26th, 2013 Tags: Algorithm, Interview The sorting algorithms are very important in programming interview. I have
+to be able to &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -96,6 +96,287 @@ is FILO( &hellip;">
 <!-- begin toload --> 
     <div id="content" class="inner">
         
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2013/09/26/implement-the-sorting-algorithms/">
+		
+			Implement the Sorting Algorithms</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-26T22:03:00+08:00" pubdate data-updated="true">Sep 26<span>th</span>, 2013</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/algorithm/'>Algorithm</a>, <a class='category' href='/blog/categories/interview/'>Interview</a>
+
+
+</div>
+    </div>
+		<p>The sorting algorithms are very important in programming interview. I have
+to be able to write them on a paper without even an error.</p>
+
+<h2>Bubble Sort</h2>
+
+<p>The immediate thought of bubble sort is that swapping the ajacent elements
+if they are of the wrong order in each pass until there are no swapping.
+For example, consider the array <code>[5, 1, 4, 2, 8]</code>,</p>
+
+<p>First pass:</p>
+
+<p>[5, 1, 4, 2, 8] => [1, 5, 4, 2, 8] => [1, 4, 5, 2, 8] => [1, 4, 2, 5, 8]
+=> [1, 4, 2, 5, 8]</p>
+
+<p>Second pass:</p>
+
+<p>[1, 2, 4, 5, 8] => [1, 2, 4, 5, 8] => [1, 2, 4, 5, 8] => [1, 2, 4, 5, 8]
+=> [1, 2, 4, 5, 8]</p>
+
+<p>Third pass:</p>
+
+<p>[1, 2, 4, 5, 8] => [1, 2, 4, 5, 8] => [1, 2, 4, 5, 8] => [1, 2, 4, 5, 8]
+=> [1, 2, 4, 5, 8]</p>
+
+<p>Here we found that the array has been sorted after the second pass, but we
+have apply the third pass so that we can know the array has been sorted
+because there are no swapping in that pass.</p>
+
+<p>There is an optimization that can improve the performance. Observer that
+in the second pass, there is no need to compare <code>5</code> to <code>8</code>, since they
+are in the right order in the first pass. Hence, there is no need to compare
+the last <code>ith</code> element in the <code>ith</code> pass.</p>
+
+<h2>Select Sort</h2>
+
+<h2>All the code</h2>
+
+<p>Here is the code of all this sort algorithms.</p>
+
+<figure class='code'><figcaption><span> (sort.cpp)</span> <a href='/code/sort/sort.cpp'>download</a></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include &lt;iostream&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+</span><span class='line'><span class="kt">void</span>
+</span><span class='line'><span class="n">swap</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">T</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">a</span> <span class="o">=</span> <span class="n">b</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">b</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+</span><span class='line'><span class="kt">void</span>
+</span><span class='line'><span class="n">compare_swap</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">is_ascending</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">is_ascending</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">swap</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">swap</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+</span><span class='line'><span class="kt">void</span>
+</span><span class='line'><span class="n">bubble_sort</span><span class="p">(</span><span class="n">T</span> <span class="n">list</span><span class="p">[],</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">size</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">is_ascending</span><span class="o">=</span><span class="kc">true</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">pass</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">while</span> <span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kt">bool</span> <span class="n">is_swapped</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span> <span class="o">-</span> <span class="n">pass</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">compare_swap</span><span class="p">(</span><span class="n">list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">list</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">is_ascending</span><span class="p">);</span>
+</span><span class='line'>            <span class="n">is_swapped</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="o">++</span><span class="n">pass</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">is_swapped</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And the test code(Using boost unit test framework).</p>
+
+<figure class='code'><figcaption><span> (sort-test.cpp)</span> <a href='/code/sort/sort-test.cpp'>download</a></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#define BOOST_TEST_DYN_LINK</span>
+</span><span class='line'><span class="cp">#define BOOST_TEST_MAIN</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#include &lt;cstdlib&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;ctime&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;algorithm&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;boost/test/unit_test.hpp&gt;</span>
+</span><span class='line'><span class="cp">#include &quot;sort.cpp&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">int</span> <span class="n">empty_list</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">const</span> <span class="kt">int</span> <span class="n">NORMAL_SIZE</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">normal_list</span><span class="p">[</span><span class="n">NORMAL_SIZE</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">8</span><span class="p">};</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">normal_list_sorted</span><span class="p">[</span><span class="n">NORMAL_SIZE</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">const</span> <span class="kt">int</span> <span class="n">RANDOM_SIZE</span> <span class="o">=</span> <span class="mi">9999</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_SUITE</span><span class="p">(</span><span class="n">bubble</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">empty</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">bubble_sort</span><span class="p">(</span><span class="n">empty_list</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">normal</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">bubble_sort</span><span class="p">(</span><span class="n">normal_list</span><span class="p">,</span> <span class="n">NORMAL_SIZE</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">NORMAL_SIZE</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">normal_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">normal_list_sorted</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">random</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">random_list</span><span class="p">[</span><span class="n">RANDOM_SIZE</span><span class="p">];</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">random_list_sorted</span><span class="p">[</span><span class="n">RANDOM_SIZE</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">srand</span><span class="p">(</span><span class="n">time</span><span class="p">(</span><span class="nb">NULL</span><span class="p">));</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">RANDOM_SIZE</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">random_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">random_list_sorted</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">rand</span><span class="p">();</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">bubble_sort</span><span class="p">(</span><span class="n">random_list</span><span class="p">,</span> <span class="n">RANDOM_SIZE</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">std</span><span class="o">::</span><span class="n">sort</span><span class="p">(</span><span class="n">random_list_sorted</span><span class="p">,</span> <span class="n">random_list_sorted</span> <span class="o">+</span> <span class="n">RANDOM_SIZE</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">RANDOM_SIZE</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">random_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">random_list_sorted</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_SUITE_END</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2013/09/26/implement-the-sorting-algorithms//index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -1880,137 +2161,6 @@ back of the queue.</li>
 <div class="meta">
 	
 		<span class="comments"><a href="/blog/2013/09/25/implement-a-queue//index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2013/09/25/my-c-plus-plus-coding-style/">
-		
-			My C++ Coding Style</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-25T19:30:00+08:00" pubdate data-updated="true">Sep 25<span>th</span>, 2013</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/c-plus-plus/'>C++</a>
-
-
-</div>
-    </div>
-		<p>Every programmer has his/her own coding style. Time goes by, and my coding
-style is changing. There following is my note on c++ coding style. I will
-explain why I want to coding in that style.</p>
-
-<p>Why do I care about my coding style so much? Because I am a virgo.</p>
-
-<ul>
-<li><strong>Always use <code>this</code> to refer to members in a member function.</strong></li>
-</ul>
-
-
-<p>This seems ridiculous. But I prefer. In a member function, there may be
-various kinds of variables, such as memeber variables, global variables
-and local variables. If we don&rsquo;t use <code>this</code> to refer to the member
-variables, we will confused when we met a variable. Is it a local variable
-or a member variable? For example, there is a statement in a member function.</p>
-
-<pre><code>size_ = size + 1;
-</code></pre>
-
-<p>How can you know what this statement exactly means? Which <code>size</code> is the
-class&rsquo;s size? However, if we write this statement as this,</p>
-
-<pre><code>this-&gt;size_ = size + 1;
-</code></pre>
-
-<p>we can know that we set the class&rsquo;s size be the value of local variable <code>size</code>
-plus one. This code is readable and it can relieve the code reader&rsquo;s headache.</p>
-
-<p>The same rule can apply to the member functions. When refering to a member
-function, always use <code>this</code>.</p>
-
-<pre><code>int *p = this-&gt;next();
-</code></pre>
-
-<p>Someone may argue that using <code>this</code> will let use write more code. My
-experience told me that the whole world is balanced. You make yourself happy
-and your code will make the code readers headache. Instead, you write readable
-codes with some extra typing and you will make the code readers happy. This is
-a balance and you can balance yourself. I am a so kind man and I always want
-those who read my codes be happy. So I will use <code>this</code> always.</p>
-
-<p>Note: In PHP, you must use <code>$this</code> to refer to members. In Python, you must
-use <code>self</code> to refer to members.</p>
-
-<ul>
-<li><strong>Always leave the return type name in a single line.</strong></li>
-</ul>
-
-
-<p>I used to leave the return type name on the left of a function name. The first
-time I saw some programmers put them in a single line is the
-<a href="http://en.wikipedia.org/wiki/Pintos">Pintos</a> project. I thought it&rsquo;s ugly.
-But after I worked on the code of <a href="http://en.wikipedia.org/wiki/Gold_(linker">Gold</a>),
-I changed my mind. I followed the author&rsquo;s style, even in a main function.</p>
-
-<pre><code>int
-main(int argc, char *argv[]) { }
-</code></pre>
-
-<p>Why do I leave the return value in a line? Because, in many large project, most
-of the names of the return types are very long, most of the function names are
-very long and most of functions has several parameters which have a long type
-name. For example,</p>
-
-<pre><code>std::map&lt;size_t, LinkedList&lt;T&gt; *&gt; *
-get_map(const std::string&amp; name, bool is_global=true) const;
-</code></pre>
-
-<p>If you don&rsquo;t leave the return type name in a single line, the function
-declaration will becomes</p>
-
-<pre><code>std::map&lt;size_t, LinkedList&lt;T&gt; *&gt; * get_map(const std::string&amp; name, bool is_global=true) const;
-</code></pre>
-
-<p>which is very very ugly!</p>
-
-<p>If we leave the return type name in a single line, the code readers will see
-the return type of the function more quickly. So the code will be more readable.</p>
-
-<p>Someone may argue that it looks more beautiful to leave the return type name on
-the left of the function name when the type name is short like this.</p>
-
-<pre><code>int get(size_t index);
-</code></pre>
-
-<p>This may be right. But most of the return type name is long in a large project.
-So for consistence, I always leave them in a single line.</p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2013/09/25/my-c-plus-plus-coding-style//index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>
