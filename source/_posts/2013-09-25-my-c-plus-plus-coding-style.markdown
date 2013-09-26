@@ -83,7 +83,3 @@ the left of the function name when the type name is short like this.
 This may be right. But most of the return type name is long in a large project.
 So for consistence, I always leave them in a single line.
 
-
-
-    
-    
