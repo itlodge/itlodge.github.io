@@ -21,7 +21,7 @@ array ``values`` whose size is ``size``.
 * ``const Queue<T>& operator=(const Queue<T>& queue)``, Support queue
 assignment.
 * ``~Queue()``, Free all the spaces allocated by the queue.
-* ``std::ostream& operator<< <> (std::ostream& os, const Queue<T>& queue)``,
+* ``std::ostream& operator<<(std::ostream& os, const Queue<T>& queue)``,
 Output the queue in the form **[1 | 2 | 3]**.
 * ``const T& head() const``, return the head element of the queue.
 * ``size_t size() const``, return the size of the queue.

@@ -22,7 +22,7 @@ an array ``values`` of size ``size``.
 * ``const CiLinkedList& operator=(const CiLinkedList& list)``, Support
 CiLinkedList assignment.
 * ``~CiLinkedList()``, Free all the space requested by the CiLinkedList.
-* ``std::ostream& operator<< <> (std::ostream&, const CiLinkedList<T>&);``,
+* ``std::ostream& operator<<(std::ostream&, const CiLinkedList<T>&);``,
 Output the CiLinkedList in the form **[a, b, c ...]**.
 * ``const T& operator[](size_t index)``, Access the element of the CiLinkedList,
 but it's not random accessible.

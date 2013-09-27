@@ -20,7 +20,7 @@ array ``values`` whose size is ``size``.
 * ``const Stack<T>& operator=(const Stack<T>& stack)``, Support stack
 assignment.
 * ``~Stack()``, Free all the spaces allocated by the stack.
-* ``std::ostream& operator<< <> (std::ostream& os, const Stack<T>& stack)``,
+* ``std::ostream& operator<<(std::ostream& os, const Stack<T>& stack)``,
 Output the stack in the form **[1 | 2 | 3]**.
 * ``const T& top() const``, return the head element of the stack.
 * ``size_t size() const``, return the size of the stack.
