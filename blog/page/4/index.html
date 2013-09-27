@@ -6,7 +6,8 @@
 	<title>Yuanhang Zheng</title>
     <meta name="author" content="Yuanhang Zheng">
     
-	<meta name="description" content="Published on: Aug 11th, 2013 Tags: C++ Prepone definitions? Wrong! Before C99, you must prepone all the variables&#8217; definitions before any &hellip;">
+	<meta name="description" content="Published on: Aug 15th, 2013 Tags: C++ In inheritance, there are some rules defined by C++, one of which is that
+the virables or the functions in &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -95,6 +96,151 @@
 <!-- begin toload --> 
     <div id="content" class="inner">
         
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2013/08/15/do-not-hide-inherited-names/">
+		
+			Do Not Hide Inherited Names</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-15T19:26:00+08:00" pubdate data-updated="true">Aug 15<span>th</span>, 2013</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/c-plus-plus/'>C++</a>
+
+
+</div>
+    </div>
+		<p>In inheritance, there are some rules defined by C++, one of which is that
+the virables or the functions in the base class will be hidden if there
+are virables and functions with the same name.</p>
+
+<p>It seems perfect, but it&rsquo;s a pitfall of C++. Consider the following example.</p>
+
+<pre><code>#include &lt;cstdio&gt;
+#include &lt;iostream&gt;
+
+class Person {
+public:
+    explicit Person()
+    { }
+    ~Person()
+    { }
+    void
+    sleep() const
+    { printf("Person sleep\n"); }
+    void
+    sleep(const int sec) const
+    { printf("Person sleep %d s\n", sec); }
+private:
+    Person(const Person&amp;);
+    const Person&amp;
+    operator=(const Person&amp;);
+};
+
+class Student:public Person {
+public:
+    explicit Student()
+    { }
+    ~Person()
+    { }
+    void
+    sleep() const
+    { printf("Student sleep\n"); }
+private:
+    Student(const Student&amp;);
+    const Student&amp;
+    operator=(const Student&amp;);
+};
+
+int
+main(int argc, char **argv)
+{
+    Student stu;
+
+    stu.sleep();
+    stu.sleep(1);
+
+    return 0;
+}
+</code></pre>
+
+<p>This program won&rsquo;t be compiled. It shows the following error:</p>
+
+<pre><code>test.cpp:39:16: error: no matching function for call to ‘Student::sleep(int)’
+     stu.sleep(1);
+                ^
+test.cpp:39:16: note: candidate is:
+test.cpp:25:5: note: void Student::sleep() const
+     sleep() const
+     ^
+test.cpp:25:5: note:   candidate expects 0 arguments, 1 provided
+</code></pre>
+
+<p>That is because C++ will hide all the names in the base class as long as there
+are the same names in the derived class. In the <code>Person</code> class, <code>sleep()</code>
+and <code>sleep(const int sec)</code> have the same name. In the <code>Student</code> class, it
+only want to override the <code>sleep()</code> function, but the overriding cause the
+hiding of the <code>sleep(const int sec)</code> function!</p>
+
+<p>So how to solve this problem? There are two methods so far.</p>
+
+<ol>
+<li>Don&rsquo;t hide the names in the base class will using overloading functions.</li>
+<li><p>Use <code>using</code> directive to make the certain methods visible.</p>
+
+<pre><code> class Student:public Person {
+ public:
+     using Person::sleep;
+
+     explicit Student()
+     { }
+     ~Person()
+     { }
+     void
+     sleep() const
+     { printf("Student sleep\n"); }
+</code></pre></li>
+</ol>
+
+
+<p>Finally, another important thing should be stated. In the above example, I
+implement <code>sleep()</code> function in the definition of the class. Why do that?
+I have worked in some very large C++ projects and there are many implementation
+in the definition. In fact, this is so-called <strong>implicit inline</strong>. The compiler
+will inline the functions that are implemented in the class definition
+automatically. Therefore, it&rsquo;s good to implement some small functions in the
+definition of class. And let the large function implement in another file.
+This will make my code more effecient and I will follow this guide in the
+future.</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2013/08/15/do-not-hide-inherited-names//blog/page/4/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -457,144 +603,6 @@ why it&rsquo;s so important in object-oriented programming.</p>
 <div class="meta">
 	
 		<span class="comments"><a href="/blog/2013/08/09/understanding-encapsulation//blog/page/4/index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2013/08/09/always-pass-parameters-by-reference-to-const/">
-		
-			Always Pass Parameters by Reference-to-const</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-09T03:42:00+08:00" pubdate data-updated="true">Aug 9<span>th</span>, 2013</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/c-plus-plus/'>C++</a>
-
-
-</div>
-    </div>
-		<p>We all know that <em>pass by value</em> is not effecient.So we use <em>pass by pointer</em>
-in C.However, in C++, we prefer <strong>pass by referece-to-const</strong>.</p>
-
-<p>Here is an example.</p>
-
-<pre><code>#include &lt;iostream&gt;
-#include &lt;cstdio&gt;
-
-class Dog {
-public:
-    Dog()
-    {
-        printf("Calling Dog's constructor\n");
-    }
-    Dog(const Dog&amp; d)
-    {
-        printf("Calling Dog's copy constructor\n");
-        this-&gt;name = d.name;
-    }
-    virtual ~Dog()
-    {
-        printf("Calling Dog's destructor\n");
-    }
-private:
-    std::string name;
-};
-
-void
-walk_the_dog(Dog d)
-{
-
-}
-
-int
-main(int argc, char **argv)
-{
-    Dog dog;
-    walk_the_dog(dog);
-
-    return 0;
-}
-</code></pre>
-
-<p>The running result is as follows:</p>
-
-<pre><code>Calling Dog's constructor
-Calling Dog's copy constructor
-Calling Dog's destructor
-Calling Dog's destructor
-</code></pre>
-
-<p>Now, let&rsquo;s analysis this <em>passing by value</em> process.
-First, <code>Dog dog;</code> will call the constructor. Then, since the function
-<code>walk_the_dog</code> pass the parameter <code>d</code> by value, it will call the copy
-constructor. Before exiting the function, it will call the destructor of <code>Dog</code>
-to destroy the parameter <code>d</code>. In the end, before exiting the main function,
-the destructor of <code>Dog</code> will be called again to destroy the <code>dog</code> object.</p>
-
-<p>Now, it seems that <em>passing by value</em> will result in a call to copy constructor
-and a call to destructor. But, in fact, it will result in two call to copy
-constructor and two call to destructor. Note that there are a <code>string</code> object
-as the member of the class <code>Dog</code>, so there will be an extra call the copy
-constructor and destructor of the <code>string</code> object.</p>
-
-<p>Obviously, the cost of <em>passing by value</em> is very expensive.
-How is <em>passing by reference-to-const</em>?</p>
-
-<pre><code>void
-walk_the_dog(const Dog&amp; d)
-{
-
-}
-</code></pre>
-
-<p>Just modify a bit and the result will be:</p>
-
-<pre><code>Calling Dog's constructor
-Calling Dog's destructor
-</code></pre>
-
-<p>Note that the <code>const</code> is very important. If there is not a <code>const</code>, the
-compiler will put the object in the writable part of the memory so that it
-cannot be shared by other functions. If declared as <code>const</code>, the object
-will be put into the readonly part of the memory and can be shared by lots
-of functions so that the program need less memory.</p>
-
-<p>The implementation of reference is using the pointer in C. Therefore, it may
-be more effecient to pass the built-in type parameters by value than referece.
-It&rsquo;s true. If the parameter is an object of type <code>char</code>, which occupies
-1 byte. But a pointer ocuppies 4 bytes in a 32-bit machine. So we should prefer
-passing by value when the parameter is of built-in type? No, we should always
-pass the parameters by reference-to-const, since <strong>the compiler will always</strong>
-<strong>put the pointer in the register!</strong></p>
-
-<p>Finally, just remember, <strong>always pass the parameters by reference-to-const</strong>.</p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2013/08/09/always-pass-parameters-by-reference-to-const//blog/page/4/index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>

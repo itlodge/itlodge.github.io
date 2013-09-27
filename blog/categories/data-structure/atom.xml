@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Data_structure | Yuanhang Zheng]]></title>
   <link href="http://itlodge.github.io/blog/categories/data-structure/atom.xml" rel="self"/>
   <link href="http://itlodge.github.io/"/>
-  <updated>2013-09-27T23:03:49+08:00</updated>
+  <updated>2013-09-27T23:13:14+08:00</updated>
   <id>http://itlodge.github.io/</id>
   <author>
     <name><![CDATA[Yuanhang Zheng]]></name>
@@ -34,7 +34,7 @@ an array <code>values</code> of size <code>size</code>.</li>
 <li><code>const CiLinkedList&amp; operator=(const CiLinkedList&amp; list)</code>, Support
 CiLinkedList assignment.</li>
 <li><code>~CiLinkedList()</code>, Free all the space requested by the CiLinkedList.</li>
-<li><code>std::ostream&amp; operator&lt;&lt; &lt;&gt; (std::ostream&amp;, const CiLinkedList&lt;T&gt;&amp;);</code>,
+<li><code>std::ostream&amp; operator&lt;&lt;(std::ostream&amp;, const CiLinkedList&lt;T&gt;&amp;);</code>,
 Output the CiLinkedList in the form <strong>[a, b, c &hellip;]</strong>.</li>
 <li><code>const T&amp; operator[](size_t index)</code>, Access the element of the CiLinkedList,
 but it&rsquo;s not random accessible.</li>
@@ -828,7 +828,7 @@ an array <code>values</code> of size <code>size</code>.</li>
 <li><code>const BiLinkedList&amp; operator=(const BiLinkedList&amp; list)</code>, Support
 BiLinkedList assignment.</li>
 <li><code>~BiLinkedList()</code>, Free all the space requested by the BiLinkedList.</li>
-<li><code>std::ostream&amp; operator&lt;&lt; &lt;&gt; (std::ostream&amp;, const BiLinkedList&lt;T&gt;&amp;);</code>,
+<li><code>std::ostream&amp; operator&lt;&lt;(std::ostream&amp;, const BiLinkedList&lt;T&gt;&amp;);</code>,
 Output the BiLinkedList in the form <strong>[a, b, c &hellip;]</strong>.</li>
 <li><code>void append(const T&amp; value)</code>, Append an element <code>value</code> to the
 BiLinkedList.</li>
@@ -1782,7 +1782,7 @@ an array <code>values</code> of size <code>size</code>.</li>
 <li><code>const LinkedList&amp; operator=(const LinkedList&amp; list)</code>, Support LinkedList
 assignment.</li>
 <li><code>~LinkedList()</code>, Free all the space requested by the LinkedList.</li>
-<li><code>friend std::ostream&amp; operator&lt;&lt; &lt;&gt; (std::ostream&amp;, const LinkedList&lt;T&gt;&amp;);</code>,
+<li><code>std::ostream&amp; operator&lt;&lt;(std::ostream&amp;, const LinkedList&lt;T&gt;&amp;);</code>,
 Output the LinkedList in the form <strong>[a, b, c &hellip;]</strong>.</li>
 <li><code>void append(const T&amp; value)</code>, Append an element <code>value</code> to the LinkedList.</li>
 <li><code>const T&amp; operator[](size_t index)</code>, Access the element of the LinkedList,

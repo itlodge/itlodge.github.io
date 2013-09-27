@@ -115,7 +115,7 @@ an array <code>values</code> of size <code>size</code>.</li>
 <li><code>const LinkedList&amp; operator=(const LinkedList&amp; list)</code>, Support LinkedList
 assignment.</li>
 <li><code>~LinkedList()</code>, Free all the space requested by the LinkedList.</li>
-<li><code>friend std::ostream&amp; operator&lt;&lt; &lt;&gt; (std::ostream&amp;, const LinkedList&lt;T&gt;&amp;);</code>,
+<li><code>std::ostream&amp; operator&lt;&lt;(std::ostream&amp;, const LinkedList&lt;T&gt;&amp;);</code>,
 Output the LinkedList in the form <strong>[a, b, c &hellip;]</strong>.</li>
 <li><code>void append(const T&amp; value)</code>, Append an element <code>value</code> to the LinkedList.</li>
 <li><code>const T&amp; operator[](size_t index)</code>, Access the element of the LinkedList,
