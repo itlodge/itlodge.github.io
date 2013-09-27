@@ -1,0 +1,668 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Yuanhang Zheng</title>
+    <meta name="author" content="Yuanhang Zheng">
+    
+	<meta name="description" content="Published on: Aug 15th, 2013 Tags: C++ In inheritance, there are some rules defined by C++, one of which is that
+the virables or the functions in &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Yuanhang Zheng" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+    <link href='http://fonts.googleapis.com/css?family=Slackey' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Amethysta' rel='stylesheet' type='text/css'>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+    <script type="text/javascript" src="/javascripts/jquery-tapir.js"></script>
+
+    <!-- remove or comment it to disable ajaxification -->   
+    <script src="/javascripts/ajaxify.js"></script>
+   
+    
+    
+
+</head>
+
+
+<body>
+    <div id="wrapper">
+    <header id="header" class="inner"><!-- for more effects see _animate.scss -->
+<h1 class="animated bounceInDown">
+    <div id="headerbg">
+        Yuanhang Zheng
+    </div>
+</h1>
+<br>
+
+<ul id="social-links" style="text-align:center">
+  
+  <!-- GitHub -->
+  <li>
+  <a href="https://github.com/itlodge" class="github" title="Github"></a>
+  </li>
+  
+  
+  <!-- Google Plus -->
+  <li>
+  <a href="http://plus.google.com/107688243765597180052?rel=author" class="google" title="Google+"></a>
+  </li>
+  
+  
+  
+  <!-- Twitter -->
+  <li>
+  <a href="http://www.twitter.com/itlodge" class="twitter" title="Twitter"></a>
+  </li>
+  
+  
+  
+  
+  
+</ul>
+
+
+<!-- use full url including 'index.html' for navigation bar if you are using ajax -->
+<ul id="nav">
+	<li id="ajax"><a href="/index.html">Home</a></li>
+	<li id="ajax"><a href="/blog/archives/index.html">Archives</a></li>
+	<li id="ajax"><a href="/me/index.html">Me</a></li>
+    <li><a href="/atom.xml">RSS</a></li>
+    
+    <li>
+    <div id="dark">
+        <form method="get" action="/search.html" id="search">
+            <input name="query" type="text" placeholder="Search..." x-webkit-speech />
+        </form>
+    </div>
+    </li>
+        
+</ul>
+
+
+
+
+</header>
+
+<div id="toload">
+<!-- begin toload --> 
+    <div id="content" class="inner">
+        
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2013/08/15/do-not-hide-inherited-names/">
+		
+			Do Not Hide Inherited Names</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-15T19:26:00+08:00" pubdate data-updated="true">Aug 15<span>th</span>, 2013</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/c-plus-plus/'>C++</a>
+
+
+</div>
+    </div>
+		<p>In inheritance, there are some rules defined by C++, one of which is that
+the virables or the functions in the base class will be hidden if there
+are virables and functions with the same name.</p>
+
+<p>It seems perfect, but it&rsquo;s a pitfall of C++. Consider the following example.</p>
+
+<pre><code>#include &lt;cstdio&gt;
+#include &lt;iostream&gt;
+
+class Person {
+public:
+    explicit Person()
+    { }
+    ~Person()
+    { }
+    void
+    sleep() const
+    { printf("Person sleep\n"); }
+    void
+    sleep(const int sec) const
+    { printf("Person sleep %d s\n", sec); }
+private:
+    Person(const Person&amp;);
+    const Person&amp;
+    operator=(const Person&amp;);
+};
+
+class Student:public Person {
+public:
+    explicit Student()
+    { }
+    ~Person()
+    { }
+    void
+    sleep() const
+    { printf("Student sleep\n"); }
+private:
+    Student(const Student&amp;);
+    const Student&amp;
+    operator=(const Student&amp;);
+};
+
+int
+main(int argc, char **argv)
+{
+    Student stu;
+
+    stu.sleep();
+    stu.sleep(1);
+
+    return 0;
+}
+</code></pre>
+
+<p>This program won&rsquo;t be compiled. It shows the following error:</p>
+
+<pre><code>test.cpp:39:16: error: no matching function for call to ‘Student::sleep(int)’
+     stu.sleep(1);
+                ^
+test.cpp:39:16: note: candidate is:
+test.cpp:25:5: note: void Student::sleep() const
+     sleep() const
+     ^
+test.cpp:25:5: note:   candidate expects 0 arguments, 1 provided
+</code></pre>
+
+<p>That is because C++ will hide all the names in the base class as long as there
+are the same names in the derived class. In the <code>Person</code> class, <code>sleep()</code>
+and <code>sleep(const int sec)</code> have the same name. In the <code>Student</code> class, it
+only want to override the <code>sleep()</code> function, but the overriding cause the
+hiding of the <code>sleep(const int sec)</code> function!</p>
+
+<p>So how to solve this problem? There are two methods so far.</p>
+
+<ol>
+<li>Don&rsquo;t hide the names in the base class will using overloading functions.</li>
+<li><p>Use <code>using</code> directive to make the certain methods visible.</p>
+
+<pre><code> class Student:public Person {
+ public:
+     using Person::sleep;
+
+     explicit Student()
+     { }
+     ~Person()
+     { }
+     void
+     sleep() const
+     { printf("Student sleep\n"); }
+</code></pre></li>
+</ol>
+
+
+<p>Finally, another important thing should be stated. In the above example, I
+implement <code>sleep()</code> function in the definition of the class. Why do that?
+I have worked in some very large C++ projects and there are many implementation
+in the definition. In fact, this is so-called <strong>implicit inline</strong>. The compiler
+will inline the functions that are implemented in the class definition
+automatically. Therefore, it&rsquo;s good to implement some small functions in the
+definition of class. And let the large function implement in another file.
+This will make my code more effecient and I will follow this guide in the
+future.</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2013/08/15/do-not-hide-inherited-names//blog/page/4/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2013/08/11/postponing-definitions-instead-of-preponing/">
+		
+			Postponing Definitions Instead of Preponing</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-11T11:26:00+08:00" pubdate data-updated="true">Aug 11<span>th</span>, 2013</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/c-plus-plus/'>C++</a>
+
+
+</div>
+    </div>
+		<h2>Prepone definitions? Wrong!</h2>
+
+<p>Before C99, you must prepone all the variables&#8217; definitions before any
+statements. But after C99 was released, you can put a variable&rsquo;s definition
+in any place as long as before being used. I think this new feature is
+introduced by learning from C++.</p>
+
+<p>This makes programer write codes more convenient. But I used to insist the
+old style. I even teach my students that they should use the old style when
+I was a TA of the course <em>Programming with C</em>.</p>
+
+<p>However, now I realize that I was wrong. <strong>We should postpone variables&#8217;</strong>
+<strong>definitions as long as possible</strong>. It&rsquo;s not for coding style, but for the
+effeciency of the program.</p>
+
+<p>Consider this program.</p>
+
+<pre><code>#include &lt;cstdio&gt;
+#include &lt;iostream&gt;
+
+void
+save_pwd(const std::string&amp; pwd)
+{
+    std::string salted_pwd("abc");
+
+    if (pwd.size() &lt; 6) {
+        fprintf(stderr, "Password too short.");
+        return;
+    }
+    salted_pwd += pwd;
+    ...
+}
+
+int
+main(int argc, char **argv)
+{
+    save_pwd("ddd");
+
+    return 0;
+}
+</code></pre>
+
+<p>When running this program, it will print an error and exit the function.
+The variable <code>salted_pwd</code> is not used. So, defining <code>salted_pwd</code> above
+the <code>if</code> statement will waste the memory, the time to allocate memory and
+the time to free memory. For the view of C++, you will pay for the cost of
+construction and destruction of the object <code>salted_pwd</code>.</p>
+
+<h2>Define and then assign? Wrong!</h2>
+
+<p>When I first learned programming in C, my teacher says that</p>
+
+<pre><code>int a;
+a = 1;
+</code></pre>
+
+<p>is the same as</p>
+
+<pre><code>int a = 1;
+</code></pre>
+
+<p>Now I realize that they are not the same and the latter is more effecient.</p>
+
+<p>For the former, <code>int a;</code> will allocate memory for the variable <code>a</code> and
+then fill zero bytes in the memory. Then <code>a = 1;</code> will write value <code>1</code>
+in the memory.
+For the latter, <code>int a = 1;</code> will directly allocate memory for the variable
+<code>a</code> and then write value <code>1</code> in the memory.
+In other words, you will pay more cost when using the former style.</p>
+
+<p>It seems that it makes little difference with the built-in type. When the
+type of the variable <code>a</code> is user-defined type, great difference appears.</p>
+
+<p>For example,</p>
+
+<pre><code>std::string str;
+...
+std::string = "abc";
+</code></pre>
+
+<p>This will first call the default constructor of <code>std::string</code> and then call
+the copy assignment operator. So the time and memory used in the default
+constructor is wasted.</p>
+
+<p>If we define an object in this way</p>
+
+<pre><code>std::string str("abc");
+</code></pre>
+
+<p>or</p>
+
+<pre><code>std::string str = "abc";
+</code></pre>
+
+<p>, it will only call the copy constructor. This is more effecient.</p>
+
+<p>So now I prefer this way</p>
+
+<pre><code>for (int i = 0; i &lt; n; i++) {
+    ...
+}
+</code></pre>
+
+<p>instead of</p>
+
+<pre><code>int i;
+
+for (i = 0; i &lt; n; i++) {
+    ...
+}
+</code></pre>
+
+<p>Now there is a special case that is worth thinking.</p>
+
+<pre><code>Person p;
+for (int i = 0; i &lt; n; i++) {
+    p = persons[i];
+    ...
+}
+</code></pre>
+
+<p>and</p>
+
+<pre><code>for (int i = 0; i &lt; n; i++) {
+    Person p = persons[i];
+    ...
+}
+</code></pre>
+
+<p>, which is better?</p>
+
+<p>Let&rsquo;s analysis the performance of them.
+* The former need 1 construction, n assignments and 1 destruction. But it makes
+the object <code>p</code> in a larger scope, which increase the comprehensibility and
+maintainability of the program.
+* The latter need n constructions and n destructions.</p>
+
+<p>Which is more effecient? I think it all depends. If assignment is less expensive
+than the total of construction and destruction, we should use the former style.
+On the contray, we should use the latter style.</p>
+
+<p>The author of <strong>Effective C++</strong> prefers the latter, but I prefer the former,
+since I am sensitive with performance and I think memory allocation and free
+will be more expensive than assignment.</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2013/08/11/postponing-definitions-instead-of-preponing//blog/page/4/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2013/08/09/understanding-encapsulation/">
+		
+			Understanding Encapsulation</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-09T21:38:00+08:00" pubdate data-updated="true">Aug 9<span>th</span>, 2013</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/c-plus-plus/'>C++</a>
+
+
+</div>
+    </div>
+		<p>Once I loved <em>C</em> very much and I thought it&rsquo;s the best programming language
+in the world. I used to argue that <em>C</em> can be used to implement the
+object-oriented design with <code>struct</code>. I used to argue that <code>private</code> and
+<code>public</code> is useless in <em>C++</em>. However, now I know I was wrong.</p>
+
+<h2>Why we need private</h2>
+
+<p>It&rsquo;s related to a very important concept in C++, that is, <strong>encapsulation</strong>.</p>
+
+<p><strong>Encapsulation is not invisibility. It&rsquo;s maintainability.</strong></p>
+
+<p>Suppose a class is very popular and is used by many projects. For example,
+the <code>string</code> class. If every members in this class is <code>public</code>, the clients
+can use many interfaces to manipulate <code>string</code>. One day, when the <code>string</code>
+class is going to be modified(some members&#8217; name change), then lots of clients
+have to modify there code. This is painful! If we declare some of the members
+<code>private</code> and change the name of the private members, only the implementations
+in the public member functions should be modified. None of the clients need to
+change their codes.</p>
+
+<p>Therefore, <strong>public means unchangable and public means unencapsulated</strong>.</p>
+
+<p>The public member functions should not be changed in the future. Since you don&rsquo;t
+know how your clients will use your class, don&rsquo;t expose the members that may be
+changed in the future to the clients.</p>
+
+<h2>Prefer non-member non-friend functions to member functions</h2>
+
+<p>Consider the following class.</p>
+
+<pre><code>class Person {
+public:
+    explicit Person()
+    { }
+    ~Person()
+    { }
+    void
+    say_age() const
+    { printf("%d\n", age); }
+    void
+    say_name() const
+    { printf("%s\n", name.c_str()); }
+private:
+    Person(const Person&amp;);
+    const Person&amp;
+    operator=(const Person&amp;);
+    int age;
+    std::string name;
+};
+</code></pre>
+
+<p>Somebody may want to use the functions together, so we add another member
+function.</p>
+
+<pre><code>class Person {
+public:
+    explicit Person()
+    { }
+    ~Person()
+    { }
+    void
+    say_age() const
+    { printf("%d\n", age); }
+    void
+    say_name() const
+    { printf("%s\n", name.c_str()); }
+    void
+    say() const
+    {
+        say_age();
+        say_name();
+    }
+private:
+    Person(const Person&amp;);
+    const Person&amp;
+    operator=(const Person&amp;);
+    int age;
+    std::string name;
+};
+</code></pre>
+
+<p>This is straightforward, especially for those Java and C# programmers. Every
+functions should be in a class and everything is object. It&rsquo;s obvious, right?</p>
+
+<p>However, e have another option, that is, using the non-member function.</p>
+
+<pre><code>class Person {
+public:
+    explicit Person()
+    { }
+    ~Person()
+    { }
+    void
+    say_age() const
+    { printf("%d\n", age); }
+    void
+    say_name() const
+    { printf("%s\n", name.c_str()); }
+private:
+    Person(const Person&amp;);
+    const Person&amp;
+    operator=(const Person&amp;);
+    int age;
+    std::string name;
+};
+
+void
+person_say(const Person&amp; p)
+{
+    p.say_age();
+    p.say_name();
+}
+</code></pre>
+
+<p>Which is better? It seems that they are the same.</p>
+
+<p>We should use the non-member function instead of the member function.</p>
+
+<p>As we all know, <strong>the less the public member functions and the friend </strong>
+ <strong>functions, the greater encapsulation is</strong>, since member functions and
+friend functions are the only interface that can access the private members.</p>
+
+<p>In this example, if we add another public member function, we decrease the
+encapsulation of the class since this member function can access the private
+members of the class. But if we use the non-member non-friend function, it
+won&rsquo;t have impact with the class because it&rsquo;s the function outside.</p>
+
+<p>Does it explain that <em>C++</em> is not so object-oriented? From Java or C#, those
+programmers will say that everything is object and classes are everywhere.
+However, they are wrong. Object-oriented princiles state that <strong>data should be</strong>
+<strong>encapsulated as possible</strong>. Therefore, prefering non-member non-friend
+functions is more <em>object-oriented</em>.</p>
+
+<p>Until now, I can say that I really understand the meaning of encapsulation and
+why it&rsquo;s so important in object-oriented programming.</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2013/08/09/understanding-encapsulation//blog/page/4/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
+
+<nav id="pagenavi">
+    
+        <a href="/blog/page/3/" class="prev">Prev</a>
+    
+    
+        <a href="/blog/page/5/" class="next">Next</a>
+    
+    <div class="center"><a href="/blog/archives">Blog Archives</a></div>
+</nav>
+
+    </div>
+    <footer id="footer">
+    <div style="display:inline">
+    Copyright &copy; 2013
+
+    Yuanhang Zheng
+. Powered by <a href="http://octopress.org">Octopress</a> | 
+    Theme <a href="http://github.com/panks/fabric">fabric</a> by <a href="http://panks.me">Pankaj Kumar</a>
+</div>
+
+
+    </footer>
+    <script src="/javascripts/fabric.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'itlodge';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+<!-- end toload --> 
+</div>
+</div>
+<script src="/javascripts/jquery.ui.totop.js" type="text/javascript"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+;(function($){$().UItoTop({easingType:'easeOutCirc'});})(jQuery); 
+/*]]>*/
+</script><!-- remove it to remove the scroll to top button -->
+</body>
+</html>

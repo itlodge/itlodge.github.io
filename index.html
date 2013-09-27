@@ -6,8 +6,8 @@
 	<title>Yuanhang Zheng</title>
     <meta name="author" content="Yuanhang Zheng">
     
-	<meta name="description" content="Published on: Aug 15th, 2013 Tags: C++ In inheritance, there are some rules defined by C++, one of which is that
-the virables or the functions in &hellip;">
+	<meta name="description" content="Published on: Sep 27th, 2013 Tags: Data_structure,, Interview A queue can be implemented using two stacks. One stack store the elements
+appended to &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -101,9 +101,9 @@ the virables or the functions in &hellip;">
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/blog/2013/08/15/do-not-hide-inherited-names/">
+		<a href="/blog/2013/09/27/implement-a-queue-using-two-stacks/">
 		
-			Do Not Hide Inherited Names</a>
+			Implement a Queue Using Two Stacks</a>
 	</h2>
     <div class="entry-content">
     <div class="meta">
@@ -119,117 +119,642 @@ the virables or the functions in &hellip;">
   
 
 
-<time datetime="2013-08-15T19:26:00+08:00" pubdate data-updated="true">Aug 15<span>th</span>, 2013</time></div>
+<time datetime="2013-09-27T23:05:00+08:00" pubdate data-updated="true">Sep 27<span>th</span>, 2013</time></div>
       <div class="tags">Tags: 
 
 
-	<a class='category' href='/blog/categories/c-plus-plus/'>C++</a>
+	<a class='category' href='/blog/categories/data-structure/'>Data_structure,</a>, <a class='category' href='/blog/categories/interview/'>Interview</a>
 
 
 </div>
     </div>
-		<p>In inheritance, there are some rules defined by C++, one of which is that
-the virables or the functions in the base class will be hidden if there
-are virables and functions with the same name.</p>
+		<p>A queue can be implemented using two stacks. One stack store the elements
+appended to the queue. The other stack store the elements to be popped from
+the queue.</p>
 
-<p>It seems perfect, but it&#8217;s a pitfall of C++. Consider the following example.</p>
+<p>Here is the specification of my Queue.</p>
 
-<pre><code>#include &lt;cstdio&gt;
-#include &lt;iostream&gt;
-
-class Person {
-public:
-    explicit Person()
-    { }
-    ~Person()
-    { }
-    void
-    sleep() const
-    { printf("Person sleep\n"); }
-    void
-    sleep(const int sec) const
-    { printf("Person sleep %d s\n", sec); }
-private:
-    Person(const Person&amp;);
-    const Person&amp;
-    operator=(const Person&amp;);
-};
-
-class Student:public Person {
-public:
-    explicit Student()
-    { }
-    ~Person()
-    { }
-    void
-    sleep() const
-    { printf("Student sleep\n"); }
-private:
-    Student(const Student&amp;);
-    const Student&amp;
-    operator=(const Student&amp;);
-};
-
-int
-main(int argc, char **argv)
-{
-    Student stu;
-
-    stu.sleep();
-    stu.sleep(1);
-
-    return 0;
-}
-</code></pre>
-
-<p>This program won&#8217;t be compiled. It shows the following error:</p>
-
-<pre><code>test.cpp:39:16: error: no matching function for call to ‘Student::sleep(int)’
-     stu.sleep(1);
-                ^
-test.cpp:39:16: note: candidate is:
-test.cpp:25:5: note: void Student::sleep() const
-     sleep() const
-     ^
-test.cpp:25:5: note:   candidate expects 0 arguments, 1 provided
-</code></pre>
-
-<p>That is because C++ will hide all the names in the base class as long as there
-are the same names in the derived class. In the <code>Person</code> class, <code>sleep()</code>
-and <code>sleep(const int sec)</code> have the same name. In the <code>Student</code> class, it
-only want to override the <code>sleep()</code> function, but the overriding cause the
-hiding of the <code>sleep(const int sec)</code> function!</p>
-
-<p>So how to solve this problem? There are two methods so far.</p>
-
-<ol>
-<li>Don&#8217;t hide the names in the base class will using overloading functions.</li>
-<li><p>Use <code>using</code> directive to make the certain methods visible.</p>
-
-<pre><code> class Student:public Person {
- public:
-     using Person::sleep;
-
-     explicit Student()
-     { }
-     ~Person()
-     { }
-     void
-     sleep() const
-     { printf("Student sleep\n"); }
-</code></pre></li>
-</ol>
+<ul>
+<li><code>StQueue()</code>, Create an empty queue.</li>
+<li><code>StQueue(const T&amp; value)</code>, Create a queue whose first element is
+<code>value</code>.</li>
+<li><code>StQueue(const T values[], const size_t&amp; size)</code>, Create a queue from an
+array <code>values</code> whose size is <code>size</code>.</li>
+<li><code>StQueue(const StQueue&lt;T&gt;&amp; queue)</code>, Create a queue from another queue.</li>
+<li><code>const StQueue&lt;T&gt;&amp; operator=(const StQueue&lt;T&gt;&amp; queue)</code>, Support queue
+assignment.</li>
+<li><code>~StQueue()</code>, Free all the spaces allocated by the queue.</li>
+<li><code>std::ostream&amp; operator&lt;&lt;(std::ostream&amp; os, const StQueue&lt;T&gt;&amp; queue)</code>,
+Output the queue in the form <strong>[1 | 2 | 3]</strong>.</li>
+<li><code>const T&amp; head() const</code>, return the head element of the queue.</li>
+<li><code>size_t size() const</code>, return the size of the queue.</li>
+<li><code>void enQueue(const T&amp; value)</code>, append the element <code>value</code> into the
+back of the queue.</li>
+<li><code>const T deQueue()</code>, remove and return the first element of the queue.</li>
+</ul>
 
 
-<p>Finally, another important thing should be stated. In the above example, I
-implement <code>sleep()</code> function in the definition of the class. Why do that?
-I have worked in some very large C++ projects and there are many implementation
-in the definition. In fact, this is so-called <strong>implicit inline</strong>. The compiler
-will inline the functions that are implemented in the class definition
-automatically. Therefore, it&#8217;s good to implement some small functions in the
-definition of class. And let the large function implement in another file.
-This will make my code more effecient and I will follow this guide in the
-future.</p>
+<p>Here is the code.</p>
+
+<p>The class definition and implementation.</p>
+
+<figure class='code'><figcaption><span> (st-queue.hpp)</span> <a href='/code/st-queue/st-queue.hpp'>download</a></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include &lt;iostream&gt;</span>
+</span><span class='line'><span class="cp">#include &quot;stack.hpp&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">StQueue</span> <span class="p">{</span>
+</span><span class='line'><span class="k">public</span><span class="o">:</span>
+</span><span class='line'>    <span class="k">explicit</span> <span class="n">StQueue</span><span class="p">()</span>
+</span><span class='line'>        <span class="o">:</span><span class="n">in_stack_</span><span class="p">(</span><span class="k">new</span> <span class="n">Stack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">()),</span> <span class="n">out_stack_</span><span class="p">(</span><span class="k">new</span> <span class="n">Stack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">()),</span> <span class="n">size_</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">explicit</span> <span class="n">StQueue</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
+</span><span class='line'>        <span class="o">:</span><span class="n">in_stack_</span><span class="p">(</span><span class="k">new</span> <span class="n">Stack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">value</span><span class="p">)),</span> <span class="n">out_stack_</span><span class="p">(</span><span class="k">new</span> <span class="n">Stack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">()),</span> <span class="n">size_</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">explicit</span> <span class="n">StQueue</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span> <span class="n">values</span><span class="p">[],</span> <span class="k">const</span> <span class="n">size_t</span><span class="o">&amp;</span> <span class="n">size</span><span class="p">)</span>
+</span><span class='line'>        <span class="o">:</span><span class="n">in_stack_</span><span class="p">(</span><span class="k">new</span> <span class="n">Stack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">size</span><span class="p">)),</span> <span class="n">out_stack_</span><span class="p">(</span><span class="k">new</span> <span class="n">Stack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">()),</span>
+</span><span class='line'>         <span class="n">size_</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">explicit</span> <span class="n">StQueue</span><span class="p">(</span><span class="k">const</span> <span class="n">StQueue</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;</span> <span class="n">queue</span><span class="p">)</span>
+</span><span class='line'>        <span class="o">:</span><span class="n">in_stack_</span><span class="p">(</span><span class="k">new</span> <span class="n">Stack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="o">*</span><span class="n">queue</span><span class="p">.</span><span class="n">in_stack_</span><span class="p">)),</span>
+</span><span class='line'>         <span class="n">out_stack_</span><span class="p">(</span><span class="k">new</span> <span class="n">Stack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="o">*</span><span class="n">queue</span><span class="p">.</span><span class="n">out_stack_</span><span class="p">)),</span>
+</span><span class='line'>         <span class="n">size_</span><span class="p">(</span><span class="n">queue</span><span class="p">.</span><span class="n">size_</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">const</span> <span class="n">StQueue</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;</span>
+</span><span class='line'>    <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">StQueue</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;</span> <span class="n">queue</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">in_stack_</span> <span class="o">==</span> <span class="n">queue</span><span class="p">.</span><span class="n">in_stack_</span>
+</span><span class='line'>            <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">out_stack_</span> <span class="o">==</span> <span class="n">queue</span><span class="p">.</span><span class="n">out_stack_</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="o">*</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">in_stack_</span><span class="p">)</span> <span class="o">=</span> <span class="o">*</span><span class="p">(</span><span class="n">queue</span><span class="p">.</span><span class="n">in_stack_</span><span class="p">);</span>
+</span><span class='line'>        <span class="o">*</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">out_stack_</span><span class="p">)</span> <span class="o">=</span> <span class="o">*</span><span class="p">(</span><span class="n">queue</span><span class="p">.</span><span class="n">out_stack_</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">this</span><span class="o">-&gt;</span><span class="n">size_</span> <span class="o">=</span> <span class="n">queue</span><span class="p">.</span><span class="n">size_</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="o">~</span><span class="n">StQueue</span><span class="p">()</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">in_stack_</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">delete</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">in_stack_</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">out_stack_</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">delete</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">out_stack_</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">friend</span> <span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span>
+</span><span class='line'>    <span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span> <span class="n">os</span><span class="p">,</span> <span class="k">const</span> <span class="n">StQueue</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;</span> <span class="n">queue</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">pout</span> <span class="o">=</span> <span class="n">queue</span><span class="p">.</span><span class="n">out_stack_</span><span class="o">-&gt;</span><span class="n">ptop</span><span class="p">();</span>
+</span><span class='line'>        <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">pin</span> <span class="o">=</span> <span class="n">queue</span><span class="p">.</span><span class="n">in_stack_</span><span class="o">-&gt;</span><span class="n">ptop</span><span class="p">();</span>
+</span><span class='line'>        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">seperator</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;[&#39;</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">while</span> <span class="p">(</span><span class="n">pout</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="n">seperator</span> <span class="o">&lt;&lt;</span> <span class="n">pout</span><span class="o">-&gt;</span><span class="n">value</span><span class="p">();</span>
+</span><span class='line'>            <span class="n">seperator</span> <span class="o">=</span> <span class="s">&quot; | &quot;</span><span class="p">;</span>
+</span><span class='line'>            <span class="n">pout</span> <span class="o">=</span> <span class="n">pout</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">();</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">pin</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">Stack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">temp</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">while</span> <span class="p">(</span><span class="n">pin</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="n">temp</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">pin</span><span class="o">-&gt;</span><span class="n">value</span><span class="p">());</span>
+</span><span class='line'>                <span class="n">pin</span> <span class="o">=</span> <span class="n">pin</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">();</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>            <span class="k">while</span> <span class="p">(</span><span class="n">temp</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="n">seperator</span> <span class="o">&lt;&lt;</span> <span class="n">temp</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+</span><span class='line'>                <span class="n">seperator</span> <span class="o">=</span> <span class="s">&quot; | &quot;</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;]&#39;</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">os</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kt">void</span>
+</span><span class='line'>    <span class="n">enQueue</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="k">this</span><span class="o">-&gt;</span><span class="n">in_stack_</span><span class="o">-&gt;</span><span class="n">push</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
+</span><span class='line'>        <span class="o">++</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">size_</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">const</span> <span class="n">T</span>
+</span><span class='line'>    <span class="n">deQueue</span><span class="p">()</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">size_</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;The queue is empty!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+</span><span class='line'>            <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">out_stack_</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">while</span> <span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">in_stack_</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="k">this</span><span class="o">-&gt;</span><span class="n">out_stack_</span><span class="o">-&gt;</span><span class="n">push</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">in_stack_</span><span class="o">-&gt;</span><span class="n">pop</span><span class="p">());</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="o">--</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">size_</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">return</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">out_stack_</span><span class="o">-&gt;</span><span class="n">pop</span><span class="p">();</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">const</span> <span class="n">size_t</span><span class="o">&amp;</span>
+</span><span class='line'>    <span class="n">size</span><span class="p">()</span> <span class="k">const</span>
+</span><span class='line'>    <span class="p">{</span> <span class="k">return</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">size_</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span>
+</span><span class='line'>    <span class="n">head</span><span class="p">()</span> <span class="k">const</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">size_</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">std</span><span class="o">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;The queue is empty!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+</span><span class='line'>            <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">out_stack_</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">while</span> <span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">in_stack_</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="k">this</span><span class="o">-&gt;</span><span class="n">out_stack_</span><span class="o">-&gt;</span><span class="n">push</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">in_stack_</span><span class="o">-&gt;</span><span class="n">pop</span><span class="p">());</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">return</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">out_stack_</span><span class="o">-&gt;</span><span class="n">top</span><span class="p">();</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="k">private</span><span class="o">:</span>
+</span><span class='line'>    <span class="n">Stack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">in_stack_</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">Stack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">out_stack_</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">size_t</span> <span class="n">size_</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now this the test code(Using boost unit test framework).</p>
+
+<figure class='code'><figcaption><span> (st-queue-test.cpp)</span> <a href='/code/st-queue/st-queue-test.cpp'>download</a></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+<span class='line-number'>124</span>
+<span class='line-number'>125</span>
+<span class='line-number'>126</span>
+<span class='line-number'>127</span>
+<span class='line-number'>128</span>
+<span class='line-number'>129</span>
+<span class='line-number'>130</span>
+<span class='line-number'>131</span>
+<span class='line-number'>132</span>
+<span class='line-number'>133</span>
+<span class='line-number'>134</span>
+<span class='line-number'>135</span>
+<span class='line-number'>136</span>
+<span class='line-number'>137</span>
+<span class='line-number'>138</span>
+<span class='line-number'>139</span>
+<span class='line-number'>140</span>
+<span class='line-number'>141</span>
+<span class='line-number'>142</span>
+<span class='line-number'>143</span>
+<span class='line-number'>144</span>
+<span class='line-number'>145</span>
+<span class='line-number'>146</span>
+<span class='line-number'>147</span>
+<span class='line-number'>148</span>
+<span class='line-number'>149</span>
+<span class='line-number'>150</span>
+<span class='line-number'>151</span>
+<span class='line-number'>152</span>
+<span class='line-number'>153</span>
+<span class='line-number'>154</span>
+<span class='line-number'>155</span>
+<span class='line-number'>156</span>
+<span class='line-number'>157</span>
+<span class='line-number'>158</span>
+<span class='line-number'>159</span>
+<span class='line-number'>160</span>
+<span class='line-number'>161</span>
+<span class='line-number'>162</span>
+<span class='line-number'>163</span>
+<span class='line-number'>164</span>
+<span class='line-number'>165</span>
+<span class='line-number'>166</span>
+<span class='line-number'>167</span>
+<span class='line-number'>168</span>
+<span class='line-number'>169</span>
+<span class='line-number'>170</span>
+<span class='line-number'>171</span>
+<span class='line-number'>172</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#define BOOST_TEST_DYN_LINK</span>
+</span><span class='line'><span class="cp">#define BOOST_TEST_MAIN</span>
+</span><span class='line'><span class="cp">#include &lt;boost/test/unit_test.hpp&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;boost/test/output_test_stream.hpp&gt;</span>
+</span><span class='line'><span class="cp">#include &quot;st-queue.hpp&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_SUITE</span><span class="p">(</span><span class="n">test_create</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">create_empty</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">StQueue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">queue</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">queue</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">arr</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">StQueue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">queue2</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">queue2</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">create_with_one_element</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">StQueue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">queue_int</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">queue_int</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">queue_int</span><span class="p">.</span><span class="n">head</span><span class="p">(),</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">StQueue</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span> <span class="n">queue_char</span><span class="p">(</span><span class="sc">&#39;a&#39;</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">queue_char</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">queue_char</span><span class="p">.</span><span class="n">head</span><span class="p">(),</span> <span class="sc">&#39;a&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">StQueue</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">queue_double</span><span class="p">(</span><span class="mf">1.23</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">queue_double</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">queue_double</span><span class="p">.</span><span class="n">head</span><span class="p">(),</span> <span class="mf">1.23</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">StQueue</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">queue_str</span><span class="p">(</span><span class="s">&quot;abc&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">queue_str</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">queue_str</span><span class="p">.</span><span class="n">head</span><span class="p">(),</span> <span class="s">&quot;abc&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">create_with_an_array</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">arr</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">};</span>
+</span><span class='line'>    <span class="n">StQueue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">queue</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">boost</span><span class="o">::</span><span class="n">test_tools</span><span class="o">::</span><span class="n">output_test_stream</span> <span class="n">output</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">output</span> <span class="o">&lt;&lt;</span> <span class="n">queue</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK</span><span class="p">(</span><span class="n">output</span><span class="p">.</span><span class="n">is_equal</span><span class="p">(</span><span class="s">&quot;[1 | 2 | 3 | 4 | 5]&quot;</span><span class="p">));</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">create_copy_empty</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">StQueue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">queue1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StQueue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">StQueue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">queue2</span><span class="p">(</span><span class="o">*</span><span class="n">queue1</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">delete</span> <span class="n">queue1</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">queue2</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">create_copy_one</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">StQueue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">queue1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StQueue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">StQueue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">queue2</span><span class="p">(</span><span class="o">*</span><span class="n">queue1</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">delete</span> <span class="n">queue1</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">queue2</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">queue2</span><span class="p">.</span><span class="n">head</span><span class="p">(),</span> <span class="mi">3</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">create_and_assign</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">arr</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">};</span>
+</span><span class='line'>    <span class="n">StQueue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">queue1</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">};</span>
+</span><span class='line'>    <span class="n">StQueue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">queue2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">queue1</span> <span class="o">=</span> <span class="n">queue2</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">boost</span><span class="o">::</span><span class="n">test_tools</span><span class="o">::</span><span class="n">output_test_stream</span> <span class="n">output</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">output</span> <span class="o">&lt;&lt;</span> <span class="n">queue1</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK</span><span class="p">(</span><span class="n">output</span><span class="p">.</span><span class="n">is_equal</span><span class="p">(</span><span class="s">&quot;[4 | 5]&quot;</span><span class="p">));</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">queue1</span> <span class="o">=</span> <span class="n">queue1</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">queue1</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">2</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">output</span> <span class="o">&lt;&lt;</span> <span class="n">queue1</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK</span><span class="p">(</span><span class="n">output</span><span class="p">.</span><span class="n">is_equal</span><span class="p">(</span><span class="s">&quot;[4 | 5]&quot;</span><span class="p">));</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">assign_empty</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">StQueue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">queue1</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">StQueue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">queue2</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">queue1</span> <span class="o">=</span> <span class="n">queue2</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">queue1</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">queue1</span> <span class="o">=</span> <span class="n">queue1</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">queue1</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_SUITE_END</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_SUITE</span><span class="p">(</span><span class="n">test_output</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">ouput_empty</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">StQueue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">queue</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">boost</span><span class="o">::</span><span class="n">test_tools</span><span class="o">::</span><span class="n">output_test_stream</span> <span class="n">output</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">output</span> <span class="o">&lt;&lt;</span> <span class="n">queue</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK</span><span class="p">(</span><span class="n">output</span><span class="p">.</span><span class="n">is_equal</span><span class="p">(</span><span class="s">&quot;[]&quot;</span><span class="p">));</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">output_one</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">StQueue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">queue</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">boost</span><span class="o">::</span><span class="n">test_tools</span><span class="o">::</span><span class="n">output_test_stream</span> <span class="n">output</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">output</span> <span class="o">&lt;&lt;</span> <span class="n">queue</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK</span><span class="p">(</span><span class="n">output</span><span class="p">.</span><span class="n">is_equal</span><span class="p">(</span><span class="s">&quot;[2]&quot;</span><span class="p">));</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">output</span> <span class="o">&lt;&lt;</span> <span class="n">queue</span><span class="p">.</span><span class="n">head</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK</span><span class="p">(</span><span class="n">output</span><span class="p">.</span><span class="n">is_equal</span><span class="p">(</span><span class="s">&quot;2&quot;</span><span class="p">));</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_SUITE_END</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_SUITE</span><span class="p">(</span><span class="n">test_enQueue</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">empty</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">StQueue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">queue</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">queue</span><span class="p">.</span><span class="n">enQueue</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">boost</span><span class="o">::</span><span class="n">test_tools</span><span class="o">::</span><span class="n">output_test_stream</span> <span class="n">out</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">out</span> <span class="o">&lt;&lt;</span> <span class="n">queue</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK</span><span class="p">(</span><span class="n">out</span><span class="p">.</span><span class="n">is_equal</span><span class="p">(</span><span class="s">&quot;[1]&quot;</span><span class="p">));</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">queue</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">normal</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">arr</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">};</span>
+</span><span class='line'>    <span class="n">StQueue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">queue</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">queue</span><span class="p">.</span><span class="n">enQueue</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">boost</span><span class="o">::</span><span class="n">test_tools</span><span class="o">::</span><span class="n">output_test_stream</span> <span class="n">out</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">out</span> <span class="o">&lt;&lt;</span> <span class="n">queue</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK</span><span class="p">(</span><span class="n">out</span><span class="p">.</span><span class="n">is_equal</span><span class="p">(</span><span class="s">&quot;[1 | 1 | 1 | 1 | 1 | 2]&quot;</span><span class="p">));</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">queue</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">6</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_SUITE_END</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_SUITE</span><span class="p">(</span><span class="n">test_deStQueue</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">one</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">StQueue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">queue</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">head</span> <span class="o">=</span> <span class="n">queue</span><span class="p">.</span><span class="n">deQueue</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">queue</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">normal</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">arr</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">};</span>
+</span><span class='line'>    <span class="n">StQueue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">queue</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">head</span> <span class="o">=</span> <span class="n">queue</span><span class="p">.</span><span class="n">deQueue</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">boost</span><span class="o">::</span><span class="n">test_tools</span><span class="o">::</span><span class="n">output_test_stream</span> <span class="n">out</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">out</span> <span class="o">&lt;&lt;</span> <span class="n">queue</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK</span><span class="p">(</span><span class="n">out</span><span class="p">.</span><span class="n">is_equal</span><span class="p">(</span><span class="s">&quot;[2 | 3 | 4 | 5]&quot;</span><span class="p">));</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">head</span> <span class="o">=</span> <span class="n">queue</span><span class="p">.</span><span class="n">deQueue</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">out</span> <span class="o">&lt;&lt;</span> <span class="n">queue</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK</span><span class="p">(</span><span class="n">out</span><span class="p">.</span><span class="n">is_equal</span><span class="p">(</span><span class="s">&quot;[3 | 4 | 5]&quot;</span><span class="p">));</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_SUITE_END</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 		
 		
@@ -237,7 +762,7 @@ future.</p>
 
 <div class="meta">
 	
-		<span class="comments"><a href="/blog/2013/08/15/do-not-hide-inherited-names//index.html#disqus_thread">Comments</a></span>
+		<span class="comments"><a href="/blog/2013/09/27/implement-a-queue-using-two-stacks//index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>
@@ -246,9 +771,9 @@ future.</p>
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/blog/2013/08/11/postponing-definitions-instead-of-preponing/">
+		<a href="/blog/2013/09/26/implement-the-sorting-algorithms/">
 		
-			Postponing Definitions Instead of Preponing</a>
+			Implement the Sorting Algorithms</a>
 	</h2>
     <div class="entry-content">
     <div class="meta">
@@ -264,159 +789,253 @@ future.</p>
   
 
 
-<time datetime="2013-08-11T11:26:00+08:00" pubdate data-updated="true">Aug 11<span>th</span>, 2013</time></div>
+<time datetime="2013-09-26T22:03:00+08:00" pubdate data-updated="true">Sep 26<span>th</span>, 2013</time></div>
       <div class="tags">Tags: 
 
 
-	<a class='category' href='/blog/categories/c-plus-plus/'>C++</a>
+	<a class='category' href='/blog/categories/algorithm/'>Algorithm</a>, <a class='category' href='/blog/categories/interview/'>Interview</a>
 
 
 </div>
     </div>
-		<h2>Prepone definitions? Wrong!</h2>
+		<p>The sorting algorithms are very important in programming interview. I have
+to be able to write them on a paper without even an error.</p>
 
-<p>Before C99, you must prepone all the variables&#8217; definitions before any
-statements. But after C99 was released, you can put a variable&#8217;s definition
-in any place as long as before being used. I think this new feature is
-introduced by learning from C++.</p>
+<h2>Bubble Sort</h2>
 
-<p>This makes programer write codes more convenient. But I used to insist the
-old style. I even teach my students that they should use the old style when
-I was a TA of the course <em>Programming with C</em>.</p>
+<p>The immediate thought of bubble sort is that swapping the ajacent elements
+if they are of the wrong order in each pass until there are no swapping.
+For example, consider the array <code>[5, 1, 4, 2, 8]</code>,</p>
 
-<p>However, now I realize that I was wrong. <strong>We should postpone variables&#8217;</strong>
-<strong>definitions as long as possible</strong>. It&#8217;s not for coding style, but for the
-effeciency of the program.</p>
+<p>First pass:</p>
 
-<p>Consider this program.</p>
+<p>[5, 1, 4, 2, 8] => [1, 5, 4, 2, 8] => [1, 4, 5, 2, 8] => [1, 4, 2, 5, 8]
+=> [1, 4, 2, 5, 8]</p>
 
-<pre><code>#include &lt;cstdio&gt;
-#include &lt;iostream&gt;
+<p>Second pass:</p>
 
-void
-save_pwd(const std::string&amp; pwd)
-{
-    std::string salted_pwd("abc");
+<p>[1, 2, 4, 5, 8] => [1, 2, 4, 5, 8] => [1, 2, 4, 5, 8] => [1, 2, 4, 5, 8]
+=> [1, 2, 4, 5, 8]</p>
 
-    if (pwd.size() &lt; 6) {
-        fprintf(stderr, "Password too short.");
-        return;
-    }
-    salted_pwd += pwd;
-    ...
-}
+<p>Third pass:</p>
 
-int
-main(int argc, char **argv)
-{
-    save_pwd("ddd");
+<p>[1, 2, 4, 5, 8] => [1, 2, 4, 5, 8] => [1, 2, 4, 5, 8] => [1, 2, 4, 5, 8]
+=> [1, 2, 4, 5, 8]</p>
 
-    return 0;
-}
-</code></pre>
+<p>Here we found that the array has been sorted after the second pass, but we
+have apply the third pass so that we can know the array has been sorted
+because there are no swapping in that pass.</p>
 
-<p>When running this program, it will print an error and exit the function.
-The variable <code>salted_pwd</code> is not used. So, defining <code>salted_pwd</code> above
-the <code>if</code> statement will waste the memory, the time to allocate memory and
-the time to free memory. For the view of C++, you will pay for the cost of
-construction and destruction of the object <code>salted_pwd</code>.</p>
+<p>There is an optimization that can improve the performance. Observer that
+in the second pass, there is no need to compare <code>5</code> to <code>8</code>, since they
+are in the right order in the first pass. Hence, there is no need to compare
+the last <code>ith</code> element in the <code>ith</code> pass.</p>
 
-<h2>Define and then assign? Wrong!</h2>
+<h2>Select Sort</h2>
 
-<p>When I first learned programming in C, my teacher says that</p>
+<h2>All the code</h2>
 
-<pre><code>int a;
-a = 1;
-</code></pre>
+<p>Here is the code of all this sort algorithms.</p>
 
-<p>is the same as</p>
+<figure class='code'><figcaption><span> (sort.cpp)</span> <a href='/code/sort/sort.cpp'>download</a></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include &lt;iostream&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+</span><span class='line'><span class="kt">void</span>
+</span><span class='line'><span class="n">swap</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">T</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">a</span> <span class="o">=</span> <span class="n">b</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">b</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+</span><span class='line'><span class="kt">void</span>
+</span><span class='line'><span class="n">compare_swap</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">is_ascending</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">is_ascending</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">swap</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">swap</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+</span><span class='line'><span class="kt">void</span>
+</span><span class='line'><span class="n">bubble_sort</span><span class="p">(</span><span class="n">T</span> <span class="n">list</span><span class="p">[],</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">size</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">is_ascending</span><span class="o">=</span><span class="kc">true</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">pass</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">while</span> <span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kt">bool</span> <span class="n">is_swapped</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span> <span class="o">-</span> <span class="n">pass</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">compare_swap</span><span class="p">(</span><span class="n">list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">list</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">is_ascending</span><span class="p">);</span>
+</span><span class='line'>            <span class="n">is_swapped</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="o">++</span><span class="n">pass</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">is_swapped</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure>
 
-<pre><code>int a = 1;
-</code></pre>
 
-<p>Now I realize that they are not the same and the latter is more effecient.</p>
+<p>And the test code(Using boost unit test framework).</p>
 
-<p>For the former, <code>int a;</code> will allocate memory for the variable <code>a</code> and
-then fill zero bytes in the memory. Then <code>a = 1;</code> will write value <code>1</code>
-in the memory.
-For the latter, <code>int a = 1;</code> will directly allocate memory for the variable
-<code>a</code> and then write value <code>1</code> in the memory.
-In other words, you will pay more cost when using the former style.</p>
+<figure class='code'><figcaption><span> (sort-test.cpp)</span> <a href='/code/sort/sort-test.cpp'>download</a></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#define BOOST_TEST_DYN_LINK</span>
+</span><span class='line'><span class="cp">#define BOOST_TEST_MAIN</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#include &lt;cstdlib&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;ctime&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;algorithm&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;boost/test/unit_test.hpp&gt;</span>
+</span><span class='line'><span class="cp">#include &quot;sort.cpp&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">int</span> <span class="n">empty_list</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">const</span> <span class="kt">int</span> <span class="n">NORMAL_SIZE</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">normal_list</span><span class="p">[</span><span class="n">NORMAL_SIZE</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">8</span><span class="p">};</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">normal_list_sorted</span><span class="p">[</span><span class="n">NORMAL_SIZE</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">const</span> <span class="kt">int</span> <span class="n">RANDOM_SIZE</span> <span class="o">=</span> <span class="mi">9999</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_SUITE</span><span class="p">(</span><span class="n">bubble</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">empty</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">bubble_sort</span><span class="p">(</span><span class="n">empty_list</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">normal</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">bubble_sort</span><span class="p">(</span><span class="n">normal_list</span><span class="p">,</span> <span class="n">NORMAL_SIZE</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">NORMAL_SIZE</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">normal_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">normal_list_sorted</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">random</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">random_list</span><span class="p">[</span><span class="n">RANDOM_SIZE</span><span class="p">];</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">random_list_sorted</span><span class="p">[</span><span class="n">RANDOM_SIZE</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">srand</span><span class="p">(</span><span class="n">time</span><span class="p">(</span><span class="nb">NULL</span><span class="p">));</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">RANDOM_SIZE</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">random_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">random_list_sorted</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">rand</span><span class="p">();</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">bubble_sort</span><span class="p">(</span><span class="n">random_list</span><span class="p">,</span> <span class="n">RANDOM_SIZE</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">std</span><span class="o">::</span><span class="n">sort</span><span class="p">(</span><span class="n">random_list_sorted</span><span class="p">,</span> <span class="n">random_list_sorted</span> <span class="o">+</span> <span class="n">RANDOM_SIZE</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">RANDOM_SIZE</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">random_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">random_list_sorted</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_SUITE_END</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>It seems that it makes little difference with the built-in type. When the
-type of the variable <code>a</code> is user-defined type, great difference appears.</p>
-
-<p>For example,</p>
-
-<pre><code>std::string str;
-...
-std::string = "abc";
-</code></pre>
-
-<p>This will first call the default constructor of <code>std::string</code> and then call
-the copy assignment operator. So the time and memory used in the default
-constructor is wasted.</p>
-
-<p>If we define an object in this way</p>
-
-<pre><code>std::string str("abc");
-</code></pre>
-
-<p>or</p>
-
-<pre><code>std::string str = "abc";
-</code></pre>
-
-<p>, it will only call the copy constructor. This is more effecient.</p>
-
-<p>So now I prefer this way</p>
-
-<pre><code>for (int i = 0; i &lt; n; i++) {
-    ...
-}
-</code></pre>
-
-<p>instead of</p>
-
-<pre><code>int i;
-
-for (i = 0; i &lt; n; i++) {
-    ...
-}
-</code></pre>
-
-<p>Now there is a special case that is worth thinking.</p>
-
-<pre><code>Person p;
-for (int i = 0; i &lt; n; i++) {
-    p = persons[i];
-    ...
-}
-</code></pre>
-
-<p>and</p>
-
-<pre><code>for (int i = 0; i &lt; n; i++) {
-    Person p = persons[i];
-    ...
-}
-</code></pre>
-
-<p>, which is better?</p>
-
-<p>Let&#8217;s analysis the performance of them.
-* The former need 1 construction, n assignments and 1 destruction. But it makes
-the object <code>p</code> in a larger scope, which increase the comprehensibility and
-maintainability of the program.
-* The latter need n constructions and n destructions.</p>
-
-<p>Which is more effecient? I think it all depends. If assignment is less expensive
-than the total of construction and destruction, we should use the former style.
-On the contray, we should use the latter style.</p>
-
-<p>The author of <strong>Effective C++</strong> prefers the latter, but I prefer the former,
-since I am sensitive with performance and I think memory allocation and free
-will be more expensive than assignment.</p>
 
 		
 		
@@ -424,7 +1043,7 @@ will be more expensive than assignment.</p>
 
 <div class="meta">
 	
-		<span class="comments"><a href="/blog/2013/08/11/postponing-definitions-instead-of-preponing//index.html#disqus_thread">Comments</a></span>
+		<span class="comments"><a href="/blog/2013/09/26/implement-the-sorting-algorithms//index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>
@@ -433,9 +1052,9 @@ will be more expensive than assignment.</p>
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/blog/2013/08/09/understanding-encapsulation/">
+		<a href="/blog/2013/09/26/implement-a-stack/">
 		
-			Understanding Encapsulation</a>
+			Implement a Stack</a>
 	</h2>
     <div class="entry-content">
     <div class="meta">
@@ -451,150 +1070,791 @@ will be more expensive than assignment.</p>
   
 
 
-<time datetime="2013-08-09T21:38:00+08:00" pubdate data-updated="true">Aug 9<span>th</span>, 2013</time></div>
+<time datetime="2013-09-26T21:10:00+08:00" pubdate data-updated="true">Sep 26<span>th</span>, 2013</time></div>
       <div class="tags">Tags: 
 
 
-	<a class='category' href='/blog/categories/c-plus-plus/'>C++</a>
+	<a class='category' href='/blog/categories/data-structure/'>Data_structure,</a>, <a class='category' href='/blog/categories/interview/'>Interview</a>
 
 
 </div>
     </div>
-		<p>Once I loved <em>C</em> very much and I thought it&#8217;s the best programming language
-in the world. I used to argue that <em>C</em> can be used to implement the
-object-oriented design with <code>struct</code>. I used to argue that <code>private</code> and
-<code>public</code> is useless in <em>C++</em>. However, now I know I was wrong.</p>
+		<p>A stack is based on the Linked List. The most explicit feature of a stack
+is FILO(First in last out).</p>
 
-<h2>Why we need private</h2>
+<p>Here is the specification of my Stack.</p>
 
-<p>It&#8217;s related to a very important concept in C++, that is, <strong>encapsulation</strong>.</p>
+<ul>
+<li><code>Stack()</code>, Create an empty stack.</li>
+<li><code>Stack(const T&amp; value)</code>, Create a stack whose first element is <code>value</code>.</li>
+<li><code>Stack(const T values[], const size_t&amp; size)</code>, Create a stack from an
+array <code>values</code> whose size is <code>size</code>.</li>
+<li><code>Stack(const Stack&lt;T&gt;&amp; stack)</code>, Create a stack from another stack.</li>
+<li><code>const Stack&lt;T&gt;&amp; operator=(const Stack&lt;T&gt;&amp; stack)</code>, Support stack
+assignment.</li>
+<li><code>~Stack()</code>, Free all the spaces allocated by the stack.</li>
+<li><code>std::ostream&amp; operator&lt;&lt;(std::ostream&amp; os, const Stack&lt;T&gt;&amp; stack)</code>,
+Output the stack in the form <strong>[1 | 2 | 3]</strong>.</li>
+<li><code>const T&amp; top() const</code>, return the head element of the stack.</li>
+<li><code>size_t size() const</code>, return the size of the stack.</li>
+<li><code>void push(const T&amp; value)</code>, append the element <code>value</code> into the
+back of the stack.</li>
+<li><code>const T pop()</code>, remove and return the first element of the stack.</li>
+<li><code>Node&lt;T&gt; * ptop() const</code>, return the top pointer.</li>
+</ul>
 
-<p><strong>Encapsulation is not invisibility. It&#8217;s maintainability.</strong></p>
 
-<p>Suppose a class is very popular and is used by many projects. For example,
-the <code>string</code> class. If every members in this class is <code>public</code>, the clients
-can use many interfaces to manipulate <code>string</code>. One day, when the <code>string</code>
-class is going to be modified(some members&#8217; name change), then lots of clients
-have to modify there code. This is painful! If we declare some of the members
-<code>private</code> and change the name of the private members, only the implementations
-in the public member functions should be modified. None of the clients need to
-change their codes.</p>
+<p>Here is the code.</p>
 
-<p>Therefore, <strong>public means unchangable and public means unencapsulated</strong>.</p>
+<p>The class definition and Implementation.</p>
 
-<p>The public member functions should not be changed in the future. Since you don&#8217;t
-know how your clients will use your class, don&#8217;t expose the members that may be
-changed in the future to the clients.</p>
+<figure class='code'><figcaption><span> (stack.hpp)</span> <a href='/code/stack/stack.hpp'>download</a></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+<span class='line-number'>124</span>
+<span class='line-number'>125</span>
+<span class='line-number'>126</span>
+<span class='line-number'>127</span>
+<span class='line-number'>128</span>
+<span class='line-number'>129</span>
+<span class='line-number'>130</span>
+<span class='line-number'>131</span>
+<span class='line-number'>132</span>
+<span class='line-number'>133</span>
+<span class='line-number'>134</span>
+<span class='line-number'>135</span>
+<span class='line-number'>136</span>
+<span class='line-number'>137</span>
+<span class='line-number'>138</span>
+<span class='line-number'>139</span>
+<span class='line-number'>140</span>
+<span class='line-number'>141</span>
+<span class='line-number'>142</span>
+<span class='line-number'>143</span>
+<span class='line-number'>144</span>
+<span class='line-number'>145</span>
+<span class='line-number'>146</span>
+<span class='line-number'>147</span>
+<span class='line-number'>148</span>
+<span class='line-number'>149</span>
+<span class='line-number'>150</span>
+<span class='line-number'>151</span>
+<span class='line-number'>152</span>
+<span class='line-number'>153</span>
+<span class='line-number'>154</span>
+<span class='line-number'>155</span>
+<span class='line-number'>156</span>
+<span class='line-number'>157</span>
+<span class='line-number'>158</span>
+<span class='line-number'>159</span>
+<span class='line-number'>160</span>
+<span class='line-number'>161</span>
+<span class='line-number'>162</span>
+<span class='line-number'>163</span>
+<span class='line-number'>164</span>
+<span class='line-number'>165</span>
+<span class='line-number'>166</span>
+<span class='line-number'>167</span>
+<span class='line-number'>168</span>
+<span class='line-number'>169</span>
+<span class='line-number'>170</span>
+<span class='line-number'>171</span>
+<span class='line-number'>172</span>
+<span class='line-number'>173</span>
+<span class='line-number'>174</span>
+<span class='line-number'>175</span>
+<span class='line-number'>176</span>
+<span class='line-number'>177</span>
+<span class='line-number'>178</span>
+<span class='line-number'>179</span>
+<span class='line-number'>180</span>
+<span class='line-number'>181</span>
+<span class='line-number'>182</span>
+<span class='line-number'>183</span>
+<span class='line-number'>184</span>
+<span class='line-number'>185</span>
+<span class='line-number'>186</span>
+<span class='line-number'>187</span>
+<span class='line-number'>188</span>
+<span class='line-number'>189</span>
+<span class='line-number'>190</span>
+<span class='line-number'>191</span>
+<span class='line-number'>192</span>
+<span class='line-number'>193</span>
+<span class='line-number'>194</span>
+<span class='line-number'>195</span>
+<span class='line-number'>196</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#ifndef _STACK_H_</span>
+</span><span class='line'><span class="cp">#define _STACK_H_</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#include &lt;iostream&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;cstdlib&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">Node</span> <span class="p">{</span>
+</span><span class='line'><span class="k">public</span><span class="o">:</span>
+</span><span class='line'>    <span class="k">explicit</span> <span class="n">Node</span><span class="p">()</span>
+</span><span class='line'>        <span class="o">:</span><span class="n">value_</span><span class="p">(),</span> <span class="n">next_</span><span class="p">(</span><span class="nb">NULL</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span> <span class="p">}</span>
+</span><span class='line'>    <span class="k">explicit</span> <span class="n">Node</span><span class="p">(</span><span class="k">const</span> <span class="n">Node</span><span class="o">&amp;</span> <span class="n">n</span><span class="p">)</span>
+</span><span class='line'>        <span class="o">:</span><span class="n">value_</span><span class="p">(</span><span class="n">n</span><span class="p">.</span><span class="n">value_</span><span class="p">),</span> <span class="n">next_</span><span class="p">(</span><span class="n">n</span><span class="p">.</span><span class="n">next_</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span> <span class="p">}</span>
+</span><span class='line'>    <span class="k">explicit</span> <span class="n">Node</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">,</span> <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">next</span><span class="o">=</span><span class="nb">NULL</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="k">this</span><span class="o">-&gt;</span><span class="n">value_</span> <span class="o">=</span> <span class="n">value</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">this</span><span class="o">-&gt;</span><span class="n">next_</span> <span class="o">=</span> <span class="n">next</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">const</span> <span class="n">Node</span><span class="o">&amp;</span>
+</span><span class='line'>    <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">Node</span><span class="o">&amp;</span> <span class="n">n</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="k">this</span><span class="o">-&gt;</span><span class="n">value_</span> <span class="o">=</span> <span class="n">n</span><span class="p">.</span><span class="n">value_</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">this</span><span class="o">-&gt;</span><span class="n">next_</span> <span class="o">=</span> <span class="n">n</span><span class="p">.</span><span class="n">next_</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="o">~</span><span class="n">Node</span><span class="p">()</span> <span class="p">{</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">friend</span> <span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span>
+</span><span class='line'>    <span class="k">operator</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span> <span class="n">os</span><span class="p">,</span> <span class="k">const</span> <span class="n">Node</span><span class="o">&amp;</span> <span class="n">node</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span> <span class="k">return</span> <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="n">node</span><span class="p">.</span><span class="n">value_</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span>
+</span><span class='line'>    <span class="n">value</span><span class="p">()</span> <span class="k">const</span>
+</span><span class='line'>    <span class="p">{</span> <span class="k">return</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">value_</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Set the node&#39;s value to VALUE.</span>
+</span><span class='line'>    <span class="kt">void</span>
+</span><span class='line'>    <span class="n">value</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">value_</span> <span class="o">=</span> <span class="n">value</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">*</span>
+</span><span class='line'>    <span class="n">next</span><span class="p">()</span> <span class="k">const</span>
+</span><span class='line'>    <span class="p">{</span> <span class="k">return</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">next_</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Set the &#39;next_&#39; pointer to the pointer NEXT.</span>
+</span><span class='line'>    <span class="kt">void</span>
+</span><span class='line'>    <span class="n">next</span><span class="p">(</span><span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">next</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">next_</span> <span class="o">=</span> <span class="n">next</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'><span class="k">private</span><span class="o">:</span>
+</span><span class='line'>    <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">next_</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">T</span> <span class="n">value_</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">Stack</span> <span class="p">{</span>
+</span><span class='line'><span class="k">public</span><span class="o">:</span>
+</span><span class='line'>    <span class="k">explicit</span> <span class="n">Stack</span><span class="p">()</span>
+</span><span class='line'>        <span class="o">:</span><span class="n">top_</span><span class="p">(</span><span class="nb">NULL</span><span class="p">),</span> <span class="n">size_</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">explicit</span> <span class="n">Stack</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
+</span><span class='line'>        <span class="o">:</span><span class="n">top_</span><span class="p">(</span><span class="k">new</span> <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">value</span><span class="p">)),</span> <span class="n">size_</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">explicit</span> <span class="n">Stack</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span> <span class="n">values</span><span class="p">[],</span> <span class="k">const</span> <span class="n">size_t</span><span class="o">&amp;</span> <span class="n">size</span><span class="p">)</span>
+</span><span class='line'>        <span class="o">:</span><span class="n">top_</span><span class="p">(</span><span class="nb">NULL</span><span class="p">),</span> <span class="n">size_</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">this</span><span class="o">-&gt;</span><span class="n">top_</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+</span><span class='line'>            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">node</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">top_</span><span class="p">);</span>
+</span><span class='line'>                <span class="k">this</span><span class="o">-&gt;</span><span class="n">top_</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">explicit</span> <span class="n">Stack</span><span class="p">(</span><span class="k">const</span> <span class="n">Stack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;</span> <span class="n">stack</span><span class="p">)</span>
+</span><span class='line'>        <span class="o">:</span><span class="n">top_</span><span class="p">(</span><span class="nb">NULL</span><span class="p">),</span> <span class="n">size_</span><span class="p">(</span><span class="n">stack</span><span class="p">.</span><span class="n">size_</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">stack</span><span class="p">.</span><span class="n">size_</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="n">stack</span><span class="p">.</span><span class="n">top_</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">this</span><span class="o">-&gt;</span><span class="n">top_</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">value</span><span class="p">());</span>
+</span><span class='line'>            <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">();</span>
+</span><span class='line'>            <span class="k">while</span> <span class="p">(</span><span class="n">p</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">node</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">value</span><span class="p">(),</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">top_</span><span class="p">);</span>
+</span><span class='line'>                <span class="k">this</span><span class="o">-&gt;</span><span class="n">top_</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+</span><span class='line'>                <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">();</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">const</span> <span class="n">Stack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;</span>
+</span><span class='line'>    <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">Stack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;</span> <span class="n">stack</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">pleft</span> <span class="o">=</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">top_</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">pright</span> <span class="o">=</span> <span class="n">stack</span><span class="p">.</span><span class="n">top_</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">pleft</span> <span class="o">==</span> <span class="n">pright</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">pright</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="n">pleft</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="n">pleft</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">pright</span><span class="o">-&gt;</span><span class="n">value</span><span class="p">());</span>
+</span><span class='line'>                <span class="k">this</span><span class="o">-&gt;</span><span class="n">top_</span> <span class="o">=</span> <span class="n">pleft</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>                <span class="n">pleft</span><span class="o">-&gt;</span><span class="n">value</span><span class="p">(</span><span class="n">pright</span><span class="o">-&gt;</span><span class="n">value</span><span class="p">());</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>            <span class="n">pright</span> <span class="o">=</span> <span class="n">pright</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">();</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">while</span> <span class="p">(</span><span class="n">pright</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="n">pleft</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">()</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">node</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">pright</span><span class="o">-&gt;</span><span class="n">value</span><span class="p">());</span>
+</span><span class='line'>                <span class="n">pleft</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+</span><span class='line'>            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>                <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="n">pleft</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">();</span>
+</span><span class='line'>                <span class="n">p</span><span class="o">-&gt;</span><span class="n">value</span><span class="p">(</span><span class="n">pright</span><span class="o">-&gt;</span><span class="n">value</span><span class="p">());</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>            <span class="n">pleft</span> <span class="o">=</span> <span class="n">pleft</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">();</span>
+</span><span class='line'>            <span class="n">pright</span> <span class="o">=</span> <span class="n">pright</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">();</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">pprev</span> <span class="o">=</span> <span class="n">pleft</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">pleft</span> <span class="o">=</span> <span class="n">pleft</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">();</span>
+</span><span class='line'>        <span class="n">pprev</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">while</span> <span class="p">(</span><span class="n">pleft</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">to_delete</span> <span class="o">=</span> <span class="n">pleft</span><span class="p">;</span>
+</span><span class='line'>            <span class="n">pleft</span> <span class="o">=</span> <span class="n">pleft</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">();</span>
+</span><span class='line'>            <span class="k">delete</span> <span class="n">to_delete</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">this</span><span class="o">-&gt;</span><span class="n">size_</span> <span class="o">=</span> <span class="n">stack</span><span class="p">.</span><span class="n">size_</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="o">~</span><span class="n">Stack</span><span class="p">()</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">top_</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">while</span> <span class="p">(</span><span class="n">p</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">to_delete</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
+</span><span class='line'>            <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">();</span>
+</span><span class='line'>            <span class="k">delete</span> <span class="n">to_delete</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">this</span><span class="o">-&gt;</span><span class="n">top_</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">friend</span> <span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span>
+</span><span class='line'>    <span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span> <span class="n">os</span><span class="p">,</span> <span class="k">const</span> <span class="n">Stack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;</span> <span class="n">stack</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="n">stack</span><span class="p">.</span><span class="n">top_</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">seperator</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;[&quot;</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">while</span> <span class="p">(</span><span class="n">p</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="n">seperator</span> <span class="o">&lt;&lt;</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">value</span><span class="p">();</span>
+</span><span class='line'>            <span class="n">seperator</span> <span class="o">=</span> <span class="s">&quot; | &quot;</span><span class="p">;</span>
+</span><span class='line'>            <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">();</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;]&quot;</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">os</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span>
+</span><span class='line'>    <span class="n">top</span><span class="p">()</span> <span class="k">const</span>
+</span><span class='line'>    <span class="p">{</span> <span class="k">return</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">top_</span><span class="o">-&gt;</span><span class="n">value</span><span class="p">();</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kt">void</span>
+</span><span class='line'>    <span class="n">push</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">node</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">top_</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">this</span><span class="o">-&gt;</span><span class="n">top_</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+</span><span class='line'>        <span class="o">++</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">size_</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">const</span> <span class="n">T</span>
+</span><span class='line'>    <span class="n">pop</span><span class="p">()</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">to_delete</span> <span class="o">=</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">top_</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">this</span><span class="o">-&gt;</span><span class="n">top_</span> <span class="o">=</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">top_</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">();</span>
+</span><span class='line'>        <span class="n">T</span> <span class="n">top_value</span> <span class="o">=</span> <span class="n">to_delete</span><span class="o">-&gt;</span><span class="n">value</span><span class="p">();</span>
+</span><span class='line'>        <span class="k">delete</span> <span class="n">to_delete</span><span class="p">;</span>
+</span><span class='line'>        <span class="o">--</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">size_</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">top_value</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">const</span> <span class="n">size_t</span><span class="o">&amp;</span>
+</span><span class='line'>    <span class="n">size</span><span class="p">()</span> <span class="k">const</span>
+</span><span class='line'>    <span class="p">{</span> <span class="k">return</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">size_</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">*</span>
+</span><span class='line'>    <span class="n">ptop</span><span class="p">()</span> <span class="k">const</span>
+</span><span class='line'>    <span class="p">{</span> <span class="k">return</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">top_</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'><span class="k">private</span><span class="o">:</span>
+</span><span class='line'>    <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">top_</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">size_t</span> <span class="n">size_</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#endif </span><span class="cm">/* _STACK_H_ */</span><span class="cp"></span>
+</span></code></pre></td></tr></table></div></figure>
 
-<h2>Prefer non-member non-friend functions to member functions</h2>
 
-<p>Consider the following class.</p>
+<p>Now this the test code(Using boost unit test framework).</p>
 
-<pre><code>class Person {
-public:
-    explicit Person()
-    { }
-    ~Person()
-    { }
-    void
-    say_age() const
-    { printf("%d\n", age); }
-    void
-    say_name() const
-    { printf("%s\n", name.c_str()); }
-private:
-    Person(const Person&amp;);
-    const Person&amp;
-    operator=(const Person&amp;);
-    int age;
-    std::string name;
-};
-</code></pre>
+<figure class='code'><figcaption><span> (stack-test.cpp)</span> <a href='/code/stack/stack-test.cpp'>download</a></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+<span class='line-number'>124</span>
+<span class='line-number'>125</span>
+<span class='line-number'>126</span>
+<span class='line-number'>127</span>
+<span class='line-number'>128</span>
+<span class='line-number'>129</span>
+<span class='line-number'>130</span>
+<span class='line-number'>131</span>
+<span class='line-number'>132</span>
+<span class='line-number'>133</span>
+<span class='line-number'>134</span>
+<span class='line-number'>135</span>
+<span class='line-number'>136</span>
+<span class='line-number'>137</span>
+<span class='line-number'>138</span>
+<span class='line-number'>139</span>
+<span class='line-number'>140</span>
+<span class='line-number'>141</span>
+<span class='line-number'>142</span>
+<span class='line-number'>143</span>
+<span class='line-number'>144</span>
+<span class='line-number'>145</span>
+<span class='line-number'>146</span>
+<span class='line-number'>147</span>
+<span class='line-number'>148</span>
+<span class='line-number'>149</span>
+<span class='line-number'>150</span>
+<span class='line-number'>151</span>
+<span class='line-number'>152</span>
+<span class='line-number'>153</span>
+<span class='line-number'>154</span>
+<span class='line-number'>155</span>
+<span class='line-number'>156</span>
+<span class='line-number'>157</span>
+<span class='line-number'>158</span>
+<span class='line-number'>159</span>
+<span class='line-number'>160</span>
+<span class='line-number'>161</span>
+<span class='line-number'>162</span>
+<span class='line-number'>163</span>
+<span class='line-number'>164</span>
+<span class='line-number'>165</span>
+<span class='line-number'>166</span>
+<span class='line-number'>167</span>
+<span class='line-number'>168</span>
+<span class='line-number'>169</span>
+<span class='line-number'>170</span>
+<span class='line-number'>171</span>
+<span class='line-number'>172</span>
+<span class='line-number'>173</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#define BOOST_TEST_DYN_LINK</span>
+</span><span class='line'><span class="cp">#define BOOST_TEST_MAIN</span>
+</span><span class='line'><span class="cp">#include &lt;boost/test/unit_test.hpp&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;boost/test/output_test_stream.hpp&gt;</span>
+</span><span class='line'><span class="cp">#include &quot;stack.hpp&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_SUITE</span><span class="p">(</span><span class="n">test_create</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">create_empty</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">Stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">stack</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">stack</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">arr</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">Stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">stack2</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">stack2</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">create_with_one_element</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">Stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">stack_int</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">stack_int</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">stack_int</span><span class="p">.</span><span class="n">top</span><span class="p">(),</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">Stack</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span> <span class="n">stack_char</span><span class="p">(</span><span class="sc">&#39;a&#39;</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">stack_char</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">stack_char</span><span class="p">.</span><span class="n">top</span><span class="p">(),</span> <span class="sc">&#39;a&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">Stack</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">stack_double</span><span class="p">(</span><span class="mf">1.23</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">stack_double</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">stack_double</span><span class="p">.</span><span class="n">top</span><span class="p">(),</span> <span class="mf">1.23</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">Stack</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">stack_str</span><span class="p">(</span><span class="s">&quot;abc&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">stack_str</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">stack_str</span><span class="p">.</span><span class="n">top</span><span class="p">(),</span> <span class="s">&quot;abc&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">create_with_an_array</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">arr</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">};</span>
+</span><span class='line'>    <span class="n">Stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">stack</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">boost</span><span class="o">::</span><span class="n">test_tools</span><span class="o">::</span><span class="n">output_test_stream</span> <span class="n">output</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">output</span> <span class="o">&lt;&lt;</span> <span class="n">stack</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK</span><span class="p">(</span><span class="n">output</span><span class="p">.</span><span class="n">is_equal</span><span class="p">(</span><span class="s">&quot;[5 | 4 | 3 | 2 | 1]&quot;</span><span class="p">));</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">create_copy_empty</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">Stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">stack1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">Stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">stack2</span><span class="p">(</span><span class="o">*</span><span class="n">stack1</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">delete</span> <span class="n">stack1</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">stack2</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">create_copy_one</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">Stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">stack1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">Stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">stack2</span><span class="p">(</span><span class="o">*</span><span class="n">stack1</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">delete</span> <span class="n">stack1</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">stack2</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">stack2</span><span class="p">.</span><span class="n">top</span><span class="p">(),</span> <span class="mi">3</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">create_and_assign</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">arr</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">};</span>
+</span><span class='line'>    <span class="n">Stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">stack1</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">};</span>
+</span><span class='line'>    <span class="n">Stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">stack2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">stack1</span> <span class="o">=</span> <span class="n">stack2</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">boost</span><span class="o">::</span><span class="n">test_tools</span><span class="o">::</span><span class="n">output_test_stream</span> <span class="n">output</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">output</span> <span class="o">&lt;&lt;</span> <span class="n">stack1</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK</span><span class="p">(</span><span class="n">output</span><span class="p">.</span><span class="n">is_equal</span><span class="p">(</span><span class="s">&quot;[5 | 4]&quot;</span><span class="p">));</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">stack1</span> <span class="o">=</span> <span class="n">stack1</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">stack1</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">2</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">output</span> <span class="o">&lt;&lt;</span> <span class="n">stack1</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK</span><span class="p">(</span><span class="n">output</span><span class="p">.</span><span class="n">is_equal</span><span class="p">(</span><span class="s">&quot;[5 | 4]&quot;</span><span class="p">));</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">assign_empty</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">Stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">stack1</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">Stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">stack2</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">stack1</span> <span class="o">=</span> <span class="n">stack2</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">stack1</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">stack1</span> <span class="o">=</span> <span class="n">stack1</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">stack1</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_SUITE_END</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_SUITE</span><span class="p">(</span><span class="n">test_output</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">ouput_empty</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">Stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">stack</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">boost</span><span class="o">::</span><span class="n">test_tools</span><span class="o">::</span><span class="n">output_test_stream</span> <span class="n">output</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">output</span> <span class="o">&lt;&lt;</span> <span class="n">stack</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK</span><span class="p">(</span><span class="n">output</span><span class="p">.</span><span class="n">is_equal</span><span class="p">(</span><span class="s">&quot;[]&quot;</span><span class="p">));</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">output_one</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">Stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">stack</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">boost</span><span class="o">::</span><span class="n">test_tools</span><span class="o">::</span><span class="n">output_test_stream</span> <span class="n">output</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">output</span> <span class="o">&lt;&lt;</span> <span class="n">stack</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK</span><span class="p">(</span><span class="n">output</span><span class="p">.</span><span class="n">is_equal</span><span class="p">(</span><span class="s">&quot;[2]&quot;</span><span class="p">));</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">output</span> <span class="o">&lt;&lt;</span> <span class="n">stack</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK</span><span class="p">(</span><span class="n">output</span><span class="p">.</span><span class="n">is_equal</span><span class="p">(</span><span class="s">&quot;2&quot;</span><span class="p">));</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_SUITE_END</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_SUITE</span><span class="p">(</span><span class="n">test_push</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">empty</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">Stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">stack</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">stack</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">boost</span><span class="o">::</span><span class="n">test_tools</span><span class="o">::</span><span class="n">output_test_stream</span> <span class="n">out</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">out</span> <span class="o">&lt;&lt;</span> <span class="n">stack</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK</span><span class="p">(</span><span class="n">out</span><span class="p">.</span><span class="n">is_equal</span><span class="p">(</span><span class="s">&quot;[1]&quot;</span><span class="p">));</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">stack</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">normal</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">arr</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">};</span>
+</span><span class='line'>    <span class="n">Stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">stack</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">stack</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">boost</span><span class="o">::</span><span class="n">test_tools</span><span class="o">::</span><span class="n">output_test_stream</span> <span class="n">out</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">out</span> <span class="o">&lt;&lt;</span> <span class="n">stack</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">BOOST_CHECK</span><span class="p">(</span><span class="n">out</span><span class="p">.</span><span class="n">is_equal</span><span class="p">(</span><span class="s">&quot;[2 | 1 | 1 | 1 | 1 | 1]&quot;</span><span class="p">));</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">stack</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">6</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_SUITE_END</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_SUITE</span><span class="p">(</span><span class="n">test_pop</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">one</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">Stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">stack</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">head</span> <span class="o">=</span> <span class="n">stack</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">stack</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">normal</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">arr</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">};</span>
+</span><span class='line'>    <span class="n">Stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">stack</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">head</span> <span class="o">=</span> <span class="n">stack</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">boost</span><span class="o">::</span><span class="n">test_tools</span><span class="o">::</span><span class="n">output_test_stream</span> <span class="n">out</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">out</span> <span class="o">&lt;&lt;</span> <span class="n">stack</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK</span><span class="p">(</span><span class="n">out</span><span class="p">.</span><span class="n">is_equal</span><span class="p">(</span><span class="s">&quot;[4 | 3 | 2 | 1]&quot;</span><span class="p">));</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">head</span> <span class="o">=</span> <span class="n">stack</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">out</span> <span class="o">&lt;&lt;</span> <span class="n">stack</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK</span><span class="p">(</span><span class="n">out</span><span class="p">.</span><span class="n">is_equal</span><span class="p">(</span><span class="s">&quot;[3 | 2 | 1]&quot;</span><span class="p">));</span>
+</span><span class='line'>    <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="mi">4</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_SUITE_END</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>Somebody may want to use the functions together, so we add another member
-function.</p>
-
-<pre><code>class Person {
-public:
-    explicit Person()
-    { }
-    ~Person()
-    { }
-    void
-    say_age() const
-    { printf("%d\n", age); }
-    void
-    say_name() const
-    { printf("%s\n", name.c_str()); }
-    void
-    say() const
-    {
-        say_age();
-        say_name();
-    }
-private:
-    Person(const Person&amp;);
-    const Person&amp;
-    operator=(const Person&amp;);
-    int age;
-    std::string name;
-};
-</code></pre>
-
-<p>This is straightforward, especially for those Java and C# programmers. Every
-functions should be in a class and everything is object. It&#8217;s obvious, right?</p>
-
-<p>However, e have another option, that is, using the non-member function.</p>
-
-<pre><code>class Person {
-public:
-    explicit Person()
-    { }
-    ~Person()
-    { }
-    void
-    say_age() const
-    { printf("%d\n", age); }
-    void
-    say_name() const
-    { printf("%s\n", name.c_str()); }
-private:
-    Person(const Person&amp;);
-    const Person&amp;
-    operator=(const Person&amp;);
-    int age;
-    std::string name;
-};
-
-void
-person_say(const Person&amp; p)
-{
-    p.say_age();
-    p.say_name();
-}
-</code></pre>
-
-<p>Which is better? It seems that they are the same.</p>
-
-<p>We should use the non-member function instead of the member function.</p>
-
-<p>As we all know, <strong>the less the public member functions and the friend </strong>
- <strong>functions, the greater encapsulation is</strong>, since member functions and
-friend functions are the only interface that can access the private members.</p>
-
-<p>In this example, if we add another public member function, we decrease the
-encapsulation of the class since this member function can access the private
-members of the class. But if we use the non-member non-friend function, it
-won&#8217;t have impact with the class because it&#8217;s the function outside.</p>
-
-<p>Does it explain that <em>C++</em> is not so object-oriented? From Java or C#, those
-programmers will say that everything is object and classes are everywhere.
-However, they are wrong. Object-oriented princiles state that <strong>data should be</strong>
-<strong>encapsulated as possible</strong>. Therefore, prefering non-member non-friend
-functions is more <em>object-oriented</em>.</p>
-
-<p>Until now, I can say that I really understand the meaning of encapsulation and
-why it&#8217;s so important in object-oriented programming.</p>
 
 		
 		
@@ -602,270 +1862,7 @@ why it&#8217;s so important in object-oriented programming.</p>
 
 <div class="meta">
 	
-		<span class="comments"><a href="/blog/2013/08/09/understanding-encapsulation//index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2013/08/09/always-pass-parameters-by-reference-to-const/">
-		
-			Always Pass Parameters by Reference-to-const</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-09T03:42:00+08:00" pubdate data-updated="true">Aug 9<span>th</span>, 2013</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/c-plus-plus/'>C++</a>
-
-
-</div>
-    </div>
-		<p>We all know that <em>pass by value</em> is not effecient.So we use <em>pass by pointer</em>
-in C.However, in C++, we prefer <strong>pass by referece-to-const</strong>.</p>
-
-<p>Here is an example.</p>
-
-<pre><code>#include &lt;iostream&gt;
-#include &lt;cstdio&gt;
-
-class Dog {
-public:
-    Dog()
-    {
-        printf("Calling Dog's constructor\n");
-    }
-    Dog(const Dog&amp; d)
-    {
-        printf("Calling Dog's copy constructor\n");
-        this-&gt;name = d.name;
-    }
-    virtual ~Dog()
-    {
-        printf("Calling Dog's destructor\n");
-    }
-private:
-    std::string name;
-};
-
-void
-walk_the_dog(Dog d)
-{
-
-}
-
-int
-main(int argc, char **argv)
-{
-    Dog dog;
-    walk_the_dog(dog);
-
-    return 0;
-}
-</code></pre>
-
-<p>The running result is as follows:</p>
-
-<pre><code>Calling Dog's constructor
-Calling Dog's copy constructor
-Calling Dog's destructor
-Calling Dog's destructor
-</code></pre>
-
-<p>Now, let&#8217;s analysis this <em>passing by value</em> process.
-First, <code>Dog dog;</code> will call the constructor. Then, since the function
-<code>walk_the_dog</code> pass the parameter <code>d</code> by value, it will call the copy
-constructor. Before exiting the function, it will call the destructor of <code>Dog</code>
-to destroy the parameter <code>d</code>. In the end, before exiting the main function,
-the destructor of <code>Dog</code> will be called again to destroy the <code>dog</code> object.</p>
-
-<p>Now, it seems that <em>passing by value</em> will result in a call to copy constructor
-and a call to destructor. But, in fact, it will result in two call to copy
-constructor and two call to destructor. Note that there are a <code>string</code> object
-as the member of the class <code>Dog</code>, so there will be an extra call the copy
-constructor and destructor of the <code>string</code> object.</p>
-
-<p>Obviously, the cost of <em>passing by value</em> is very expensive.
-How is <em>passing by reference-to-const</em>?</p>
-
-<pre><code>void
-walk_the_dog(const Dog&amp; d)
-{
-
-}
-</code></pre>
-
-<p>Just modify a bit and the result will be:</p>
-
-<pre><code>Calling Dog's constructor
-Calling Dog's destructor
-</code></pre>
-
-<p>Note that the <code>const</code> is very important. If there is not a <code>const</code>, the
-compiler will put the object in the writable part of the memory so that it
-cannot be shared by other functions. If declared as <code>const</code>, the object
-will be put into the readonly part of the memory and can be shared by lots
-of functions so that the program need less memory.</p>
-
-<p>The implementation of reference is using the pointer in C. Therefore, it may
-be more effecient to pass the built-in type parameters by value than referece.
-It&#8217;s true. If the parameter is an object of type <code>char</code>, which occupies
-1 byte. But a pointer ocuppies 4 bytes in a 32-bit machine. So we should prefer
-passing by value when the parameter is of built-in type? No, we should always
-pass the parameters by reference-to-const, since <strong>the compiler will always</strong>
-<strong>put the pointer in the register!</strong></p>
-
-<p>Finally, just remember, <strong>always pass the parameters by reference-to-const</strong>.</p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2013/08/09/always-pass-parameters-by-reference-to-const//index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2013/08/03/a-tour-to-the-badaling-great-wall/">
-		
-			A Tour to the Badaling Great Wall</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-03T19:52:00+08:00" pubdate data-updated="true">Aug 3<span>rd</span>, 2013</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/travel/'>Travel</a>
-
-
-</div>
-    </div>
-		<p>Today, I went to the Badaling Great Wall <strong>alone</strong>.</p>
-
-<p>There is a saying that <strong>He who has never been to the Great Wall is not a</strong>
-<strong>true man</strong>.</p>
-
-<p>I had read this saying for many times when I was in high school, but I have
-never been to the Great Wall util today.</p>
-
-<p>I got up at 7:00am and began my tour at about 7:40am after the breakfast.
-It took me 30 minutes to arrive at <em>Xi zhi men station</em> from where I live.</p>
-
-<p><img class="right" src="/pictures/13.8.3.Great-Wall-too-many-people.jpg" width="300" height="350" title="'Too many people'" ></p>
-
-<p>I planed to take the <em>Shi jiao yan qing s2 line</em> train to the Great Wall
-directly at <em>Beijing bei station</em>, which is near the <em>Xi zhi men station</em>.
-However, when I arrived there, the staff of the station said that the train
-will depart at 11:00am.I watched my smart phone, which showed that it&#8217;s
-8:24am now.So I had to wait for about 2.5 hours if I took this train.Because
-I&#8217;am those one who don&#8217;t want to stay in a place too long and want to go
-somewhere to have a look, I prefer the other type of a tour.Therefore, from
-the staff of the train, I knew that I could take buses to the Great Wall.</p>
-
-<p>Thanks to the <em>Baidu Map</em>, this time I need to take the <em>line 13 train</em> and
-arrive at the <em>Long ze station</em>, then take the <em>878 bus</em>.However, when I
-arrived at the <em>Long ze station</em> and the <em>878 bus station</em>, I found something
-almost shock me.That is, the <em>878 bus</em> only depart at 7:00am-9:00am.But my
-smart phone showed that it&#8217;s 9:03am.Oh my god!But I didn&#8217;t give up.I stayed
-there for another 20 minutes.This time, I almost wanted to go back home because
-I looked for 10 minutes to find some bus that can go to the Great Wall and I
-failed.</p>
-
-<p><img class="left" src="/pictures/13.8.3.south-wall.jpg" width="300" height="350" title="'South Wall'" ></p>
-
-<p>I was still stubborn so that I found another way to go to the Great Wall from
-<em>Baidu Map</em>.This time I went back to the <em>Xi er qi station</em>, take the
-<em>Chang ping line train</em> and arrived at the final station <em>Nan shao station</em>.
-When I got out of the station, I was shock again.This place is a remote village
-and I can&#8217;t find a bus after looking for 10 minutes.So I went back to the
-exit of the subway and ask a driver of the <em>black car</em> how much of taking me
-to the Badaling Great Wall.His answer suprised me because he wanted 180 yuan.
-Although I could bargin with him to reduce the price to 100 yuan, but it&#8217;s
-still very very very expensive.This time I wanted to give up and went away to
-find another bus station.When I got there, I found it&#8217;s excactly the bus I
-could take to the Great Wall.This is the <em>870 bus</em> and then the bus didn&#8217;t
-appear.Fortunately, the bus was coming soon and I got in without thinking.
-That is, <strong>there is a way out for somebody</strong>.</p>
-
-<p>After about an hour, I arrived at <em>Ni sha he station</em> and I need to change to
-another bus.This time, I could take <em>919 bus</em> or the <em>879</em> bus and I felt the
-Great Wall was near.After about 5 minutes, the bus comed but there were too
-many people there, so I had to stand in the bus.I thought the bus will arrived
-at the Great Wall no more than 20 minutes, but I never wanted to know that it&#8217;s
-the most painful bus I have ever taken.I standed in the bus for more than 1.5
-hours because of the traffic jam!</p>
-
-<p>Finally I arrived at the Great Wall.</p>
-
-<p>First, I have a lunch at <em>Yong he da wang restaurant</em>.</p>
-
-<p><img src="/pictures/13.8.3.have-a-lunch.jpg" title="Have a lunch" alt="Have a lunch"></p>
-
-<p>There were lots of people.But I thought there will be more in Spring and Autumn.
-The photo below shows the <em>North Wall</em>.</p>
-
-<p><img src="/pictures/13.8.3.north-wall.jpg" title="North Wall" alt="North Wall"></p>
-
-<p>It&#8217;s obvious that I was on the south wall, and the photo below is a bird&#8217;s-eye
-view of the north wall.</p>
-
-<p><img src="/pictures/13.8.3.north-wall-bird-view.jpg" title="North Wall bird view" alt="North Wall bird view"></p>
-
-<p>There is no doubt that I must have someone take a photo for myself.The photo
-below is it, I&#8217;m not very handsome as you imaged, though.</p>
-
-<p><img src="/pictures/13.8.3.Great-Wall-me.jpg" title="Me" alt="Me"></p>
-
-<p>The return tour was so relax because I could take the <em>877 bus</em> to
-<em>De sheng men xi station</em> directly!And it const me only 4.8 yuan.</p>
-
-<p>In a word, although <em>the Badaling Great Wall</em> is not so <strong>great</strong> as
-<em>the Palace</em>, I was still very happy today, because it&#8217;s the first time I have
-a tour <strong>alone</strong>.</p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2013/08/03/a-tour-to-the-badaling-great-wall//index.html#disqus_thread">Comments</a></span>
+		<span class="comments"><a href="/blog/2013/09/26/implement-a-stack//index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>
