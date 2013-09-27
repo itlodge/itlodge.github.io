@@ -1,13 +1,14 @@
 CXX = g++
+INCS = -I../stack/
 FLAGS = -Wall -o2 -g
 LIBS = -lboost_unit_test_framework
 
-SRC = stack-test.cpp
+SRC = st-queue-test.cpp
 OBJS = $(SRC:.cpp=.o)
-TARGET = stack-test
+TARGET = st-queue-test
 
 %.o: %.cpp
-	$(CXX) $(FLAGS) -c $< -o $@
+	$(CXX) $(FLAGS) $(INCS) -c $< -o $@
 
 all: clean $(TARGET)
 

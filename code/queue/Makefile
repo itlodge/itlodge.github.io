@@ -2,7 +2,7 @@ CXX = g++
 FLAGS = -Wall -o2 -g
 LIBS = -lboost_unit_test_framework
 
-SRC = queue.cpp queue-test.cpp
+SRC = queue-test.cpp
 OBJS = $(SRC:.cpp=.o)
 TARGET = queue-test
 
@@ -12,7 +12,7 @@ TARGET = queue-test
 all: clean $(TARGET)
 
 $(TARGET): $(OBJS)
-	$(CXX) $(LIBS) $(FLAGS) $^ -o $@
+	$(CXX) $(LIBS) $^ -o $@
 
 .PRONY: clean
 clean:

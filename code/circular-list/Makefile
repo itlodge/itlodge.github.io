@@ -2,7 +2,7 @@ CXX = g++
 FLAGS = -Wall -o2 -g
 LIBS = -lboost_unit_test_framework
 
-SRC = cilist.cpp cilist_test.cpp
+SRC = cilist-test.cpp
 OBJS = $(SRC:.cpp=.o)
 TARGET = cilist_test
 
@@ -11,7 +11,7 @@ TARGET = cilist_test
 
 all: clean $(TARGET)
 $(TARGET): $(OBJS)
-	$(CXX) $(LIBS) $(FLAGS) $^ -o $@
+	$(CXX) $(LIBS) $^ -o $@
 
 .PRONY:clean
 clean:
