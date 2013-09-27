@@ -31,14 +31,10 @@ but it's not random accessible.
 
 Here is the code.
 
-The class definition.
+The class definition and implementation.
 
-{% include_code circular-list/cilist.h lang:cpp %}
-
-And the class implementation.
-
-{% include_code circular-list/cilist.cpp %}
+{% include_code circular-list/cilist.hpp lang:cpp %}
 
 Now this the test code(Using boost unit test framework).
 
-{% include_code circular-list/cilist_test.cpp %}
+{% include_code circular-list/cilist-test.cpp %}

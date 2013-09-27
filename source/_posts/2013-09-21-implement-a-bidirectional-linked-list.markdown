@@ -35,14 +35,10 @@ in the position ``index``.
 
 Here is the code.
 
-The class definition.
+The class definition and implementation.
 
-{% include_code bidirectional-list/bilist.h lang:cpp %}
-
-And the class implementation.
-
-{% include_code bidirectional-list/bilist.cpp %}
+{% include_code bidirectional-list/bilist.hpp lang:cpp %}
 
 Now this the test code(Using boost unit test framework).
 
-{% include_code bidirectional-list/bilist_test.cpp %}
+{% include_code bidirectional-list/bilist-test.cpp %}

@@ -27,16 +27,13 @@ Output the stack in the form **[1 | 2 | 3]**.
 * ``void push(const T& value)``, append the element ``value`` into the
 back of the stack.
 * ``const T pop()``, remove and return the first element of the stack.
+* ``Node<T> * ptop() const``, return the top pointer.
 
 Here is the code.
 
-The class definition.
+The class definition and Implementation.
 
-{% include_code stack/stack.h lang:cpp %}
-
-The class implementation
-
-{% include_code stack/stack.cpp %}
+{% include_code stack/stack.hpp lang:cpp %}
 
 Now this the test code(Using boost unit test framework).
 

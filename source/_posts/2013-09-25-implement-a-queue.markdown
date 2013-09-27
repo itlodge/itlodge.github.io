@@ -31,13 +31,9 @@ back of the queue.
 
 Here is the code.
 
-The class definition.
+The class definition and implementation.
 
-{% include_code queue/queue.h lang:cpp %}
-
-The class implementation
-
-{% include_code queue/queue.cpp %}
+{% include_code queue/queue.hpp lang:cpp %}
 
 Now this the test code(Using boost unit test framework).
 

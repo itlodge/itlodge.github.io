@@ -51,13 +51,9 @@ I solve it in the method ``nth_last()``.
 
 Here is the code.
 
-The class definition.
+The class definition and implementation.
 
-{% include_code singular-list/list.h lang:cpp %}
-
-And the class implementation.
-
-{% include_code singular-list/list.cpp %}
+{% include_code singular-list/list.hpp lang:cpp %}
 
 Now this the test code(Using boost unit test framework).
 
