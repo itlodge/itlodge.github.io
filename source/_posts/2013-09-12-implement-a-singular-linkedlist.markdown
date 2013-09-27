@@ -24,7 +24,7 @@ an array ``values`` of size ``size``.
 * ``const LinkedList& operator=(const LinkedList& list)``, Support LinkedList
 assignment.
 * ``~LinkedList()``, Free all the space requested by the LinkedList.
-* ``friend std::ostream& operator<< <> (std::ostream&, const LinkedList<T>&);``,
+* ``std::ostream& operator<<(std::ostream&, const LinkedList<T>&);``,
 Output the LinkedList in the form **[a, b, c ...]**.
 * ``void append(const T& value)``, Append an element ``value`` to the LinkedList.
 * ``const T& operator[](size_t index)``, Access the element of the LinkedList,

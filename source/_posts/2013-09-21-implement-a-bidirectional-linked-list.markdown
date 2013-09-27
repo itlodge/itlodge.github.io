@@ -22,7 +22,7 @@ an array ``values`` of size ``size``.
 * ``const BiLinkedList& operator=(const BiLinkedList& list)``, Support
 BiLinkedList assignment.
 * ``~BiLinkedList()``, Free all the space requested by the BiLinkedList.
-* ``std::ostream& operator<< <> (std::ostream&, const BiLinkedList<T>&);``,
+* ``std::ostream& operator<<(std::ostream&, const BiLinkedList<T>&);``,
 Output the BiLinkedList in the form **[a, b, c ...]**.
 * ``void append(const T& value)``, Append an element ``value`` to the
 BiLinkedList.
