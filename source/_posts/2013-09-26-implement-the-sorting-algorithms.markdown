@@ -40,17 +40,32 @@ in the second pass, there is no need to compare ``5`` to ``8``, since they
 are in the right order in the first pass. Hence, there is no need to compare
 the last ``ith`` element in the ``ith`` pass.
 
-Select Sort
---------------
+Here is the code.
 
-
-All the code
----------------
-
-Here is the code of all this sort algorithms.
-
-{% include_code sort/sort.cpp %}
+{% include_code sort/bubble-sort/bubble-sort.cpp %}
 
 And the test code(Using boost unit test framework).
 
-{% include_code sort/sort-test.cpp %}
+{% include_code sort/bubble-sort/bubble-sort-test.cpp %}
+
+For this test cases, the average run time is **0.9s**.
+
+Select Sort
+--------------
+Just like its name, select sort is to select the smallest or the biggest
+element of the rest elements every pass. This algorithm is very easy and
+I can write down it with an eyes on.
+
+Here is the code.
+
+{% include_code sort/select-sort/select-sort.cpp %}
+
+And the test code(Using boost unit test framework).
+
+{% include_code sort/select-sort/select-sort-test.cpp %}
+
+For this test cases, the average run time is **0.4s**.
+
+
+
+
