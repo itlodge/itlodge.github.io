@@ -2,9 +2,9 @@ CXX = g++
 FLAGS = -Wall -o2 -g
 LIBS = -lboost_unit_test_framework
 
-SRC = sort.cpp sort-test.cpp
+SRC = bubble-sort.cpp bubble-sort-test.cpp
 OBJS = $(SRC:.cpp=.o)
-TARGET = sort-test
+TARGET = bubble-sort-test
 
 %.o: %.cpp
 	$(CXX) $(FLAGS) -c $< -o $@
@@ -12,7 +12,7 @@ TARGET = sort-test
 all: clean $(TARGET)
 
 $(TARGET): $(OBJS)
-	$(CXX) $(LIBS) $(FLAGS) $^ -o $@
+	$(CXX) $(LIBS) $^ -o $@
 
 .PRONY: clean
 clean:
