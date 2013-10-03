@@ -84,11 +84,11 @@
     </url>
     <url>
         <loc>http://itlodge.github.io/blog/2013/09/25/implement-a-queue/</loc>
-        <lastmod>2013-09-28T07:41:01+08:00</lastmod>
+        <lastmod>2013-10-03T15:46:32+08:00</lastmod>
     </url>
     <url>
         <loc>http://itlodge.github.io/blog/2013/09/26/implement-a-stack/</loc>
-        <lastmod>2013-09-28T07:41:01+08:00</lastmod>
+        <lastmod>2013-10-03T15:46:01+08:00</lastmod>
     </url>
     <url>
         <loc>http://itlodge.github.io/blog/2013/09/26/implement-the-sorting-algorithms/</loc>
@@ -96,7 +96,11 @@
     </url>
     <url>
         <loc>http://itlodge.github.io/blog/2013/09/27/implement-a-queue-using-two-stacks/</loc>
-        <lastmod>2013-09-28T07:41:01+08:00</lastmod>
+        <lastmod>2013-10-03T15:45:36+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://itlodge.github.io/blog/2013/10/03/implement-a-binary-search-tree/</loc>
+        <lastmod>2013-10-03T16:04:27+08:00</lastmod>
     </url>
     <url>
         <loc>http://itlodge.github.io/robots.txt</loc>
@@ -104,15 +108,15 @@
     </url>
     <url>
         <loc>http://itlodge.github.io/me/</loc>
-        <lastmod>2013-09-28T13:45:41+08:00</lastmod>
+        <lastmod>2013-10-02T19:46:27+08:00</lastmod>
     </url>
     <url>
         <loc>http://itlodge.github.io/blog/archives/</loc>
-        <lastmod>2013-10-01T22:40:14+08:00</lastmod>
+        <lastmod>2013-10-03T16:04:27+08:00</lastmod>
     </url>
     <url>
         <loc>http://itlodge.github.io/</loc>
-        <lastmod>2013-10-01T22:40:14+08:00</lastmod>
+        <lastmod>2013-10-03T16:04:27+08:00</lastmod>
     </url>
     <url>
         <loc>http://itlodge.github.io/search.html</loc>
