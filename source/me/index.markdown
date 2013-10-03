@@ -19,6 +19,36 @@ Books I read.
     <td>Name</td><td>Author<td>Finish date</td>
   </tr></th>
   <tr>
+    <td>More Effective C++</td>
+    <td>Scott Meyers</td>
+    <td>...</td>
+  </tr>
+  <tr>
+    <td>Effective C++ 2nd</td>
+    <td>Scott Meyers</td>
+    <td>...</td>
+  </tr>
+  <tr>
+    <td>程序员的自我修养：链接，装载与库</td>
+    <td>俞甲子，石凡，潘爱民</td>
+    <td>...</td>
+  </tr>
+  <tr>
+    <td>程序员面试宝典</td>
+    <td>欧立奇，刘洋，段韬</td>
+    <td>...</td>
+  </tr>
+  <tr>
+    <td>剑指Offer</td>
+    <td>何海涛</td>
+    <td>...</td>
+  </tr>
+  <tr>
+    <td>编程之美</td>
+    <td>《编程之美》小组</td>
+    <td>...</td>
+  </tr>
+  <tr>
     <td>何以笙箫默</td>
     <td>顾漫</td>
     <td>2013.8.24</td>
@@ -40,7 +70,7 @@ Books I read.
   </tr>
   <tr>
     <td>How To Become A Hacker</td>
-    <td>Eric Raymond</td>
+    <td>Eric Steven Raymond</td>
     <td>2013</td>
   </tr>
   <tr>

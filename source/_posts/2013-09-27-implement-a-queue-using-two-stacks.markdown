@@ -4,7 +4,7 @@ title: "Implement a queue using two stacks"
 date: 2013-09-27 23:05
 comments: true
 sharing: true
-categories: Data_structure, Interview
+categories: Data_structure Interview
 ---
 
 A queue can be implemented using two stacks. One stack store the elements

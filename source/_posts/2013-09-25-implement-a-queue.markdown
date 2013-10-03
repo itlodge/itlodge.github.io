@@ -4,7 +4,7 @@ title: "Implement a queue"
 date: 2013-09-25 22:54
 comments: true
 sharing: true
-categories: Data_structure, Interview
+categories: Data_structure Interview
 ---
 
 A queue is based on the Linked List. The most explicit feature of a queue

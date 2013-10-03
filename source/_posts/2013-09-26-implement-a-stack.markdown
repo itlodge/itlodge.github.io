@@ -4,7 +4,7 @@ title: "Implement a stack"
 date: 2013-09-26 21:10
 comments: true
 sharing: true
-categories: Data_structure, Interview
+categories: Data_structure Interview
 ---
 
 A stack is based on the Linked List. The most explicit feature of a stack
