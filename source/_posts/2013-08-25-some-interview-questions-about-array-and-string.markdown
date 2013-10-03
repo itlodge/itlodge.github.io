@@ -114,8 +114,10 @@ I implemented the last method here.
 **1.5** Write a method to replace all spaces in a string with '%20'.
 
 There is a ``replace`` method in class ``std::string`` , so I can use it
-directly. But if the string is a C-Style string, I have to resize the string
-and replace them one another. Here is the code using ``replace``.
+directly. But it's too slow(O(n^2)). There is another method with the time
+complexity O(n). Count the number of the spaces and resize the string and
+copy the string from tail to head. If encounter the space, replace it with
+``%20``. Here is the code of the two methods.
 
 {% include_code careerup-array/careerup-1.5.cpp %}
 
