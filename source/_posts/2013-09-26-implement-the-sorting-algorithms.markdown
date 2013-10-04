@@ -11,7 +11,7 @@ The sorting algorithms are very important in programming interview. I have
 to be able to write them on a paper without even an error.
 
 Bubble Sort
----------------
+=================
 The immediate thought of bubble sort is that swapping the ajacent elements
 if they are of the wrong order in each pass until there are no swapping.
 For example, consider the array ``[5, 1, 4, 2, 8]``,
@@ -51,7 +51,7 @@ And the test code(Using boost unit test framework).
 For this test cases, the average run time is **0.9s**.
 
 Select Sort
---------------
+==================
 Just like its name, select sort is to select the smallest or the biggest
 element of the rest elements every pass. This algorithm is very easy and
 I can write down it with an eyes on.
@@ -65,6 +65,30 @@ And the test code(Using boost unit test framework).
 {% include_code sort/select-sort/select-sort-test.cpp %}
 
 For this test cases, the average run time is **0.4s**.
+
+Quick Sort
+=================
+This is the most important algorithm in the interview. I must learn to write
+it on a paper with an eye on.
+
+Recursive version
+---------------------
+Select an element as the one to be compared(so-called **pivot**), and then put
+it at the end of the list. Iterate the whole list and let those elements that
+are smaller(larger) than the pivot in a part, the others in another part. Do
+the same work recursively in the two parts.
+
+{% include_code sort/quick-sort/quick-sort.cpp %}
+
+And the test code(Using boost unit test framework).
+
+{% include_code sort/quick-sort/quick-sort-test.cpp %}
+
+For this test cases, the average run time is **0.05s**.
+
+
+
+
 
 
 
