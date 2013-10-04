@@ -4,6 +4,8 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/output_test_stream.hpp>
 #include "binary-search-tree.hpp"
+#include <cstdlib>
+#include <ctime>
 
 BOOST_AUTO_TEST_SUITE(type)
 
@@ -124,8 +126,42 @@ BOOST_AUTO_TEST_CASE(remove)
     BOOST_CHECK_EQUAL(tree.inorder_string(), expect_inorder);
 }
 
+BOOST_AUTO_TEST_SUITE_END()
+
+BOOST_AUTO_TEST_SUITE(compare)
+
+BOOST_AUTO_TEST_CASE(empty)
+{
+    BinarySearchTree<int> t1;
+    BinarySearchTree<int> t2;
+    BOOST_CHECK(t1 == t2);
+}
+
+BOOST_AUTO_TEST_CASE(one_node)
+{
+    BinarySearchTree<int> t1(2);
+    BinarySearchTree<int> t2(2);
+    BOOST_CHECK(t1 == t2);
+}
+
+BOOST_AUTO_TEST_CASE(random)
+{
+    const int NUM = 100;
+    int a1[NUM], a2[NUM];
+
+    srand(time(NULL));
+    for (int i = 0; i < NUM; ++i) {
+        a1[i] = a2[i] = rand();
+    }
+    BinarySearchTree<int> t1(a1, NUM);
+    BinarySearchTree<int> t2(a2, NUM);
+
+    BOOST_CHECK(t1 == t2);
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()
+
 
 BOOST_AUTO_TEST_SUITE(record)
 
