@@ -230,7 +230,7 @@ end
 
 desc "copy dot files for deployment"
 task :copydot, :source, :dest do |t, args|
-  FileList["#{args.source}/**/.*"].exclude("code/", "**/.", "**/..", "**/.DS_Store", "**/._*").each do |file|
+  FileList["#{args.source}/**/.*"].exclude("**/.", "**/..", "**/.DS_Store", "**/._*").each do |file|
     cp_r file, file.gsub(/#{args.source}/, "#{args.dest}") unless File.directory?(file)
   end
 end
@@ -250,7 +250,7 @@ multitask :push do
   puts "## Deploying branch to Github Pages "
   puts "## Pulling any updates from Github Pages "
   cd "#{deploy_dir}" do 
-    system "git pull https://github.com/itlodge/itlodge.github.io.git --force"
+    system "git pull --force"
   end
   (Dir["#{deploy_dir}/*"]).each { |f| rm_rf(f) }
   Rake::Task[:copydot].invoke(public_dir, deploy_dir)
@@ -258,11 +258,12 @@ multitask :push do
   cp_r "#{public_dir}/.", deploy_dir
   cd "#{deploy_dir}" do
     system "git add -A"
+    system "git rm -r code/"
     puts "\n## Commiting: Site updated at #{Time.now.utc}"
     message = "Site updated at #{Time.now.utc}"
     system "git commit -m \"#{message}\""
     puts "\n## Pushing generated #{deploy_dir} website"
-    system "git push https://github.com/itlodge/itlodge.github.io.git #{deploy_branch} --force"
+    system "git push #{deploy_branch} --force"
     puts "\n## Github Pages deploy complete"
   end
 end
