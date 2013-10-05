@@ -84,12 +84,18 @@ And the test code(Using boost unit test framework).
 
 {% include_code sort/quick-sort/quick-sort-test.cpp %}
 
-For this test cases, the average run time is **0.05s**.
+For this test cases, the average run time is **0.07s**.
 
+Iterate version
+---------------------
+The recursive version is just the depth-first search, so we can change it
+into stack operation.
 
+{% include_code sort/quick-sort/quick-sort-iter.cpp %}
 
+And the test code(Using boost unit test framework).
 
+{% include_code sort/quick-sort/quick-sort-iter-test.cpp %}
 
-
-
+For this test cases, the average run time is also **0.07s**.
 
