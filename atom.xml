@@ -4,7 +4,7 @@
   <title><![CDATA[Yuanhang Zheng]]></title>
   <link href="http://itlodge.github.io/atom.xml" rel="self"/>
   <link href="http://itlodge.github.io/"/>
-  <updated>2013-10-05T08:30:25+08:00</updated>
+  <updated>2013-10-05T09:03:31+08:00</updated>
   <id>http://itlodge.github.io/</id>
   <author>
     <name><![CDATA[Yuanhang Zheng]]></name>
@@ -2560,12 +2560,22 @@ the same work recursively in the two parts.</p>
 <span class='line-number'>35</span>
 <span class='line-number'>36</span>
 <span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
 </pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include &lt;iostream&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
-</span><span class='line'><span class="kt">void</span>
+</span><span class='line'><span class="kr">inline</span> <span class="kt">void</span>         <span class="c1">// Inline, may be faster.</span>
 </span><span class='line'><span class="n">swap</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span>
 </span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>  <span class="c1">// If the same, there&#39;s no need to swap.</span>
+</span><span class='line'>        <span class="k">return</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
 </span><span class='line'>    <span class="n">T</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span>
 </span><span class='line'>    <span class="n">a</span> <span class="o">=</span> <span class="n">b</span><span class="p">;</span>
 </span><span class='line'>    <span class="n">b</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
@@ -2575,28 +2585,32 @@ the same work recursively in the two parts.</p>
 </span><span class='line'><span class="kt">void</span>
 </span><span class='line'><span class="n">qsort_r</span><span class="p">(</span><span class="n">T</span> <span class="n">arr</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">begin</span><span class="p">,</span> <span class="kt">int</span> <span class="n">end</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">is_ascending</span><span class="o">=</span><span class="kc">true</span><span class="p">)</span>
 </span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">arr</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">begin</span> <span class="o">&gt;=</span> <span class="n">end</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">arr</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">begin</span> <span class="o">&gt;=</span> <span class="n">end</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>   <span class="c1">// If no element or one element.</span>
 </span><span class='line'>        <span class="k">return</span><span class="p">;</span>
 </span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="c1">// First swap the middle element with the last element.</span>
+</span><span class='line'>    <span class="n">swap</span><span class="p">(</span><span class="n">arr</span><span class="p">[(</span><span class="n">begin</span> <span class="o">+</span> <span class="n">end</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">end</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]);</span>
 </span><span class='line'>
-</span><span class='line'>    <span class="kt">int</span> <span class="n">pivot</span> <span class="o">=</span> <span class="n">end</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-</span><span class='line'>    <span class="kt">int</span> <span class="n">last_left</span> <span class="o">=</span> <span class="n">begin</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">pivot</span> <span class="o">=</span> <span class="n">end</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>      <span class="c1">// That is, the pivot is the middle element.</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">last_left</span> <span class="o">=</span> <span class="n">begin</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>   <span class="c1">// The index of the last element in the left</span>
+</span><span class='line'>
 </span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">begin</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">end</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>        <span class="k">if</span> <span class="p">((</span><span class="n">is_ascending</span> <span class="o">&amp;&amp;</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">pivot</span><span class="p">])</span> <span class="o">||</span>
 </span><span class='line'>            <span class="p">(</span><span class="o">!</span><span class="n">is_ascending</span> <span class="o">&amp;&amp;</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">pivot</span><span class="p">]))</span> <span class="p">{</span>
-</span><span class='line'>            <span class="o">++</span><span class="n">last_left</span><span class="p">;</span>
-</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">!=</span> <span class="n">last_left</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>                <span class="n">swap</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">last_left</span><span class="p">]);</span>
-</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>            <span class="n">swap</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="o">++</span><span class="n">last_left</span><span class="p">]);</span>
 </span><span class='line'>        <span class="p">}</span>
 </span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="o">++</span><span class="n">last_left</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">pivot</span> <span class="o">!=</span> <span class="n">last_left</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="n">swap</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">pivot</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">last_left</span><span class="p">]);</span>
-</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">swap</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">pivot</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="o">++</span><span class="n">last_left</span><span class="p">]);</span>
+</span><span class='line'>
 </span><span class='line'>    <span class="n">qsort_r</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">begin</span><span class="p">,</span> <span class="n">last_left</span><span class="p">,</span> <span class="n">is_ascending</span><span class="p">);</span>
 </span><span class='line'>    <span class="n">qsort_r</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">last_left</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">is_ascending</span><span class="p">);</span>
 </span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+</span><span class='line'><span class="kt">void</span>
+</span><span class='line'><span class="n">qsort_i</span><span class="p">(</span><span class="n">T</span> <span class="n">arr</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">begin</span><span class="p">,</span> <span class="kt">int</span> <span class="n">end</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">is_ascending</span><span class="o">=</span><span class="kc">true</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>
 </span></code></pre></td></tr></table></div></figure>
 
 
