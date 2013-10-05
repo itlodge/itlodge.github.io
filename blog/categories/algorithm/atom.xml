@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Algorithm | Yuanhang Zheng]]></title>
   <link href="http://itlodge.github.io/blog/categories/algorithm/atom.xml" rel="self"/>
   <link href="http://itlodge.github.io/"/>
-  <updated>2013-10-05T13:18:29+08:00</updated>
+  <updated>2013-10-05T15:53:04+08:00</updated>
   <id>http://itlodge.github.io/</id>
   <author>
     <name><![CDATA[Yuanhang Zheng]]></name>
@@ -489,11 +489,6 @@ the same work recursively in the two parts.</p>
 <span class='line-number'>35</span>
 <span class='line-number'>36</span>
 <span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
 </pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include &lt;iostream&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
@@ -531,11 +526,6 @@ the same work recursively in the two parts.</p>
 </span><span class='line'>    <span class="n">qsort_r</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">begin</span><span class="p">,</span> <span class="n">last_left</span><span class="p">,</span> <span class="n">is_ascending</span><span class="p">);</span>
 </span><span class='line'>    <span class="n">qsort_r</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">last_left</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">is_ascending</span><span class="p">);</span>
 </span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>And the test code(Using boost unit test framework).</p>
