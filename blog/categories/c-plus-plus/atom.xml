@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: C++ | Yuanhang Zheng]]></title>
-  <link href="http://itlodge.github.io/blog/categories/c-plus-plus/atom.xml" rel="self"/>
-  <link href="http://itlodge.github.io/"/>
-  <updated>2013-10-06T10:50:12+08:00</updated>
-  <id>http://itlodge.github.io/</id>
+  <link href="http://yuanhangzheng.github.io/blog/categories/c-plus-plus/atom.xml" rel="self"/>
+  <link href="http://yuanhangzheng.github.io/"/>
+  <updated>2013-10-06T11:10:28+08:00</updated>
+  <id>http://yuanhangzheng.github.io/</id>
   <author>
     <name><![CDATA[Yuanhang Zheng]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[My C++ coding style]]></title>
-    <link href="http://itlodge.github.io/blog/2013/09/25/my-c-plus-plus-coding-style/"/>
+    <link href="http://yuanhangzheng.github.io/blog/2013/09/25/my-c-plus-plus-coding-style/"/>
     <updated>2013-09-25T19:30:00+08:00</updated>
-    <id>http://itlodge.github.io/blog/2013/09/25/my-c-plus-plus-coding-style</id>
+    <id>http://yuanhangzheng.github.io/blog/2013/09/25/my-c-plus-plus-coding-style</id>
     <content type="html"><![CDATA[<p>Every programmer has his/her own coding style. Time goes by, and my coding
 style is changing. There following is my note on c++ coding style. I will
 explain why I want to coding in that style.</p>
@@ -111,9 +111,9 @@ So for consistence, I always leave them in a single line.</p>
   
   <entry>
     <title type="html"><![CDATA[Some interview questions about array and string]]></title>
-    <link href="http://itlodge.github.io/blog/2013/08/25/some-interview-questions-about-array-and-string/"/>
+    <link href="http://yuanhangzheng.github.io/blog/2013/08/25/some-interview-questions-about-array-and-string/"/>
     <updated>2013-08-25T08:43:00+08:00</updated>
-    <id>http://itlodge.github.io/blog/2013/08/25/some-interview-questions-about-array-and-string</id>
+    <id>http://yuanhangzheng.github.io/blog/2013/08/25/some-interview-questions-about-array-and-string</id>
     <content type="html"><![CDATA[<h2>Hash Table</h2>
 
 <p>In C++, the namespace<code>std::tr1</code> contains lots of hash tables. We can play
@@ -1516,9 +1516,9 @@ of <code>erbottlewat</code>.</p>
   
   <entry>
     <title type="html"><![CDATA[Do not hide inherited names]]></title>
-    <link href="http://itlodge.github.io/blog/2013/08/15/do-not-hide-inherited-names/"/>
+    <link href="http://yuanhangzheng.github.io/blog/2013/08/15/do-not-hide-inherited-names/"/>
     <updated>2013-08-15T19:26:00+08:00</updated>
-    <id>http://itlodge.github.io/blog/2013/08/15/do-not-hide-inherited-names</id>
+    <id>http://yuanhangzheng.github.io/blog/2013/08/15/do-not-hide-inherited-names</id>
     <content type="html"><![CDATA[<p>In inheritance, there are some rules defined by C++, one of which is that
 the virables or the functions in the base class will be hidden if there
 are virables and functions with the same name.</p>
@@ -1626,9 +1626,9 @@ future.</p>
   
   <entry>
     <title type="html"><![CDATA[Postponing definitions instead of preponing]]></title>
-    <link href="http://itlodge.github.io/blog/2013/08/11/postponing-definitions-instead-of-preponing/"/>
+    <link href="http://yuanhangzheng.github.io/blog/2013/08/11/postponing-definitions-instead-of-preponing/"/>
     <updated>2013-08-11T11:26:00+08:00</updated>
-    <id>http://itlodge.github.io/blog/2013/08/11/postponing-definitions-instead-of-preponing</id>
+    <id>http://yuanhangzheng.github.io/blog/2013/08/11/postponing-definitions-instead-of-preponing</id>
     <content type="html"><![CDATA[<h2>Prepone definitions? Wrong!</h2>
 
 <p>Before C99, you must prepone all the variables' definitions before any
@@ -1778,9 +1778,9 @@ will be more expensive than assignment.</p>
   
   <entry>
     <title type="html"><![CDATA[Understanding Encapsulation]]></title>
-    <link href="http://itlodge.github.io/blog/2013/08/09/understanding-encapsulation/"/>
+    <link href="http://yuanhangzheng.github.io/blog/2013/08/09/understanding-encapsulation/"/>
     <updated>2013-08-09T21:38:00+08:00</updated>
-    <id>http://itlodge.github.io/blog/2013/08/09/understanding-encapsulation</id>
+    <id>http://yuanhangzheng.github.io/blog/2013/08/09/understanding-encapsulation</id>
     <content type="html"><![CDATA[<p>Once I loved <em>C</em> very much and I thought it&rsquo;s the best programming language
 in the world. I used to argue that <em>C</em> can be used to implement the
 object-oriented design with <code>struct</code>. I used to argue that <code>private</code> and

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Algorithm | Yuanhang Zheng]]></title>
-  <link href="http://itlodge.github.io/blog/categories/algorithm/atom.xml" rel="self"/>
-  <link href="http://itlodge.github.io/"/>
-  <updated>2013-10-06T10:50:12+08:00</updated>
-  <id>http://itlodge.github.io/</id>
+  <link href="http://yuanhangzheng.github.io/blog/categories/algorithm/atom.xml" rel="self"/>
+  <link href="http://yuanhangzheng.github.io/"/>
+  <updated>2013-10-06T11:10:28+08:00</updated>
+  <id>http://yuanhangzheng.github.io/</id>
   <author>
     <name><![CDATA[Yuanhang Zheng]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Implement the sorting algorithms]]></title>
-    <link href="http://itlodge.github.io/blog/2013/09/26/implement-the-sorting-algorithms/"/>
+    <link href="http://yuanhangzheng.github.io/blog/2013/09/26/implement-the-sorting-algorithms/"/>
     <updated>2013-09-26T22:03:00+08:00</updated>
-    <id>http://itlodge.github.io/blog/2013/09/26/implement-the-sorting-algorithms</id>
+    <id>http://yuanhangzheng.github.io/blog/2013/09/26/implement-the-sorting-algorithms</id>
     <content type="html"><![CDATA[<p>The sorting algorithms are very important in programming interview. I have
 to be able to write them on a paper without even an error.</p>
 

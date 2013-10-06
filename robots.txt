@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: 
 
-Sitemap: http://itlodge.github.io/sitemap.xml 
+Sitemap: http://yuanhangzheng.github.io/sitemap.xml 
