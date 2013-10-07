@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Ruby | Yuanhang Zheng]]></title>
-  <link href="http://yuanhangzheng.github.io/blog/categories/ruby/atom.xml" rel="self"/>
-  <link href="http://yuanhangzheng.github.io/"/>
-  <updated>2013-10-06T11:10:28+08:00</updated>
-  <id>http://yuanhangzheng.github.io/</id>
+  <link href="http://itlodge.github.io/blog/categories/ruby/atom.xml" rel="self"/>
+  <link href="http://itlodge.github.io/"/>
+  <updated>2013-10-07T21:44:13+08:00</updated>
+  <id>http://itlodge.github.io/</id>
   <author>
     <name><![CDATA[Yuanhang Zheng]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Some basic Ruby]]></title>
-    <link href="http://yuanhangzheng.github.io/blog/2013/07/25/some-basic-ruby/"/>
+    <link href="http://itlodge.github.io/blog/2013/07/25/some-basic-ruby/"/>
     <updated>2013-07-25T20:07:00+08:00</updated>
-    <id>http://yuanhangzheng.github.io/blog/2013/07/25/some-basic-ruby</id>
+    <id>http://itlodge.github.io/blog/2013/07/25/some-basic-ruby</id>
     <content type="html"><![CDATA[<h2>String and name</h2>
 
 <p>When defining a function, the parentheses are not necessary.So this one</p>
@@ -217,9 +217,9 @@ puts i while (i += 1) &lt; 10
   
   <entry>
     <title type="html"><![CDATA[Ruby-getting started]]></title>
-    <link href="http://yuanhangzheng.github.io/blog/2013/06/30/ruby-getting-started/"/>
+    <link href="http://itlodge.github.io/blog/2013/06/30/ruby-getting-started/"/>
     <updated>2013-06-30T22:54:00+08:00</updated>
-    <id>http://yuanhangzheng.github.io/blog/2013/06/30/ruby-getting-started</id>
+    <id>http://itlodge.github.io/blog/2013/06/30/ruby-getting-started</id>
     <content type="html"><![CDATA[<h1>Running ruby</h1>
 
 <h2>Interactive</h2>

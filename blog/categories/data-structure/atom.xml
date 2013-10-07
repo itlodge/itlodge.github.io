@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Data_structure | Yuanhang Zheng]]></title>
-  <link href="http://yuanhangzheng.github.io/blog/categories/data-structure/atom.xml" rel="self"/>
-  <link href="http://yuanhangzheng.github.io/"/>
-  <updated>2013-10-06T11:10:28+08:00</updated>
-  <id>http://yuanhangzheng.github.io/</id>
+  <link href="http://itlodge.github.io/blog/categories/data-structure/atom.xml" rel="self"/>
+  <link href="http://itlodge.github.io/"/>
+  <updated>2013-10-07T21:44:13+08:00</updated>
+  <id>http://itlodge.github.io/</id>
   <author>
     <name><![CDATA[Yuanhang Zheng]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Implement a binary search tree]]></title>
-    <link href="http://yuanhangzheng.github.io/blog/2013/10/03/implement-a-binary-search-tree/"/>
+    <link href="http://itlodge.github.io/blog/2013/10/03/implement-a-binary-search-tree/"/>
     <updated>2013-10-03T15:43:00+08:00</updated>
-    <id>http://yuanhangzheng.github.io/blog/2013/10/03/implement-a-binary-search-tree</id>
+    <id>http://itlodge.github.io/blog/2013/10/03/implement-a-binary-search-tree</id>
     <content type="html"><![CDATA[<p>A binary search tree is very useful in solving the real world problems. The
 red-black tree is one kind of binary search tree. For more information about
 binary search tree, please visit the <a href="http://en.wikipedia.org/wiki/Binary_search_tree">wikipedia</a>.</p>
@@ -1461,9 +1461,9 @@ assignment between trees.</p></li>
   
   <entry>
     <title type="html"><![CDATA[Implement a queue using two stacks]]></title>
-    <link href="http://yuanhangzheng.github.io/blog/2013/09/27/implement-a-queue-using-two-stacks/"/>
+    <link href="http://itlodge.github.io/blog/2013/09/27/implement-a-queue-using-two-stacks/"/>
     <updated>2013-09-27T23:05:00+08:00</updated>
-    <id>http://yuanhangzheng.github.io/blog/2013/09/27/implement-a-queue-using-two-stacks</id>
+    <id>http://itlodge.github.io/blog/2013/09/27/implement-a-queue-using-two-stacks</id>
     <content type="html"><![CDATA[<p>A queue can be implemented using two stacks. One stack store the elements
 appended to the queue. The other stack store the elements to be popped from
 the queue.</p>
@@ -2094,9 +2094,9 @@ back of the queue.</li>
   
   <entry>
     <title type="html"><![CDATA[Implement a stack]]></title>
-    <link href="http://yuanhangzheng.github.io/blog/2013/09/26/implement-a-stack/"/>
+    <link href="http://itlodge.github.io/blog/2013/09/26/implement-a-stack/"/>
     <updated>2013-09-26T21:10:00+08:00</updated>
-    <id>http://yuanhangzheng.github.io/blog/2013/09/26/implement-a-stack</id>
+    <id>http://itlodge.github.io/blog/2013/09/26/implement-a-stack</id>
     <content type="html"><![CDATA[<p>A stack is based on the Linked List. The most explicit feature of a stack
 is FILO(First in last out).</p>
 
@@ -2876,9 +2876,9 @@ back of the stack.</li>
   
   <entry>
     <title type="html"><![CDATA[Implement a queue]]></title>
-    <link href="http://yuanhangzheng.github.io/blog/2013/09/25/implement-a-queue/"/>
+    <link href="http://itlodge.github.io/blog/2013/09/25/implement-a-queue/"/>
     <updated>2013-09-25T22:54:00+08:00</updated>
-    <id>http://yuanhangzheng.github.io/blog/2013/09/25/implement-a-queue</id>
+    <id>http://itlodge.github.io/blog/2013/09/25/implement-a-queue</id>
     <content type="html"><![CDATA[<p>A queue is based on the Linked List. The most explicit feature of a queue
 is FIFO(First in first out).</p>
 
@@ -3686,9 +3686,9 @@ back of the queue.</li>
   
   <entry>
     <title type="html"><![CDATA[Implement a circular linked list]]></title>
-    <link href="http://yuanhangzheng.github.io/blog/2013/09/21/implement-a-circular-linked-list/"/>
+    <link href="http://itlodge.github.io/blog/2013/09/21/implement-a-circular-linked-list/"/>
     <updated>2013-09-21T21:57:00+08:00</updated>
-    <id>http://yuanhangzheng.github.io/blog/2013/09/21/implement-a-circular-linked-list</id>
+    <id>http://itlodge.github.io/blog/2013/09/21/implement-a-circular-linked-list</id>
     <content type="html"><![CDATA[<p>A circular linked list is the same as a singular linked list except that
 there last node points to the first node.</p>
 

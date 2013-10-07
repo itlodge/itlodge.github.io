@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Travel | Yuanhang Zheng]]></title>
-  <link href="http://yuanhangzheng.github.io/blog/categories/travel/atom.xml" rel="self"/>
-  <link href="http://yuanhangzheng.github.io/"/>
-  <updated>2013-10-06T11:10:28+08:00</updated>
-  <id>http://yuanhangzheng.github.io/</id>
+  <link href="http://itlodge.github.io/blog/categories/travel/atom.xml" rel="self"/>
+  <link href="http://itlodge.github.io/"/>
+  <updated>2013-10-07T21:44:13+08:00</updated>
+  <id>http://itlodge.github.io/</id>
   <author>
     <name><![CDATA[Yuanhang Zheng]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[A tour to The Badaling Great Wall]]></title>
-    <link href="http://yuanhangzheng.github.io/blog/2013/08/03/a-tour-to-the-badaling-great-wall/"/>
+    <link href="http://itlodge.github.io/blog/2013/08/03/a-tour-to-the-badaling-great-wall/"/>
     <updated>2013-08-03T19:52:00+08:00</updated>
-    <id>http://yuanhangzheng.github.io/blog/2013/08/03/a-tour-to-the-badaling-great-wall</id>
+    <id>http://itlodge.github.io/blog/2013/08/03/a-tour-to-the-badaling-great-wall</id>
     <content type="html"><![CDATA[<p>Today, I went to the Badaling Great Wall <strong>alone</strong>.</p>
 
 <p>There is a saying that <strong>He who has never been to the Great Wall is not a</strong>
