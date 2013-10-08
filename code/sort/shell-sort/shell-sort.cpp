@@ -1,26 +1,23 @@
+#include <iostream>
 
 template <typename T>
 void
-shell_sort(T list[], const int& len, bool is_ascending=true)
+shell_sort(T list[], const int& size, bool is_ascending=true)
 {
-    int gap = len >> 1;
+    if (list == NULL || size <= 1) {
+        return;
+    }
+    int gap = size >> 1;
     while (gap >= 1) {
-        for (int i = gap; i < len; i += gap) {
+        for (int i = gap; i < size; i += gap) {
             T tmp = list[i];
-            T j;
+            int j;
             for (j = i - gap; j >= 0; j -= gap) {
-                if (is_ascending) {
-                    if (tmp < list[j]) {
-                        list[j + gap] = list[j];
-                    } else {
-                        break;
-                    }
+                if ((is_ascending && tmp < list[j]) ||
+                    (!is_ascending && tmp > list[j])) {
+                    list[j + gap] = list[j];
                 } else {
-                    if (tmp > list[j]) {
-                        list[j + gap] = list[j];
-                    } else {
-                        break;
-                    }
+                    break;
                 }
             }
             list[j + gap] = tmp;

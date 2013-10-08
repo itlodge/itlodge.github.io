@@ -45,7 +45,7 @@ qsort_i(T arr[], int begin, int end, bool is_ascending=true)
             stack[++top] = last_left;
             stack[++top] = begin;
         }
-        if (last_left < end - 1) {
+        if (last_left < end - 2) {
             stack[++top] = end;
             stack[++top] = last_left + 1;
         }
