@@ -66,6 +66,42 @@ And the test code(Using boost unit test framework).
 
 For this test cases, the average run time is **0.4s**.
 
+Insert sort
+=================
+Just like playing poker, insert-sort will insert an element in a position
+of a sorted subsequence by moving the not-match elements backward. In the
+worst case, the time complexity is O(n^2). However, if the list is already
+sorted, it requires only O(n) time complexity.
+
+Here is the code.
+
+{% include_code sort/insert-sort/insert-sort.cpp %}
+
+And the test code(Using boost unit test framework).
+
+{% include_code sort/insert-sort/insert-sort-test.cpp %}
+
+For this test cases, the average run time is also **0.22s**.
+
+Shell sort
+=================
+Shell sort is one kind of insert sort. The idea that relatively sorted list can
+be sorted more easy is used in shell sort. It will sort the list for several
+times and each time with some of the elements. These elements is divided by
+a fixed **gap** and the gap will decrease until becoming 1. If the gap is 1,
+it's the same as the insert sort. But now it will be more fast than the original
+insert sort.
+
+Here is the code.
+
+{% include_code sort/shell-sort/shell-sort.cpp %}
+
+And the test code(Using boost unit test framework).
+
+{% include_code sort/shell-sort/shell-sort-test.cpp %}
+
+For this test cases, the average run time is also **0.18s**.
+
 Quick Sort
 =================
 This is the most important algorithm in the interview. I must learn to write
@@ -99,3 +135,36 @@ And the test code(Using boost unit test framework).
 
 For this test cases, the average run time is also **0.07s**.
 
+Summary
+=================
+Here is the running time of these sorting algorithm with the same test cases.
+
+<table>
+  <th><tr>
+    <td>Algorithm</td><td>Best time complexity</td>
+    <td>Average time complexity</td><td>Worst time complexity</td>
+    <td>Running time</td>
+  </tr></th>
+  <tr>
+    <td>Bubble Sort</td><td>O(n)</td><td>O(n^2)</td><td>O(n^2)</td>
+    <td>0.9s</td>
+  </tr>
+  <tr>
+    <td>Select Sort</td><td>O(n^2)</td><td>O(n^2)</td><td>O(n^2)</td>
+    <td>0.4s</td>
+  </tr>
+  <tr>
+    <td>Insert Sort</td><td>O(n)</td><td>O(n^2)</td><td>O(n^2)</td>
+    <td>0.22s</td>
+  </tr>
+  <tr>
+    <td>Shell Sort</td><td>O(n)</td><td>O(n^2)</td><td>O(n^2)</td>
+    <td>0.18s</td>
+  </tr>
+  <tr>
+    <td>Quick Sort</td><td>O(nlog(n))</td><td>O(nlog(n))</td><td>O(n^2)</td>
+    <td>0.07s</td>
+  </tr>
+</table>
+
+  
