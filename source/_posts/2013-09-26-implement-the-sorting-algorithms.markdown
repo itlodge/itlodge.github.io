@@ -66,7 +66,7 @@ And the test code(Using boost unit test framework).
 
 For this test cases, the average run time is **0.4s**.
 
-Insert sort
+Insert Sort
 =================
 Just like playing poker, insert-sort will insert an element in a position
 of a sorted subsequence by moving the not-match elements backward. In the
@@ -83,7 +83,7 @@ And the test code(Using boost unit test framework).
 
 For this test cases, the average run time is also **0.22s**.
 
-Shell sort
+Shell Sort
 =================
 Shell sort is one kind of insert sort. The idea that relatively sorted list can
 be sorted more easy is used in shell sort. It will sort the list for several
@@ -135,6 +135,25 @@ And the test code(Using boost unit test framework).
 
 For this test cases, the average run time is also **0.07s**.
 
+Heap Sort
+=================
+A heap is very useful in sorting algorithm or in algorithms that find the top
+nth elements. I use a binary tree to build the tree and the binary tree is built
+from an array instead of a linked list. This makes me write the heap sort very
+easy.
+
+Heap sort is faster than quick sort in many cases, expecially in large data set.
+
+Here is the code.
+
+{% include_code sort/heap-sort/heap-sort.cpp %}
+
+And the test code(Using boost unit test framework).
+
+{% include_code sort/heap-sort/heap-sort-test.cpp %}
+
+For this test cases, the average run time is also **0.022s**.
+
 Summary
 =================
 Here is the running time of these sorting algorithm with the same test cases.
@@ -165,6 +184,8 @@ Here is the running time of these sorting algorithm with the same test cases.
     <td>Quick Sort</td><td>O(nlog(n))</td><td>O(nlog(n))</td><td>O(n^2)</td>
     <td>0.07s</td>
   </tr>
+  <tr>
+    <td>Heap Sort</td><td>O(nlog(n))</td><td>O(nlog(n))</td><td>O(nlog(n))</td>
+    <td>0.022s</td>
+  </tr>
 </table>
-
-  
