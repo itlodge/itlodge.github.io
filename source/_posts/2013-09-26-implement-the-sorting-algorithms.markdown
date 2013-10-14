@@ -135,6 +135,75 @@ And the test code(Using boost unit test framework).
 
 For this test cases, the average run time is also **0.07s**.
 
+Merge Sort
+==================
+Merge sort is in terms of so-called **Divided and Conquered** method. Dividing
+each sequence into two subsequences and merge them after they are sorted. Merge
+sort is generally faster than Quick sort(As my test cases show) but is slower
+than Heap sort.
+
+I implemented three versions of merge sort.
+
+Merge using a temporary array
+---------------------------------
+In the merge process, I used a buffer to store the sorted array from the two
+sorted subarrays and then copy the elements to the original array.
+
+Here is the code.
+
+{% include_code sort/merge-sort/merge-sort.cpp %}
+
+And the test code(Using boost unit test framework).
+
+{% include_code sort/merge-sort/merge-sort-test.cpp %}
+
+For this test cases, the average run time is **0.042s**.
+
+Merge using Insert sort
+---------------------------------
+In the merge process, we can using insert sort to merge the two sorted arrays.
+Since the two arrays is sorted, it's fast to merge them.
+
+Note this method is [in-place](http://en.wikipedia.org/wiki/In-place_algorithm).
+
+Here is the code.
+
+{% include_code sort/merge-sort/merge-sort-insert.cpp %}
+
+And the test code(Using boost unit test framework).
+
+{% include_code sort/merge-sort/merge-sort-insert-test.cpp %}
+
+For this test cases, the average run time is also **0.045s**.
+
+Merge by exchanging memory
+--------------------------------
+How to do it? Suppose we have two subarrays, say ``a`` and ``b`` and ``a``
+start from ``begin``, ``b`` start from ``mid``.
+
+1. iterate ``a`` form ``begin`` to ``i`` until ``a[i]`` larger than ``b[mid]``.
+
+2. iterate ``b`` from ``mid`` to ``j`` until ``b[j]`` larger than ``a[i]``.
+
+3. exchange the sub-block ``a[i..mid]`` with ``b[mid..j]``.
+
+4. now replace ``begin`` with the start point of the rest sub-array and repeate
+   step 1, 2, 3.
+
+For more information, please visit [this](http://www.cppblog.com/converse/archive/2013/08/08/63008.html).
+
+Note this method is also [in-place](http://en.wikipedia.org/wiki/In-place_algorithm).
+
+Here is the code.
+
+{% include_code sort/merge-sort/merge-sort-exchange.cpp %}
+
+And the test code(Using boost unit test framework).
+
+{% include_code sort/merge-sort/merge-sort-exchange-test.cpp %}
+
+For this test cases, the average run time is also **0.045s**.
+
 Heap Sort
 =================
 A heap is very useful in sorting algorithm or in algorithms that find the top
@@ -183,6 +252,10 @@ Here is the running time of these sorting algorithm with the same test cases.
   <tr>
     <td>Quick Sort</td><td>O(nlog(n))</td><td>O(nlog(n))</td><td>O(n^2)</td>
     <td>0.07s</td>
+  </tr>
+  <tr>
+    <td>Merge Sort</td><td>O(nlog(n))</td><td>O(nlog(n))</td><td>O(nlog(n))</td>
+    <td>0.042s</td>
   </tr>
   <tr>
     <td>Heap Sort</td><td>O(nlog(n))</td><td>O(nlog(n))</td><td>O(nlog(n))</td>
