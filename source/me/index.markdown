@@ -49,6 +49,11 @@ Books I read.
     <td>...</td>
   </tr>
   <tr>
+    <td>漫画数据库</td>
+    <td>高桥麻奈</td>
+    <td>2013.10.18</td>
+  </tr>
+  <tr>
     <td>何以笙箫默</td>
     <td>顾漫</td>
     <td>2013.8.24</td>
