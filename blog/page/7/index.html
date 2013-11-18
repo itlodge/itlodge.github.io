@@ -6,7 +6,7 @@
 	<title>Yuanhang Zheng</title>
     <meta name="author" content="Yuanhang Zheng">
     
-	<meta name="description" content="Published on: Jul 25th, 2013 Tags: Ruby String and name When defining a function, the parentheses are not necessary.So this one def say_hello name " &hellip;">
+	<meta name="description" content="Published on: Jul 28th, 2013 Tags: C++ What functions C++ will silently write and call? If we declare an empty class, the compiler will declare a &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -95,6 +95,549 @@
 <!-- begin toload --> 
     <div id="content" class="inner">
         
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2013/07/28/about-constructors-destructors-and-assignment-operators/">
+		
+			About Constructors Destructors and Assignment Operators</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-28T18:32:00+08:00" pubdate data-updated="true">Jul 28<span>th</span>, 2013</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/c-plus-plus/'>C++</a>
+
+
+</div>
+    </div>
+		<h2>What functions C++ will silently write and call?</h2>
+
+<p>If we declare an empty class, the compiler will declare a constructor,
+a copy constructor, a copy assignment operator and a destructor for us.</p>
+
+<pre><code>class Girl {
+
+};
+</code></pre>
+
+<p>But the compiler is not foolish, it will only generate them when needed.</p>
+
+<p>What do the generated functions do?</p>
+
+<ul>
+<li><p>For construtor, it will invoke the corresponding constructor and non-static
+members of its base class.</p></li>
+<li><p>For destructor, it will invoke the corresponding destructor of its base class.
+If its base class&rsquo;s destructor is virtual, the destructor will declare as
+virtual.</p></li>
+<li><p>For copy constructor and copy assignment operator, they will copy each
+non-static data member from the source object to the target object.</p></li>
+</ul>
+
+
+<p>If the class has some members that are pointer, reference or constant, there
+will be some trouble with the compiler.Therefore, always define the four
+functions when we define our own class.</p>
+
+<h2>Disallow the use of generated functions you don&rsquo;t want</h2>
+
+<p>Sometimes, we may not want the copy constructor or the copy assignment
+operator because every member may be different with the other object&rsquo;s
+members.Preventing the generation of these functions will make the
+program more effecient.</p>
+
+<p>If we don&rsquo;t declare these two functions, the compiler will generate them
+for us.</p>
+
+<p>So how can we do?</p>
+
+<p>The prefer solution is <strong>declare the copy constructor and copy assignment</strong>
+<strong>operator as private and never implement them</strong>.</p>
+
+<p>If we implement them, the members and friends of the class can call them.But
+if we don&rsquo;t implement them, the linker will complain at it.</p>
+
+<p>In order to move the link-time error to the compile time, we should let the
+members and the friends of the class cannot call them.One method is to define
+a base class that can&rsquo;t be copied and inherited by the class that you don&rsquo;t
+want it to be copyable.</p>
+
+<pre><code>class Uncopyable {
+protected:
+    Uncopyable()
+    { }
+    ~Uncopyable()
+    { }
+private:
+    Uncopyable(const Uncopyable&amp;);
+    Uncopyable&amp; operator=(const Uncopyable&amp;);
+};
+
+class Person: private Uncopyable {
+
+};
+</code></pre>
+
+<p>The copy constructor and copy assignment operator of the class <code>Uncopyable</code>
+are declared as private, so the members and friends of class <code>Person</code> can&rsquo;t
+call them.</p>
+
+<h2>Declare destructors virtual in polymorphic base classes</h2>
+
+<p>I have met this problem in an interview.</p>
+
+<p>Suppose the destructor of the base class is not virtual.</p>
+
+<pre><code>class Dog {
+public:
+    Dog();
+    ~Dog();
+};
+</code></pre>
+
+<p>And there are two class inherited from it.</p>
+
+<pre><code>class Whippet:public Dog {
+
+};
+
+class Spaniel:public Dog {
+
+};
+</code></pre>
+
+<p>We can use a base class pointer to handle the derived classes.</p>
+
+<pre><code>Dog *aDog = new Whippet();
+...
+</code></pre>
+
+<p>Then you should delete the pointer when you want to quit.</p>
+
+<pre><code>delete aDog;
+</code></pre>
+
+<p>Now, the problem appears.The C++ specifies that when a derived class
+object is deleted through a pointer to a base class with a non-virtual
+destructor, results are undefined.</p>
+
+<p>That is, the destructor of the base class will be called typically, but
+the destructor of the derived class may not be called.</p>
+
+<p>I have written a simple program to test it.</p>
+
+<pre><code>#include &lt;cstdio&gt;
+
+class Dog {
+public:
+    Dog()
+    { }
+    ~Dog()
+    {
+        printf("Call Dog's destructor\n");
+    }
+private:
+    Dog(const Dog&amp;);
+    Dog&amp;
+    operator=(const Dog&amp;);
+};
+
+class Whippet:public Dog {
+public:
+    Whippet()
+    { }
+    ~Whippet()
+    {
+        printf("Call Whippet's destructor\n");
+    }
+};
+
+int
+main(int argc, char **argv)
+{
+    Dog *aDog = new Whippet();
+    delete aDog;
+
+    return 0;
+}
+</code></pre>
+
+<p>I run the program several times and the results are the same.</p>
+
+<pre><code>~/test $ ./test 
+Call Dog's destructor
+</code></pre>
+
+<p>Now, if I change the destrutor to <code>virtual</code>, the result is:</p>
+
+<pre><code>virtual ~Dog()
+{
+    printf("Call Dog's destructor\n");
+}
+
+~/test $ ./test 
+Call Whippet's destructor
+Call Dog's destructor
+</code></pre>
+
+<p>Therefore, when the base class have virtual member functions, you should
+always make the destructor virtual.</p>
+
+<p>However, not every destructor of any class should be virtual.Making it
+virtual will occupy some additional information(virtual table pointer)
+that can increase the size of an object of that class.</p>
+
+<p><strong>Prevent exceptions from leaving destructors</strong></p>
+
+<p><strong>Never call virtual functions during construction or destruction</strong></p>
+
+<p>I have seen the assignment operator in this form many times.</p>
+
+<pre><code>Person&amp; operator=(const Person&amp; p)
+{
+    ...
+    return *this;
+}
+</code></pre>
+
+<p>First, the parameter is passed by const-reference, which is more effecient.
+Second, the function returns a reference of the object.This is more effecient
+when doing this.</p>
+
+<pre><code>p3 = p2 = p1;
+</code></pre>
+
+<p>Remember that always write assignment operator in this form.</p>
+
+<p>This is also appropriate with <code>+=</code>, <code>*=</code> and so on.</p>
+
+<p>Sometimes we may assignment to the object itself.</p>
+
+<pre><code>Person p;
+p = p;
+</code></pre>
+
+<p>It seems impossible, but how about this.</p>
+
+<pre><code>persons[i] = persons[j];
+*p1 = *p2;
+</code></pre>
+
+<p><code>persons[i]</code> and <code>persons[j]</code> may be the same.<code>p1</code> and <code>p2</code> may point
+to the same object.</p>
+
+<p>Some assignment operator may be like this one.</p>
+
+<pre><code>Disk&amp;
+Disk::operator=(const Disk&amp; d)
+{
+    delete data;
+    data = new Disk(*(d.data));
+
+    return *this;
+}
+</code></pre>
+
+<p>It seems reasonable that delete the original data and then allocate a
+new one using the data of <code>d</code>.</p>
+
+<p>However, this is very dangerous.What if <code>this</code> is the same as <code>d</code>?
+If that happened, the content of <code>data</code> and <code>d.data</code> is the same
+thing.So the content of <code>d.data</code> have been delete before call the
+copy constructor.</p>
+
+<p>A direct solution to this problem is obvious.That is, just check if they
+are the same.</p>
+
+<pre><code>Disk&amp;
+Disk::operator=(const Disk&amp; d)
+{
+    if (this == &amp;d) {
+        return *this;
+    }
+    delete data;
+    data = new Disk(*(d.data));
+
+    return *this;
+}
+</code></pre>
+
+<p>I prefer the above solution.But there are another solution.</p>
+
+<pre><code>Disk&amp;
+Disk::operator=(const Disk&amp; d)
+{
+    Disk *origin = data;
+    data = new Disk(*(d.data));
+    delete origin;
+
+    return *this;
+}
+</code></pre>
+
+<p>This code just change the order of some statement, but it make great
+difference.</p>
+
+<p><strong>When adding a member to a class, remember to update the constructors,</strong>
+<strong>destructor, copy constructor, copy assignment operator</strong>.</p>
+
+<p><strong>Don&rsquo;t miss anyone!</strong></p>
+
+<p>When a class is a derived class, make sure to call the constructors,
+copy constructor and copy assignment operator of the base class, respectively
+when writing my own constructors, copy constructor, assignment operator.</p>
+
+<p><strong>Do not call copy constructor in the copy assignment operator.</strong>
+<strong>Do not call copy assignment operator in the copy constructor.</strong></p>
+
+<p>That is all about constructors, copy constructor and copy assignment operator.
+It really helps.</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2013/07/28/about-constructors-destructors-and-assignment-operators//blog/page/7/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2013/07/26/initialized-before-used/">
+		
+			Initialized Before Used</a>
+	</h2>
+    <div class="entry-content">
+    <div class="meta">
+      <div class="date">Published on: 
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-26T22:29:00+08:00" pubdate data-updated="true">Jul 26<span>th</span>, 2013</time></div>
+      <div class="tags">Tags: 
+
+
+	<a class='category' href='/blog/categories/c-plus-plus/'>C++</a>
+
+
+</div>
+    </div>
+		<h2>For constructor</h2>
+
+<p>In the constructor, the statements in the body are assignments, not
+initializations.</p>
+
+<pre><code>#include &lt;iostream&gt;
+
+class Girl {
+public:
+    Girl(std::string name, int age)
+    {
+        name_ = name;    // These are assignments, not initilizations.
+        age_ = age;
+    }
+private:
+    std::string name_;
+    int age_;
+};
+</code></pre>
+
+<p>If you do this, the program will be very slow.When calling the constructor,
+the program will call the <strong>default construtors</strong> to initialize the members,
+and then enter the body of the constructor.Therefor, all the work performed
+in the default constructors were wasted.</p>
+
+<p>Using the initilization list instead of the assignment will be more efficient.</p>
+
+<pre><code>#include &lt;iostream&gt;
+
+class Girl {
+public:
+    Girl(std::string name, int age)
+        :name_(name), age_(age)
+    { }
+private:
+    std::string name_;
+    int age_;
+};
+</code></pre>
+
+<p>If the member is <strong>const</strong> or <strong>reference</strong>, you must use initialization list.</p>
+
+<h2>For non-local static objects defined in different translation units</h2>
+
+<p>How long the title was!</p>
+
+<p><strong>static objects</strong> include <em>global objects</em>, <em>objects defined at namespace</em>,
+<em>objects defined static inside classes</em>, <em>objects defined static inside
+functions</em> and <em>objects declared static at file scope</em>.</p>
+
+<p><em>objects defined static inside functions</em> are called <strong>non-local static objects</strong>.</p>
+
+<p>A <strong>translation unit</strong> is a single source file plus all of its <code>#include</code>files.</p>
+
+<p>Given an example.</p>
+
+<p>main.h:</p>
+
+<pre><code>#ifndef _MAIN_H_
+#define _MAIN_H_
+
+class Girl {
+public:
+    Girl(std::string name, int age)
+        :name_(name), age_(age)
+    { }
+    std::string
+    get_name() const
+    {
+        return "Mary";
+    }
+private:
+    std::string name_;
+    int age_;
+};
+
+#endif /* _MAIN_H_ */
+</code></pre>
+
+<p>main.c:</p>
+
+<pre><code>#include &lt;iostream&gt;
+#include "main.h"
+
+extern Girl wife;
+
+class Man {
+public:
+    Man(std::string name, std::string wife_name)
+        :name_(name), wife_name_()
+    {
+        wife_name_ = wife.get_name();
+    }
+private:
+    std::string name_;
+    std::string wife_name_;
+};
+
+int
+main(int argc, char **argv)
+{
+    Man m("Tom", "");
+
+    return 0;
+}
+</code></pre>
+
+<p><code>wife</code> is a non-local static object.In the constructor of class <code>Man</code>,
+<code>wife</code> will be used before it is initialized since <strong>the relative order</strong>
+<strong>of initialization of non-local static objects defined in different </strong>
+<strong>translation units is undefined</strong>.</p>
+
+<p>To let <code>wife</code> be initialized before used, change it to <strong>local static</strong>.</p>
+
+<p>main.h:</p>
+
+<pre><code>#ifndef _MAIN_H_
+#define _MAIN_H_
+
+class Girl {
+public:
+    Girl()
+    { }
+
+    Girl(std::string name, int age)
+        :name_(name), age_(age)
+    { }
+
+    std::string
+    get_name() const
+    {
+        return "Mary";
+    }
+private:
+    std::string name_;
+    int age_;
+};
+
+#endif /* _MAIN_H_ */
+</code></pre>
+
+<p>main.cpp</p>
+
+<pre><code>#include &lt;iostream&gt;
+#include "main.h"
+
+class Man {
+public:
+    Man(std::string name, std::string wife_name)
+        :name_(name), wife_name_()
+    {
+        wife_name_ = wife().get_name();
+    }
+    Girl&amp;
+    wife()
+    {
+        static Girl w;
+
+        return w;
+    }
+private:
+    std::string name_;
+    std::string wife_name_;
+};
+
+int
+main(int argc, char **argv)
+{
+    Man m("Tom", "");
+
+    return 0;
+}
+</code></pre>
+
+<p>The so-call <em>Factory pattern</em> is just like the above code.</p>
+
+		
+		
+	</div>
+
+<div class="meta">
+	
+		<span class="comments"><a href="/blog/2013/07/26/initialized-before-used//blog/page/7/index.html#disqus_thread">Comments</a></span>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -329,422 +872,6 @@ puts i while (i += 1) &lt; 10
 <div class="meta">
 	
 		<span class="comments"><a href="/blog/2013/07/25/some-basic-ruby//blog/page/7/index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2013/07/24/const-anyway/">
-		
-			Const Anyway!</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-24T20:01:00+08:00" pubdate data-updated="true">Jul 24<span>th</span>, 2013</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/c-plus-plus/'>C++</a>
-
-
-</div>
-    </div>
-		<h2>Const pointer</h2>
-
-<p><code>const</code> is versatile.I am always confused by the following syntax.</p>
-
-<pre><code>const char *str = "Hello";    // const data, non-const pointer
-char * const str = "Hello";    // const pointer, non-const data
-</code></pre>
-
-<p>Now there is a tip to remember it.</p>
-
-<p>If <code>const</code> appears to the right of the asterisk, the pointer is
-constant.If <code>const</code> appears to the left of the asterisk, the data
-is constant.</p>
-
-<p>So the following two statements are the same.</p>
-
-<pre><code>const char *str = "Hello";
-char const *str = "Hello";
-</code></pre>
-
-<p>In STL, <code>iterator</code> is just like a <code>T *</code> pointer.
-* <code>const std::vector&lt;int&gt;::iterator iter</code> is just like <code>T * const iter</code>.
-* <code>std::vector&lt;int&gt;::const_iterator cIter</code> is just like <code>const T *iter</code>.</p>
-
-<p>So, in a loop, if we don&rsquo;t want to modify the data, use <code>const_iterator</code>.</p>
-
-<h2>Const member function</h2>
-
-<p>Sometimes, we have two version member functions.One is const and the other is
-not.</p>
-
-<pre><code>#include &lt;string&gt;
-#include &lt;iostream&gt;
-
-class Str {
-public:
-    Str(std::string str)
-    :data(str)
-    { }
-
-    const char&amp;
-    operator[](std::size_t pos) const    // Const objects use this
-    {
-        return data[pos];
-    }
-
-    char&amp;
-    operator[](std::size_t pos)    // Non-const objects use this
-    {
-        return data[pos];
-    }
-
-private:
-    std::string data;
-};
-
-void
-print(const Str&amp; const_str)
-{
-    std::cout &lt;&lt; const_str[1] &lt;&lt; std::endl;
-}
-
-int
-main(int argc, char **argv)
-{
-    Str nonconst_str("abc");
-    std::cout &lt;&lt; nonconst_str[1] &lt;&lt; std::endl;
-    nonconst_str[1] = 'a';
-
-    print(nonconst_str);
-
-    return 0;
-}
-</code></pre>
-
-<p>In <code>main</code>, <code>nonconst_str</code> is a non-const object and it can be modified
-by <code>[]</code>.In <code>print</code>, <code>const Str&amp; const_str</code> means
-<strong>pass parameters by reference-to-const</strong>, so <code>const_str</code> is a const object.</p>
-
-<p>We observe that the <code>const</code> keyword is after the closing parenthesis of the
-argument list.This means the function is a const member function.</p>
-
-<p>Reference to <a href="http://msdn.microsoft.com/en-us/library/6ke686zh.aspx">MSDN</a>,
-<strong>A constant member function cannot modify any non-static members or call any</strong>
-<strong>member functions that aren&rsquo;t constant.</strong>That is, the cons member function
-can&rsquo;t modify the object that it is called.</p>
-
-<p>The above philosophy is called <strong>bitwise constness</strong> or <strong>physical constness</strong>.
-There are another philosophy called <strong>logical constness</strong>.Adherents to this
-philosophy argue that <strong>a const member function might modify some of the bits</strong>
-<strong>in the object on which it&rsquo;s invoked, but only in ways that clients cannot</strong>
-<strong>detect</strong>.</p>
-
-<p>For example, if we add a new member function <code>length()</code> to the above class.</p>
-
-<pre><code>    std::size_t
-    length() const
-    {
-        len = data.length();
-
-        return len;
-    }
-
-private:
-    std::string data;
-    std::size_t len;
-</code></pre>
-
-<p>This will generate the following compiled error.</p>
-
-<pre><code>test.cpp:25:6: error: assignment of member ‘Str::len’ in read-only object
-  len = data.length();
-      ^
-</code></pre>
-
-<p>Since member variable <code>len</code> has been modified and the compiler use the
-<strong>bitwise const</strong>, error produces.However, return and object&rsquo;s length seems
-not modify the object it is called.</p>
-
-<p>To solved this problem, use the <strong>mutable</strong> keyword.It can free non-static
-data members from bitwise constness constraints.</p>
-
-<pre><code>mutable std::size_t len;
-</code></pre>
-
-<p>I beleive in code reusing forever!In the above example, the duplicate code
-in the two <code>operator[]</code> functions can be merged into one.</p>
-
-<p>Only then non-const function should be modified.</p>
-
-<pre><code>char&amp;
-operator[](std::size_t pos)    // Non-const objects use this
-{
-    return const_cast&lt;char&amp;&gt;(static_cast&lt;const Str&amp;&gt;(*this)[pos]);
-}
-</code></pre>
-
-<p><code>static_cast&lt;const Str&amp;&gt;</code>will make <code>*this</code>const and then it can call
-<code>operator[]</code>.Finally, <code>const_cast</code> is used the free the const constraint.</p>
-
-<p>This is all about <code>const</code>, it&rsquo;s an amazing keyword.For readable and efficient
-code, use it anyway.</p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2013/07/24/const-anyway//blog/page/7/index.html#disqus_thread">Comments</a></span>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2013/07/23/more-consts-enums-inlines-and-less-defines/">
-		
-			More Consts Enums Inlines and Less #defines</a>
-	</h2>
-    <div class="entry-content">
-    <div class="meta">
-      <div class="date">Published on: 
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-23T21:33:00+08:00" pubdate data-updated="true">Jul 23<span>rd</span>, 2013</time></div>
-      <div class="tags">Tags: 
-
-
-	<a class='category' href='/blog/categories/c-plus-plus/'>C++</a>
-
-
-</div>
-    </div>
-		<p>This is an old topic.</p>
-
-<h1>For constants</h1>
-
-<p>Consider a macro below.</p>
-
-<pre><code>#define PI 3.14
-</code></pre>
-
-<p>There are several drawbacks when using a macro.</p>
-
-<ul>
-<li><p>It&rsquo;s hard to debug.As we all know, the macros are resolved by the
-preprocessor and the compiler know nothing about them.When you get an error
-when compiling the program, the error message may refer to <code>3.14</code> but not
-<code>PI</code> because <code>PI</code> is not in the symbol table.</p></li>
-<li><p>It will result in more object codes.When the preprocessor replace <code>PI</code>
-with <code>3.14</code>, there will be several copy of 3.14 in the object code.</p></li>
-</ul>
-
-
-<p>If we use the <strong>constant</strong> instead of the macro,</p>
-
-<pre><code>const double Pi = 3.14;
-</code></pre>
-
-<p>it has the following advantages, respectively.</p>
-
-<ul>
-<li><p>It&rsquo;s easy to debug, since the constant is in the symble table.</p></li>
-<li><p>It has only one copy in the object code.The other place it appears is just
-its references.</p></li>
-</ul>
-
-
-<p>But I think it has disadvantages too.</p>
-
-<p>When replacing lots of <strong>macros</strong> with <strong>constant</strong>, there will be
-lots of entries in the symbol table.And it will make the object files or
-executable files larger.</p>
-
-<p>When defining a constant string, we may want to do this.</p>
-
-<pre><code>const char *Name = "Tom";
-</code></pre>
-
-<p>But this is not effecient.</p>
-
-<p>If defined above, the value &ldquo;Tom&rdquo; cannot be changed, but what the pointer
-<code>Name</code> points to can be changed.So the compiler will allocate a piece of
-memory for the pointer <code>Name</code> in the normal data segment.Moreover, when
-the linker starts working, it need to perform some relocations for <code>Name</code>.</p>
-
-<p>So, it&rsquo;s better to be defined as follows.</p>
-
-<pre><code>const char * const Name = "Tom";
-</code></pre>
-
-<p>or</p>
-
-<pre><code>const char Name[] = "Tom";
-</code></pre>
-
-<p>Now the compiler will put <code>Name</code> in the read only data segment and the linker
-needn&rsquo;t performing relocations.</p>
-
-<p>Alternatively, we can use this.</p>
-
-<pre><code>const std::string Name("Tom");
-</code></pre>
-
-<h1>For class-specific constants</h1>
-
-<p>Sometimes we need a constant member in the class, for example.</p>
-
-<pre><code>class Hand {
-private:
-    static const int NumFingers = 5;
-    int fingers[NumFingers];
-};
-</code></pre>
-
-<p>In order to ensure there is only one copy of the constant, it must be
-<code>static</code>.</p>
-
-<p>However, <code>static const int NumFingers = 5;</code> is just a <strong>declaration</strong> for
-<code>NumFinger</code>.Why this can be compiled with no error message?Everything
-should have its definition, does it?However, the class-specific constants
-that are static and with integral type(<code>int</code>, <code>char</code>, <code>bool</code>,&hellip;) is
-an exception.</p>
-
-<p>You can even use the constant.</p>
-
-<pre><code>#include &lt;cstdio&gt;
-
-class Hand {
- public:
-    static const int NumFingers = 5;
-    int fingers[NumFingers];
-};
-
-int main(int argc, char *argv[])
-{
-    printf("%d\n", Hand::NumFingers);
-
-    return 0;
-}
-</code></pre>
-
-<p>But when you want to use the address of <code>NumFingers</code>, you must put the
-definition of <code>NumFingers</code> in the implemetation file of the class.</p>
-
-<pre><code>#include &lt;cstdio&gt;
-
-class Hand {
- public:
-    static const int NumFingers = 5;
-    int fingers[NumFingers];
-};
-
-const int Hand::NumFingers;
-
-int main(int argc, char *argv[])
-{
-    printf("%p\n", &amp;Hand::NumFingers);
-
-    return 0;
-}
-</code></pre>
-
-<p>Remember, there is no need to put <code>static</code> at the begining of the definition.</p>
-
-<p>We know that the size of the array <code>finger</code> is just the value of the static
-constant <code>NumFingers</code>.But there is another way to do that.</p>
-
-<pre><code>class Hand {
- public:
-    enum {NumFingers = 5};
-    int fingers[NumFingers];
-};
-</code></pre>
-
-<p>That is fine, too.</p>
-
-<h1>For functions</h1>
-
-<p>Macros like this</p>
-
-<pre><code>#define MAX(a, b) ((a) &gt; (b) ? (a) : (b))
-</code></pre>
-
-<p>can result in many painful problems.</p>
-
-<ul>
-<li><p>First, you have to remember parenthesizing all the arguments(We all know
-why).</p></li>
-<li><p>There are problems when calling it like this <code>MAX(++a, b)</code>(It&rsquo;s easy to
-think about it).</p></li>
-</ul>
-
-
-<p>If using <code>inline</code> and <code>template</code>, we can solve all this problems.</p>
-
-<pre><code>#include &lt;cstdio&gt;
-
-template&lt;typename T&gt;
-inline T
-max(const T&amp; a, const T&amp; b)
-{
-    return a &gt; b ? a : b;
-}
-
-int
-main(int argc, char *argv[])
-{
-    char a = 'a', b = 'b';
-    int c = 1, d = 2;
-
-    printf("%c\n", max(a, b));
-    printf("%d\n", max(c, d));
-
-    return 0;
-}
-</code></pre>
-
-<p>However, I don&rsquo;t think macros are useless and should be replaced by const,
-enum and inline.In a way, macro can decrease the time of compiling and
-linking.And there are still lots of code that using macros.</p>
-
-		
-		
-	</div>
-
-<div class="meta">
-	
-		<span class="comments"><a href="/blog/2013/07/23/more-consts-enums-inlines-and-less-defines//blog/page/7/index.html#disqus_thread">Comments</a></span>
 	
 </div>
 </article>

@@ -104,30 +104,31 @@ explain why I want to coding in that style.</p>
 <p>Why do I care about my coding style so much? Because I am a virgo.</p>
 
 <ul>
-<li><strong>Always use <code>this</code> to refer to members in a member function.</strong></li>
+<li><strong>Always add a <code>m_</code> prefix to the members and use <code>this</code> to refer to
+other member functions in the member function.</strong></li>
 </ul>
 
 
 <p>This seems ridiculous. But I prefer. In a member function, there may be
 various kinds of variables, such as memeber variables, global variables
-and local variables. If we don&rsquo;t use <code>this</code> to refer to the member
+and local variables. If we don&rsquo;t add some flag to refer to the member
 variables, we will confused when we met a variable. Is it a local variable
 or a member variable? For example, there is a statement in a member function.</p>
 
-<pre><code>size_ = size + 1;
+<pre><code>size1 = size2 + 1;
 </code></pre>
 
 <p>How can you know what this statement exactly means? Which <code>size</code> is the
 class&rsquo;s size? However, if we write this statement as this,</p>
 
-<pre><code>this-&gt;size_ = size + 1;
+<pre><code>m_size1 = size2 + 1;
 </code></pre>
 
 <p>we can know that we set the class&rsquo;s size be the value of local variable <code>size</code>
 plus one. This code is readable and it can relieve the code reader&rsquo;s headache.</p>
 
-<p>The same rule can apply to the member functions. When refering to a member
-function, always use <code>this</code>.</p>
+<p>For the member functions. When refering to a member function, always use
+<code>this</code>.</p>
 
 <pre><code>int *p = this-&gt;next();
 </code></pre>
@@ -140,7 +141,9 @@ a balance and you can balance yourself. I am a so kind man and I always want
 those who read my codes be happy. So I will use <code>this</code> always.</p>
 
 <p>Note: In PHP, you must use <code>$this</code> to refer to members. In Python, you must
-use <code>self</code> to refer to members.</p>
+use <code>self</code> to refer to members. In most of the source code in <strong>Android</strong>,
+members in C++ class is always with prefix <code>m_</code> and members in JAVA class is
+always with prefix <code>m</code>.</p>
 
 <ul>
 <li><strong>Always leave the return type name in a single line.</strong></li>
@@ -185,6 +188,53 @@ the left of the function name when the type name is short like this.</p>
 
 <p>This may be right. But most of the return type name is long in a large project.
 So for consistence, I always leave them in a single line.</p>
+
+<ul>
+<li><strong>Use <code>return</code> or <code>continue</code> to avoid indentation</strong></li>
+</ul>
+
+
+<p>The code will look ugly when there are many indentations. For example,</p>
+
+<pre><code>if (arr != NULL &amp;&amp; begin &lt; end - 1) {
+    ...
+    while (top &gt; 0) {
+        ...
+        for (int i = begin; i &lt; end - 1; ++i) {
+            if (arr[i] &lt; arr[pivot]) {
+                for (int j = i;  j &lt; end; ++j) {
+                    ...
+                }
+            }
+        }
+    }
+    ...
+}
+</code></pre>
+
+<p>There are <strong>5</strong> level of indentations, which is very ugly. However, we can use
+<code>return</code> and <code>continue</code> to make it look better.</p>
+
+<pre><code>if (arr == NULL || begin &gt;= end - 1) {
+    return;
+}
+...
+while (top &gt; 0) {
+    ...
+    for (int i = begin; i &lt; end - 1; ++i) {
+        if (arr[i] &gt;= arr[pivot]) {
+            continue;
+        }
+        for (int j = i;  j &lt; end; ++j) {
+            ...
+        }
+    }
+}
+...
+</code></pre>
+
+<p>Now, it&rsquo;s only <strong>3</strong> level of indentations, which looks more beautiful.
+This is an important skills to make my code more beautiful.</p>
 </div>
 
 <div class="meta">

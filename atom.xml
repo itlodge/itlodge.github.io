@@ -4,7 +4,7 @@
   <title><![CDATA[Yuanhang Zheng]]></title>
   <link href="http://itlodge.github.io/atom.xml" rel="self"/>
   <link href="http://itlodge.github.io/"/>
-  <updated>2013-10-14T22:51:24+08:00</updated>
+  <updated>2013-11-19T03:58:49+08:00</updated>
   <id>http://itlodge.github.io/</id>
   <author>
     <name><![CDATA[Yuanhang Zheng]]></name>
@@ -12,6 +12,24 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Implement elementary arithmetic using stack]]></title>
+    <link href="http://itlodge.github.io/blog/2013/11/14/implement-elementary-arithmetic-using-stack/"/>
+    <updated>2013-11-14T02:29:00+08:00</updated>
+    <id>http://itlodge.github.io/blog/2013/11/14/implement-elementary-arithmetic-using-stack</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Implement a graph using ajacency matrix]]></title>
+    <link href="http://itlodge.github.io/blog/2013/10/16/implement-a-graph-using-ajacency-matrix/"/>
+    <updated>2013-10-16T00:06:00+08:00</updated>
+    <id>http://itlodge.github.io/blog/2013/10/16/implement-a-graph-using-ajacency-matrix</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Implement a binary search tree]]></title>
@@ -5970,30 +5988,31 @@ explain why I want to coding in that style.</p>
 <p>Why do I care about my coding style so much? Because I am a virgo.</p>
 
 <ul>
-<li><strong>Always use <code>this</code> to refer to members in a member function.</strong></li>
+<li><strong>Always add a <code>m_</code> prefix to the members and use <code>this</code> to refer to
+other member functions in the member function.</strong></li>
 </ul>
 
 
 <p>This seems ridiculous. But I prefer. In a member function, there may be
 various kinds of variables, such as memeber variables, global variables
-and local variables. If we don&rsquo;t use <code>this</code> to refer to the member
+and local variables. If we don&rsquo;t add some flag to refer to the member
 variables, we will confused when we met a variable. Is it a local variable
 or a member variable? For example, there is a statement in a member function.</p>
 
-<pre><code>size_ = size + 1;
+<pre><code>size1 = size2 + 1;
 </code></pre>
 
 <p>How can you know what this statement exactly means? Which <code>size</code> is the
 class&rsquo;s size? However, if we write this statement as this,</p>
 
-<pre><code>this-&gt;size_ = size + 1;
+<pre><code>m_size1 = size2 + 1;
 </code></pre>
 
 <p>we can know that we set the class&rsquo;s size be the value of local variable <code>size</code>
 plus one. This code is readable and it can relieve the code reader&rsquo;s headache.</p>
 
-<p>The same rule can apply to the member functions. When refering to a member
-function, always use <code>this</code>.</p>
+<p>For the member functions. When refering to a member function, always use
+<code>this</code>.</p>
 
 <pre><code>int *p = this-&gt;next();
 </code></pre>
@@ -6006,7 +6025,9 @@ a balance and you can balance yourself. I am a so kind man and I always want
 those who read my codes be happy. So I will use <code>this</code> always.</p>
 
 <p>Note: In PHP, you must use <code>$this</code> to refer to members. In Python, you must
-use <code>self</code> to refer to members.</p>
+use <code>self</code> to refer to members. In most of the source code in <strong>Android</strong>,
+members in C++ class is always with prefix <code>m_</code> and members in JAVA class is
+always with prefix <code>m</code>.</p>
 
 <ul>
 <li><strong>Always leave the return type name in a single line.</strong></li>
@@ -6051,6 +6072,53 @@ the left of the function name when the type name is short like this.</p>
 
 <p>This may be right. But most of the return type name is long in a large project.
 So for consistence, I always leave them in a single line.</p>
+
+<ul>
+<li><strong>Use <code>return</code> or <code>continue</code> to avoid indentation</strong></li>
+</ul>
+
+
+<p>The code will look ugly when there are many indentations. For example,</p>
+
+<pre><code>if (arr != NULL &amp;&amp; begin &lt; end - 1) {
+    ...
+    while (top &gt; 0) {
+        ...
+        for (int i = begin; i &lt; end - 1; ++i) {
+            if (arr[i] &lt; arr[pivot]) {
+                for (int j = i;  j &lt; end; ++j) {
+                    ...
+                }
+            }
+        }
+    }
+    ...
+}
+</code></pre>
+
+<p>There are <strong>5</strong> level of indentations, which is very ugly. However, we can use
+<code>return</code> and <code>continue</code> to make it look better.</p>
+
+<pre><code>if (arr == NULL || begin &gt;= end - 1) {
+    return;
+}
+...
+while (top &gt; 0) {
+    ...
+    for (int i = begin; i &lt; end - 1; ++i) {
+        if (arr[i] &gt;= arr[pivot]) {
+            continue;
+        }
+        for (int j = i;  j &lt; end; ++j) {
+            ...
+        }
+    }
+}
+...
+</code></pre>
+
+<p>Now, it&rsquo;s only <strong>3</strong> level of indentations, which looks more beautiful.
+This is an important skills to make my code more beautiful.</p>
 ]]></content>
   </entry>
   
@@ -12186,358 +12254,6 @@ main(int argc, char **argv)
 </code></pre>
 
 <p>The so-call <em>Factory pattern</em> is just like the above code.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Some basic Ruby]]></title>
-    <link href="http://itlodge.github.io/blog/2013/07/25/some-basic-ruby/"/>
-    <updated>2013-07-25T20:07:00+08:00</updated>
-    <id>http://itlodge.github.io/blog/2013/07/25/some-basic-ruby</id>
-    <content type="html"><![CDATA[<h2>String and name</h2>
-
-<p>When defining a function, the parentheses are not necessary.So this one</p>
-
-<pre><code>def say_hello name
-  "Hello " + name
-end
-
-puts say_hello "man"
-</code></pre>
-
-<p>is the same as this.</p>
-
-<pre><code>def say_hello(name)
-  "Hello " + name
-end
-
-puts(say_hello("man"))
-</code></pre>
-
-<p>However, when there are more than one parameters, it will be difficult to
-know which argument goes with which method invocation.So it&rsquo;s recommended
-using parentheses in all but the simplest cases.</p>
-
-<p>We can use single-quote or double-quote to create a string.What&rsquo;s the
-difference?</p>
-
-<p>First, single-quoted string can&rsquo;t represent the escape character, and
-double-quoted string can.</p>
-
-<pre><code>puts '\nabc'
-puts "\nabc"
-</code></pre>
-
-<p>The above code will output this.</p>
-
-<pre><code>\nabc
-
-abc
-</code></pre>
-
-<p>Second, double-quoted string can be expression interpolated.</p>
-
-<pre><code>name = 'Tom'
-
-puts 'Hello #{name}'
-puts "Hello #{name}"
-</code></pre>
-
-<p>The above code will output this.</p>
-
-<pre><code>ruby test.rb
-Hello #{name}
-Hello Tom
-</code></pre>
-
-<p>And we can even invoke methods.</p>
-
-<pre><code>name = 'Tom'
-puts "Hello #{name.upcase}"
-</code></pre>
-
-<p>This will generate the following.</p>
-
-<pre><code>Hello TOM
-</code></pre>
-
-<p>When the expression is a global, instance or class variable, there is no need
-to use the braces.</p>
-
-<pre><code>@h = "Hello"    # @ means instance
-$name = 'Tom'    # $ means global
-
-puts "#@h #$name"
-</code></pre>
-
-<p>This will generate the same output.</p>
-
-<p>There are some conventions for the <strong>name</strong> in Ruby.</p>
-
-<ul>
-<li><p>Local variables, method parameters and method names <em>should</em> all start
-with a lowercase letter or an underscore.</p></li>
-<li><p>Class names, module names and constants <em>must</em> start with an uppercase
-letter.</p></li>
-<li><p>Global variables start with <code>$</code>.</p></li>
-<li><p>Instance variables begin with <code>@</code>.</p></li>
-<li><p>Class variables are prefixed with <code>@@</code>.</p></li>
-</ul>
-
-
-<h2>Arrays and Hashes</h2>
-
-<p>In ruby, arrays and hashes can hold objects of different types.</p>
-
-<pre><code>a = [1, 'abc', :sym]
-puts a
-</code></pre>
-
-<p>It will generate the following output.</p>
-
-<pre><code>1
-abc
-sym
-</code></pre>
-
-<p>By the way, <code>nil</code> is an object, represent <strong>nothing</strong>.</p>
-
-<p>If we want to create an array of string, we have to list all the strings.
-And we have to type lots of quotes and commas.However, <code>%w</code> can do it
-more easily.</p>
-
-<pre><code>a = ['a', 'b', 'c']
-b = %w{a b c}
-
-puts a
-puts b
-</code></pre>
-
-<p>It will generate the following output.</p>
-
-<pre><code>a
-b
-c
-a
-b
-c
-</code></pre>
-
-<p>The index of Array is integer, but the index of Hash is anything.</p>
-
-<p>It has the following form.</p>
-
-<pre><code>var = {
-  key1 =&gt; value1
-  key2 =&gt; value2
-  ...
-}
-</code></pre>
-
-<p>For example:</p>
-
-<pre><code>girl = {
-  :name =&gt; 'Mary',
-  :age =&gt; 20
-}
-
-puts "#{girl[:name]} is #{girl[:age]} years old."
-</code></pre>
-
-<p>Output:</p>
-
-<pre><code>Mary is 20 years old.
-</code></pre>
-
-<p>A new Hash can also be created in this way.</p>
-
-<pre><code>decimal = Hash.new(0)
-puts decimal[:first]
-decimal[:first] = 1
-puts decimal[:first]
-</code></pre>
-
-<p>Ouput:</p>
-
-<pre><code>0
-1
-</code></pre>
-
-<p><code>0</code> is the default value for all keys.</p>
-
-<h2>Control Structures</h2>
-
-<p>In Ruby, there is a <code>elsif</code> keyword instead of <code>else if</code>.</p>
-
-<p>The method <code>gets</code> return the next line from the standard input stream and
-return nil when get the <code>EOF</code>, so the following code can let all the inputs
-be upcase.</p>
-
-<pre><code>while line = gets
-  puts line.upcase
-end
-</code></pre>
-
-<p>If the <code>if</code> and <code>while</code> statement is just a single expression, we usually
-write them in this way.</p>
-
-<pre><code>puts 'Hey' if 2 &gt; 1
-
-i = 1
-puts i while (i += 1) &lt; 10
-</code></pre>
-
-<p>Someone say that this style is similar with <code>Perl</code>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Const anyway!]]></title>
-    <link href="http://itlodge.github.io/blog/2013/07/24/const-anyway/"/>
-    <updated>2013-07-24T20:01:00+08:00</updated>
-    <id>http://itlodge.github.io/blog/2013/07/24/const-anyway</id>
-    <content type="html"><![CDATA[<h2>Const pointer</h2>
-
-<p><code>const</code> is versatile.I am always confused by the following syntax.</p>
-
-<pre><code>const char *str = "Hello";    // const data, non-const pointer
-char * const str = "Hello";    // const pointer, non-const data
-</code></pre>
-
-<p>Now there is a tip to remember it.</p>
-
-<p>If <code>const</code> appears to the right of the asterisk, the pointer is
-constant.If <code>const</code> appears to the left of the asterisk, the data
-is constant.</p>
-
-<p>So the following two statements are the same.</p>
-
-<pre><code>const char *str = "Hello";
-char const *str = "Hello";
-</code></pre>
-
-<p>In STL, <code>iterator</code> is just like a <code>T *</code> pointer.
-* <code>const std::vector&lt;int&gt;::iterator iter</code> is just like <code>T * const iter</code>.
-* <code>std::vector&lt;int&gt;::const_iterator cIter</code> is just like <code>const T *iter</code>.</p>
-
-<p>So, in a loop, if we don&rsquo;t want to modify the data, use <code>const_iterator</code>.</p>
-
-<h2>Const member function</h2>
-
-<p>Sometimes, we have two version member functions.One is const and the other is
-not.</p>
-
-<pre><code>#include &lt;string&gt;
-#include &lt;iostream&gt;
-
-class Str {
-public:
-    Str(std::string str)
-    :data(str)
-    { }
-
-    const char&amp;
-    operator[](std::size_t pos) const    // Const objects use this
-    {
-        return data[pos];
-    }
-
-    char&amp;
-    operator[](std::size_t pos)    // Non-const objects use this
-    {
-        return data[pos];
-    }
-
-private:
-    std::string data;
-};
-
-void
-print(const Str&amp; const_str)
-{
-    std::cout &lt;&lt; const_str[1] &lt;&lt; std::endl;
-}
-
-int
-main(int argc, char **argv)
-{
-    Str nonconst_str("abc");
-    std::cout &lt;&lt; nonconst_str[1] &lt;&lt; std::endl;
-    nonconst_str[1] = 'a';
-
-    print(nonconst_str);
-
-    return 0;
-}
-</code></pre>
-
-<p>In <code>main</code>, <code>nonconst_str</code> is a non-const object and it can be modified
-by <code>[]</code>.In <code>print</code>, <code>const Str&amp; const_str</code> means
-<strong>pass parameters by reference-to-const</strong>, so <code>const_str</code> is a const object.</p>
-
-<p>We observe that the <code>const</code> keyword is after the closing parenthesis of the
-argument list.This means the function is a const member function.</p>
-
-<p>Reference to <a href="http://msdn.microsoft.com/en-us/library/6ke686zh.aspx">MSDN</a>,
-<strong>A constant member function cannot modify any non-static members or call any</strong>
-<strong>member functions that aren&rsquo;t constant.</strong>That is, the cons member function
-can&rsquo;t modify the object that it is called.</p>
-
-<p>The above philosophy is called <strong>bitwise constness</strong> or <strong>physical constness</strong>.
-There are another philosophy called <strong>logical constness</strong>.Adherents to this
-philosophy argue that <strong>a const member function might modify some of the bits</strong>
-<strong>in the object on which it&rsquo;s invoked, but only in ways that clients cannot</strong>
-<strong>detect</strong>.</p>
-
-<p>For example, if we add a new member function <code>length()</code> to the above class.</p>
-
-<pre><code>    std::size_t
-    length() const
-    {
-        len = data.length();
-
-        return len;
-    }
-
-private:
-    std::string data;
-    std::size_t len;
-</code></pre>
-
-<p>This will generate the following compiled error.</p>
-
-<pre><code>test.cpp:25:6: error: assignment of member ‘Str::len’ in read-only object
-  len = data.length();
-      ^
-</code></pre>
-
-<p>Since member variable <code>len</code> has been modified and the compiler use the
-<strong>bitwise const</strong>, error produces.However, return and object&rsquo;s length seems
-not modify the object it is called.</p>
-
-<p>To solved this problem, use the <strong>mutable</strong> keyword.It can free non-static
-data members from bitwise constness constraints.</p>
-
-<pre><code>mutable std::size_t len;
-</code></pre>
-
-<p>I beleive in code reusing forever!In the above example, the duplicate code
-in the two <code>operator[]</code> functions can be merged into one.</p>
-
-<p>Only then non-const function should be modified.</p>
-
-<pre><code>char&amp;
-operator[](std::size_t pos)    // Non-const objects use this
-{
-    return const_cast&lt;char&amp;&gt;(static_cast&lt;const Str&amp;&gt;(*this)[pos]);
-}
-</code></pre>
-
-<p><code>static_cast&lt;const Str&amp;&gt;</code>will make <code>*this</code>const and then it can call
-<code>operator[]</code>.Finally, <code>const_cast</code> is used the free the const constraint.</p>
-
-<p>This is all about <code>const</code>, it&rsquo;s an amazing keyword.For readable and efficient
-code, use it anyway.</p>
 ]]></content>
   </entry>
   

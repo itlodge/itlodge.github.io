@@ -80,7 +80,7 @@
     </url>
     <url>
         <loc>http://itlodge.github.io/blog/2013/09/25/my-c-plus-plus-coding-style/</loc>
-        <lastmod>2013-09-28T07:41:01+08:00</lastmod>
+        <lastmod>2013-11-19T03:55:48+08:00</lastmod>
     </url>
     <url>
         <loc>http://itlodge.github.io/blog/2013/09/25/implement-a-queue/</loc>
@@ -103,20 +103,32 @@
         <lastmod>2013-10-03T16:04:27+08:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://itlodge.github.io/blog/2013/10/16/implement-a-graph-using-ajacency-matrix/
+        </loc>
+        <lastmod>2013-10-17T18:54:01+08:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://itlodge.github.io/blog/2013/11/14/implement-elementary-arithmetic-using-stack/
+        </loc>
+        <lastmod>2013-11-14T02:29:12+08:00</lastmod>
+    </url>
+    <url>
         <loc>http://itlodge.github.io/robots.txt</loc>
         <lastmod>2013-09-28T07:41:02+08:00</lastmod>
     </url>
     <url>
         <loc>http://itlodge.github.io/me/</loc>
-        <lastmod>2013-10-02T19:46:27+08:00</lastmod>
+        <lastmod>2013-10-19T04:11:25+08:00</lastmod>
     </url>
     <url>
         <loc>http://itlodge.github.io/blog/archives/</loc>
-        <lastmod>2013-10-14T22:51:03+08:00</lastmod>
+        <lastmod>2013-11-19T03:55:48+08:00</lastmod>
     </url>
     <url>
         <loc>http://itlodge.github.io/</loc>
-        <lastmod>2013-10-14T22:51:03+08:00</lastmod>
+        <lastmod>2013-11-19T03:55:48+08:00</lastmod>
     </url>
     <url>
         <loc>http://itlodge.github.io/search.html</loc>
