@@ -291,6 +291,93 @@ puts i while (i += 1) &lt; 10
 </code></pre>
 
 <p>Someone say that this style is similar with <code>Perl</code>.</p>
+
+<h2>Regular expressions</h2>
+
+<p>&lsquo;/&rsquo;   forward slash</p>
+
+<p>&lsquo;|&rsquo;   pipe</p>
+
+<p>The match operator is <code>=~</code>. For example,</p>
+
+<p>line = &ldquo;Perlppp&rdquo;</p>
+
+<pre><code>if line =~ /Perl|Python/
+  puts "match"
+end
+</code></pre>
+
+<p>The replace method is <code>sub</code> and <code>gsub</code>.</p>
+
+<p><code>sub(pattern, str)</code> will replace the first string that matched <code>pattern</code>
+with <code>str</code>.</p>
+
+<p><code>gsub(pattern, str)</code> will replace all the string that matched <code>pattern</code>
+with <code>str</code>. <code>g</code> means <strong>global</strong>.</p>
+
+<h2>Blocks and Iterators</h2>
+
+<p>This is a code block.</p>
+
+<pre><code>{ puts 'Hello World!' }
+</code></pre>
+
+<p>This is also a code block.</p>
+
+<pre><code>do
+  a = 1
+  puts a
+end
+</code></pre>
+
+<p>When we define a function like this,</p>
+
+<pre><code>def hello
+  puts "Do some staff before calling the code block"
+  yield
+  puts "Do some staff after calling the code block"
+end
+</code></pre>
+
+<p>now we can call this function in this way.</p>
+
+<pre><code>hello { puts 'Hello World' }
+</code></pre>
+
+<p><code>yield</code> will execute the code block <code>{ puts 'Hello World' }</code>. Here code
+is just like data. There may be many functions that should do some staff
+before calling them and do some staff after calling them. For example, logging
+and open/close file. This is call <a href="http://en.wikipedia.org/wiki/Aspect-oriented_programming">AOP</a>.</p>
+
+<p><code>yield</code> can also accept parameters.</p>
+
+<pre><code>def hello
+  puts "Do some staff before calling the code block"
+  yield('Hello ')
+  puts "Do some staff after calling the code block"
+end
+
+hello { |greet| puts greet + 'Ruby' }
+</code></pre>
+
+<p><strong>Code block</strong> is used to implement <strong>Iterator</strong>. The famouse function <code>each</code>
+is an example.</p>
+
+<pre><code>animals = %w(ant bee cat dog)
+animals.each { |animal| puts animal }
+</code></pre>
+
+<p>If we want to print 5 &lsquo;*&rsquo; in C/C++, we will do it in this way.</p>
+
+<pre><code>for (int i = 0; i &lt; 5; ++i) {
+    printf('*');
+}
+</code></pre>
+
+<p>But in Ruby, you can do it in an elegant way.</p>
+
+<pre><code>5.times { print '*' }
+</code></pre>
 </div>
 
 <div class="meta">
@@ -327,7 +414,7 @@ puts i while (i += 1) &lt; 10
     </div>
     <footer id="footer">
     <div style="display:inline">
-    Copyright &copy; 2013
+    Copyright &copy; 2014
 
     Yuanhang Zheng
 . Powered by <a href="http://octopress.org">Octopress</a> | 
