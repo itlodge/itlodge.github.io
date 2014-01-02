@@ -131,10 +131,10 @@ The index of Array is integer, but the index of Hash is anything.
 It has the following form.
 
     var = {
-	  key1 => value1
-	  key2 => value2
-	  ...
-	}
+      key1 => value1
+      key2 => value2
+      ...
+    }
 
 For example:
 
@@ -186,6 +186,80 @@ write them in this way.
 
 Someone say that this style is similar with ``Perl``.
 
+Regular expressions
+----------------------
+'/'   forward slash
 
+'|'   pipe 
 
+The match operator is ``=~``. For example,
 
+line = "Perlppp"
+
+    if line =~ /Perl|Python/
+      puts "match"
+    end
+
+The replace method is ``sub`` and ``gsub``.
+
+``sub(pattern, str)`` will replace the first string that matched ``pattern``
+with ``str``.
+
+``gsub(pattern, str)`` will replace all the string that matched ``pattern``
+with ``str``. ``g`` means **global**.
+
+Blocks and Iterators
+-----------------------
+This is a code block.
+
+    { puts 'Hello World!' }
+
+This is also a code block.
+
+    do
+      a = 1
+      puts a
+    end
+
+When we define a function like this,
+
+    def hello
+      puts "Do some staff before calling the code block"
+      yield
+      puts "Do some staff after calling the code block"
+    end
+
+now we can call this function in this way.
+
+    hello { puts 'Hello World' }
+
+``yield`` will execute the code block ``{ puts 'Hello World' }``. Here code
+is just like data. There may be many functions that should do some staff
+before calling them and do some staff after calling them. For example, logging
+and open/close file. This is call [AOP](http://en.wikipedia.org/wiki/Aspect-oriented_programming).
+
+``yield`` can also accept parameters.
+
+    def hello
+      puts "Do some staff before calling the code block"
+      yield('Hello ')
+      puts "Do some staff after calling the code block"
+    end
+
+    hello { |greet| puts greet + 'Ruby' }
+
+**Code block** is used to implement **Iterator**. The famouse function ``each``
+is an example.
+
+    animals = %w(ant bee cat dog)
+    animals.each { |animal| puts animal }
+
+If we want to print 5 '*' in C/C++, we will do it in this way.
+
+    for (int i = 0; i < 5; ++i) {
+        printf('*');
+    }
+
+But in Ruby, you can do it in an elegant way.
+
+    5.times { print '*' }
