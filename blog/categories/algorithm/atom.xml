@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Algorithm | Yuanhang Zheng]]></title>
   <link href="http://itlodge.github.io/blog/categories/algorithm/atom.xml" rel="self"/>
   <link href="http://itlodge.github.io/"/>
-  <updated>2014-01-02T21:09:58+08:00</updated>
+  <updated>2014-02-23T20:02:03+08:00</updated>
   <id>http://itlodge.github.io/</id>
   <author>
     <name><![CDATA[Yuanhang Zheng]]></name>
@@ -937,6 +937,18 @@ the same work recursively in the two parts.</p>
 <span class='line-number'>54</span>
 <span class='line-number'>55</span>
 <span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
 </pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#define BOOST_TEST_DYN_LINK</span>
 </span><span class='line'><span class="cp">#define BOOST_TEST_MAIN</span>
 </span><span class='line'>
@@ -952,13 +964,23 @@ the same work recursively in the two parts.</p>
 </span><span class='line'><span class="kt">int</span> <span class="n">normal_list_sorted</span><span class="p">[</span><span class="n">NORMAL_SIZE</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">};</span>
 </span><span class='line'><span class="kt">int</span> <span class="n">normal_list_sorted_descend</span><span class="p">[</span><span class="n">NORMAL_SIZE</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">};</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">const</span> <span class="kt">int</span> <span class="n">RANDOM_SIZE</span> <span class="o">=</span> <span class="mi">9999</span><span class="p">;</span>
+</span><span class='line'><span class="k">const</span> <span class="kt">int</span> <span class="n">RANDOM_SIZE</span> <span class="o">=</span> <span class="mi">200000</span><span class="p">;</span>
 </span><span class='line'>
 </span><span class='line'><span class="n">BOOST_AUTO_TEST_SUITE</span><span class="p">(</span><span class="n">quick_recursive</span><span class="p">)</span>
 </span><span class='line'>
 </span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">empty</span><span class="p">)</span>
 </span><span class='line'><span class="p">{</span>
 </span><span class='line'>    <span class="n">qsort_r</span><span class="p">(</span><span class="n">empty_list</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">two_element</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="k">const</span> <span class="kt">int</span> <span class="n">NUM</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">arr</span><span class="p">[</span><span class="n">NUM</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">qsort_r</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">NUM</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">2</span><span class="p">);</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
 </span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">normal</span><span class="p">)</span>
@@ -979,8 +1001,8 @@ the same work recursively in the two parts.</p>
 </span><span class='line'>
 </span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">random</span><span class="p">)</span>
 </span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="kt">int</span> <span class="n">random_list</span><span class="p">[</span><span class="n">RANDOM_SIZE</span><span class="p">];</span>
-</span><span class='line'>    <span class="kt">int</span> <span class="n">random_list_sorted</span><span class="p">[</span><span class="n">RANDOM_SIZE</span><span class="p">];</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="o">*</span><span class="n">random_list</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">RANDOM_SIZE</span><span class="p">];</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="o">*</span><span class="n">random_list_sorted</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">RANDOM_SIZE</span><span class="p">];</span>
 </span><span class='line'>    <span class="n">srand</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
 </span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">RANDOM_SIZE</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>        <span class="n">random_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">random_list_sorted</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">rand</span><span class="p">();</span>
@@ -990,6 +1012,8 @@ the same work recursively in the two parts.</p>
 </span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">RANDOM_SIZE</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>        <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">random_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">random_list_sorted</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
 </span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">delete</span><span class="p">[]</span> <span class="n">random_list</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">delete</span><span class="p">[]</span> <span class="n">random_list_sorted</span><span class="p">;</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
 </span><span class='line'><span class="n">BOOST_AUTO_TEST_SUITE_END</span><span class="p">()</span>
@@ -1056,6 +1080,7 @@ into stack operation.</p>
 <span class='line-number'>51</span>
 <span class='line-number'>52</span>
 <span class='line-number'>53</span>
+<span class='line-number'>54</span>
 </pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include &lt;iostream&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
@@ -1076,7 +1101,7 @@ into stack operation.</p>
 </span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">arr</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">begin</span> <span class="o">&gt;=</span> <span class="n">end</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>        <span class="k">return</span><span class="p">;</span>
 </span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="kt">int</span> <span class="n">stack</span><span class="p">[</span><span class="n">end</span> <span class="o">-</span> <span class="n">begin</span><span class="p">];</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="o">*</span><span class="n">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">end</span> <span class="o">-</span> <span class="n">begin</span><span class="p">];</span>
 </span><span class='line'>    <span class="kt">int</span> <span class="n">top</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
 </span><span class='line'>
 </span><span class='line'>    <span class="n">stack</span><span class="p">[</span><span class="o">++</span><span class="n">top</span><span class="p">]</span> <span class="o">=</span> <span class="n">end</span><span class="p">;</span>
@@ -1108,6 +1133,7 @@ into stack operation.</p>
 </span><span class='line'>            <span class="n">stack</span><span class="p">[</span><span class="o">++</span><span class="n">top</span><span class="p">]</span> <span class="o">=</span> <span class="n">last_left</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
 </span><span class='line'>        <span class="p">}</span>
 </span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">delete</span><span class="p">[]</span> <span class="n">stack</span><span class="p">;</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
@@ -1170,6 +1196,8 @@ into stack operation.</p>
 <span class='line-number'>54</span>
 <span class='line-number'>55</span>
 <span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
 </pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#define BOOST_TEST_DYN_LINK</span>
 </span><span class='line'><span class="cp">#define BOOST_TEST_MAIN</span>
 </span><span class='line'>
@@ -1185,7 +1213,7 @@ into stack operation.</p>
 </span><span class='line'><span class="kt">int</span> <span class="n">normal_list_sorted</span><span class="p">[</span><span class="n">NORMAL_SIZE</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">};</span>
 </span><span class='line'><span class="kt">int</span> <span class="n">normal_list_sorted_descend</span><span class="p">[</span><span class="n">NORMAL_SIZE</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">};</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">const</span> <span class="kt">int</span> <span class="n">RANDOM_SIZE</span> <span class="o">=</span> <span class="mi">9999</span><span class="p">;</span>
+</span><span class='line'><span class="k">const</span> <span class="kt">int</span> <span class="n">RANDOM_SIZE</span> <span class="o">=</span> <span class="mi">10000000</span><span class="p">;</span>
 </span><span class='line'>
 </span><span class='line'><span class="n">BOOST_AUTO_TEST_SUITE</span><span class="p">(</span><span class="n">quick_iterate</span><span class="p">)</span>
 </span><span class='line'>
@@ -1212,8 +1240,8 @@ into stack operation.</p>
 </span><span class='line'>
 </span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">random</span><span class="p">)</span>
 </span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="kt">int</span> <span class="n">random_list</span><span class="p">[</span><span class="n">RANDOM_SIZE</span><span class="p">];</span>
-</span><span class='line'>    <span class="kt">int</span> <span class="n">random_list_sorted</span><span class="p">[</span><span class="n">RANDOM_SIZE</span><span class="p">];</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="o">*</span><span class="n">random_list</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">RANDOM_SIZE</span><span class="p">];</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="o">*</span><span class="n">random_list_sorted</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">RANDOM_SIZE</span><span class="p">];</span>
 </span><span class='line'>    <span class="n">srand</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
 </span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">RANDOM_SIZE</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>        <span class="n">random_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">random_list_sorted</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">rand</span><span class="p">();</span>
@@ -1223,6 +1251,8 @@ into stack operation.</p>
 </span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">RANDOM_SIZE</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>        <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">random_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">random_list_sorted</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
 </span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">delete</span><span class="p">[]</span> <span class="n">random_list</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">delete</span><span class="p">[]</span> <span class="n">random_list_sorted</span><span class="p">;</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
 </span><span class='line'><span class="n">BOOST_AUTO_TEST_SUITE_END</span><span class="p">()</span>
@@ -1294,13 +1324,14 @@ sorted subarrays and then copy the elements to the original array.</p>
 <span class='line-number'>45</span>
 <span class='line-number'>46</span>
 <span class='line-number'>47</span>
+<span class='line-number'>48</span>
 </pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include &lt;iostream&gt;</span>
 </span><span class='line'>
 </span><span class='line'><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
 </span><span class='line'><span class="kt">void</span>
 </span><span class='line'><span class="n">merge</span><span class="p">(</span><span class="n">T</span> <span class="n">list</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">begin</span><span class="p">,</span> <span class="kt">int</span> <span class="n">mid</span><span class="p">,</span> <span class="kt">int</span> <span class="n">end</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">is_ascending</span><span class="p">)</span>
 </span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="n">T</span> <span class="n">tmp</span><span class="p">[</span><span class="n">end</span> <span class="o">-</span> <span class="n">begin</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">T</span> <span class="o">*</span><span class="n">tmp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">T</span><span class="p">[</span><span class="n">end</span> <span class="o">-</span> <span class="n">begin</span><span class="p">];</span>
 </span><span class='line'>    <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="n">begin</span><span class="p">;</span>
 </span><span class='line'>    <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="n">mid</span><span class="p">;</span>
 </span><span class='line'>    <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
@@ -1326,6 +1357,7 @@ sorted subarrays and then copy the elements to the original array.</p>
 </span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">index</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>        <span class="n">list</span><span class="p">[</span><span class="n">begin</span> <span class="o">+</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
 </span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">delete</span><span class="p">[]</span> <span class="n">tmp</span><span class="p">;</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
 </span><span class='line'><span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
@@ -1402,6 +1434,11 @@ sorted subarrays and then copy the elements to the original array.</p>
 <span class='line-number'>54</span>
 <span class='line-number'>55</span>
 <span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
 </pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#define BOOST_TEST_DYN_LINK</span>
 </span><span class='line'><span class="cp">#define BOOST_TEST_MAIN</span>
 </span><span class='line'>
@@ -1417,7 +1454,7 @@ sorted subarrays and then copy the elements to the original array.</p>
 </span><span class='line'><span class="kt">int</span> <span class="n">normal_list_sorted</span><span class="p">[</span><span class="n">NORMAL_SIZE</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">};</span>
 </span><span class='line'><span class="kt">int</span> <span class="n">normal_list_sorted_descend</span><span class="p">[</span><span class="n">NORMAL_SIZE</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">};</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">const</span> <span class="kt">int</span> <span class="n">RANDOM_SIZE</span> <span class="o">=</span> <span class="mi">9999</span><span class="p">;</span>
+</span><span class='line'><span class="k">const</span> <span class="kt">int</span> <span class="n">RANDOM_SIZE</span> <span class="o">=</span> <span class="mi">20000000</span><span class="p">;</span>
 </span><span class='line'>
 </span><span class='line'><span class="n">BOOST_AUTO_TEST_SUITE</span><span class="p">(</span><span class="n">merge_</span><span class="p">)</span>
 </span><span class='line'>
@@ -1444,8 +1481,11 @@ sorted subarrays and then copy the elements to the original array.</p>
 </span><span class='line'>
 </span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">random</span><span class="p">)</span>
 </span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="kt">int</span> <span class="n">random_list</span><span class="p">[</span><span class="n">RANDOM_SIZE</span><span class="p">];</span>
-</span><span class='line'>    <span class="kt">int</span> <span class="n">random_list_sorted</span><span class="p">[</span><span class="n">RANDOM_SIZE</span><span class="p">];</span>
+</span><span class='line'>    <span class="c1">// int random_list[RANDOM_SIZE];</span>
+</span><span class='line'>    <span class="c1">// int random_list_sorted[RANDOM_SIZE];</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="o">*</span><span class="n">random_list</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="n">RANDOM_SIZE</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="o">*</span><span class="n">random_list_sorted</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="n">RANDOM_SIZE</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+</span><span class='line'>
 </span><span class='line'>    <span class="n">srand</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
 </span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">RANDOM_SIZE</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>        <span class="n">random_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">random_list_sorted</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">rand</span><span class="p">();</span>
@@ -1455,6 +1495,8 @@ sorted subarrays and then copy the elements to the original array.</p>
 </span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">RANDOM_SIZE</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>        <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">random_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">random_list_sorted</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
 </span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">free</span><span class="p">(</span><span class="n">random_list</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">free</span><span class="p">(</span><span class="n">random_list_sorted</span><span class="p">);</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
 </span><span class='line'><span class="n">BOOST_AUTO_TEST_SUITE_END</span><span class="p">()</span>
@@ -1601,6 +1643,11 @@ Since the two arrays is sorted, it&rsquo;s fast to merge them.</p>
 <span class='line-number'>54</span>
 <span class='line-number'>55</span>
 <span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
 </pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#define BOOST_TEST_DYN_LINK</span>
 </span><span class='line'><span class="cp">#define BOOST_TEST_MAIN</span>
 </span><span class='line'>
@@ -1616,7 +1663,7 @@ Since the two arrays is sorted, it&rsquo;s fast to merge them.</p>
 </span><span class='line'><span class="kt">int</span> <span class="n">normal_list_sorted</span><span class="p">[</span><span class="n">NORMAL_SIZE</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">};</span>
 </span><span class='line'><span class="kt">int</span> <span class="n">normal_list_sorted_descend</span><span class="p">[</span><span class="n">NORMAL_SIZE</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">};</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">const</span> <span class="kt">int</span> <span class="n">RANDOM_SIZE</span> <span class="o">=</span> <span class="mi">9999</span><span class="p">;</span>
+</span><span class='line'><span class="k">const</span> <span class="kt">int</span> <span class="n">RANDOM_SIZE</span> <span class="o">=</span> <span class="mi">10000000</span><span class="p">;</span>
 </span><span class='line'>
 </span><span class='line'><span class="n">BOOST_AUTO_TEST_SUITE</span><span class="p">(</span><span class="n">merge_insert</span><span class="p">)</span>
 </span><span class='line'>
@@ -1643,8 +1690,11 @@ Since the two arrays is sorted, it&rsquo;s fast to merge them.</p>
 </span><span class='line'>
 </span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">random</span><span class="p">)</span>
 </span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="kt">int</span> <span class="n">random_list</span><span class="p">[</span><span class="n">RANDOM_SIZE</span><span class="p">];</span>
-</span><span class='line'>    <span class="kt">int</span> <span class="n">random_list_sorted</span><span class="p">[</span><span class="n">RANDOM_SIZE</span><span class="p">];</span>
+</span><span class='line'>    <span class="c1">// int random_list[RANDOM_SIZE];</span>
+</span><span class='line'>    <span class="c1">// int random_list_sorted[RANDOM_SIZE];</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="o">*</span><span class="n">random_list</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="n">RANDOM_SIZE</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="o">*</span><span class="n">random_list_sorted</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="n">RANDOM_SIZE</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+</span><span class='line'>
 </span><span class='line'>    <span class="n">srand</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
 </span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">RANDOM_SIZE</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>        <span class="n">random_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">random_list_sorted</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">rand</span><span class="p">();</span>
@@ -1654,6 +1704,8 @@ Since the two arrays is sorted, it&rsquo;s fast to merge them.</p>
 </span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">RANDOM_SIZE</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>        <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">random_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">random_list_sorted</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
 </span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">free</span><span class="p">(</span><span class="n">random_list</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">free</span><span class="p">(</span><span class="n">random_list_sorted</span><span class="p">);</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
 </span><span class='line'><span class="n">BOOST_AUTO_TEST_SUITE_END</span><span class="p">()</span>
@@ -1887,6 +1939,12 @@ step 1, 2, 3.</p></li>
 <span class='line-number'>54</span>
 <span class='line-number'>55</span>
 <span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
 </pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#define BOOST_TEST_DYN_LINK</span>
 </span><span class='line'><span class="cp">#define BOOST_TEST_MAIN</span>
 </span><span class='line'>
@@ -1902,7 +1960,8 @@ step 1, 2, 3.</p></li>
 </span><span class='line'><span class="kt">int</span> <span class="n">normal_list_sorted</span><span class="p">[</span><span class="n">NORMAL_SIZE</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">};</span>
 </span><span class='line'><span class="kt">int</span> <span class="n">normal_list_sorted_descend</span><span class="p">[</span><span class="n">NORMAL_SIZE</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">};</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">const</span> <span class="kt">int</span> <span class="n">RANDOM_SIZE</span> <span class="o">=</span> <span class="mi">9999</span><span class="p">;</span>
+</span><span class='line'><span class="k">const</span> <span class="kt">int</span> <span class="n">RANDOM_SIZE</span> <span class="o">=</span> <span class="mi">10000000</span><span class="p">;</span>
+</span><span class='line'><span class="c1">//const int RANDOM_SIZE = 9999;</span>
 </span><span class='line'>
 </span><span class='line'><span class="n">BOOST_AUTO_TEST_SUITE</span><span class="p">(</span><span class="n">merge_</span><span class="p">)</span>
 </span><span class='line'>
@@ -1929,8 +1988,11 @@ step 1, 2, 3.</p></li>
 </span><span class='line'>
 </span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">random</span><span class="p">)</span>
 </span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="kt">int</span> <span class="n">random_list</span><span class="p">[</span><span class="n">RANDOM_SIZE</span><span class="p">];</span>
-</span><span class='line'>    <span class="kt">int</span> <span class="n">random_list_sorted</span><span class="p">[</span><span class="n">RANDOM_SIZE</span><span class="p">];</span>
+</span><span class='line'>    <span class="c1">//    int random_list[RANDOM_SIZE];</span>
+</span><span class='line'>    <span class="c1">//    int random_list_sorted[RANDOM_SIZE];</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="o">*</span><span class="n">random_list</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="n">RANDOM_SIZE</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="o">*</span><span class="n">random_list_sorted</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="n">RANDOM_SIZE</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+</span><span class='line'>
 </span><span class='line'>    <span class="n">srand</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
 </span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">RANDOM_SIZE</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>        <span class="n">random_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">random_list_sorted</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">rand</span><span class="p">();</span>
@@ -1940,6 +2002,8 @@ step 1, 2, 3.</p></li>
 </span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">RANDOM_SIZE</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>        <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">random_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">random_list_sorted</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
 </span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">free</span><span class="p">(</span><span class="n">random_list</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">free</span><span class="p">(</span><span class="n">random_list_sorted</span><span class="p">);</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
 </span><span class='line'><span class="n">BOOST_AUTO_TEST_SUITE_END</span><span class="p">()</span>
@@ -2152,6 +2216,11 @@ easy.</p>
 <span class='line-number'>54</span>
 <span class='line-number'>55</span>
 <span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
 </pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#define BOOST_TEST_DYN_LINK</span>
 </span><span class='line'><span class="cp">#define BOOST_TEST_MAIN</span>
 </span><span class='line'>
@@ -2167,7 +2236,7 @@ easy.</p>
 </span><span class='line'><span class="kt">int</span> <span class="n">normal_list_sorted</span><span class="p">[</span><span class="n">NORMAL_SIZE</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">};</span>
 </span><span class='line'><span class="kt">int</span> <span class="n">normal_list_sorted_descend</span><span class="p">[</span><span class="n">NORMAL_SIZE</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">};</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">const</span> <span class="kt">int</span> <span class="n">RANDOM_SIZE</span> <span class="o">=</span> <span class="mi">9999</span><span class="p">;</span>
+</span><span class='line'><span class="k">const</span> <span class="kt">int</span> <span class="n">RANDOM_SIZE</span> <span class="o">=</span> <span class="mi">20000000</span><span class="p">;</span>
 </span><span class='line'>
 </span><span class='line'><span class="n">BOOST_AUTO_TEST_SUITE</span><span class="p">(</span><span class="n">heap_</span><span class="p">)</span>
 </span><span class='line'>
@@ -2194,8 +2263,11 @@ easy.</p>
 </span><span class='line'>
 </span><span class='line'><span class="n">BOOST_AUTO_TEST_CASE</span><span class="p">(</span><span class="n">random</span><span class="p">)</span>
 </span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="kt">int</span> <span class="n">random_list</span><span class="p">[</span><span class="n">RANDOM_SIZE</span><span class="p">];</span>
-</span><span class='line'>    <span class="kt">int</span> <span class="n">random_list_sorted</span><span class="p">[</span><span class="n">RANDOM_SIZE</span><span class="p">];</span>
+</span><span class='line'>    <span class="c1">//    int random_list[RANDOM_SIZE];</span>
+</span><span class='line'>    <span class="c1">//    int random_list_sorted[RANDOM_SIZE];</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="o">*</span><span class="n">random_list</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="n">RANDOM_SIZE</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="o">*</span><span class="n">random_list_sorted</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="n">RANDOM_SIZE</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+</span><span class='line'>
 </span><span class='line'>    <span class="n">srand</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
 </span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">RANDOM_SIZE</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>        <span class="n">random_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">random_list_sorted</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">rand</span><span class="p">();</span>
@@ -2205,6 +2277,8 @@ easy.</p>
 </span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">RANDOM_SIZE</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
 </span><span class='line'>        <span class="n">BOOST_CHECK_EQUAL</span><span class="p">(</span><span class="n">random_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">random_list_sorted</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
 </span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">free</span><span class="p">(</span><span class="n">random_list</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">free</span><span class="p">(</span><span class="n">random_list_sorted</span><span class="p">);</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
 </span><span class='line'><span class="n">BOOST_AUTO_TEST_SUITE_END</span><span class="p">()</span>

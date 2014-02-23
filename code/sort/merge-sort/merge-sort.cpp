@@ -4,7 +4,7 @@ template <typename T>
 void
 merge(T list[], int begin, int mid, int end, bool is_ascending)
 {
-    T tmp[end - begin];
+    T *tmp = new T[end - begin];
     int left = begin;
     int right = mid;
     int index = -1;
@@ -30,6 +30,7 @@ merge(T list[], int begin, int mid, int end, bool is_ascending)
     for (int i = 0; i <= index; ++i) {
         list[begin + i] = tmp[i];
     }
+    delete[] tmp;
 }
                       
 template <typename T>

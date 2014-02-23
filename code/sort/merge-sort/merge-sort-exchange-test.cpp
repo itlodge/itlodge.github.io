@@ -13,7 +13,8 @@ int normal_list[NORMAL_SIZE] = {5, 1, 4, 2, 8};
 int normal_list_sorted[NORMAL_SIZE] = {1, 2, 4, 5, 8};
 int normal_list_sorted_descend[NORMAL_SIZE] = {8, 5, 4, 2, 1};
 
-const int RANDOM_SIZE = 9999;
+const int RANDOM_SIZE = 10000000;
+//const int RANDOM_SIZE = 9999;
 
 BOOST_AUTO_TEST_SUITE(merge_)
 
@@ -40,8 +41,11 @@ BOOST_AUTO_TEST_CASE(normal_descending)
 
 BOOST_AUTO_TEST_CASE(random)
 {
-    int random_list[RANDOM_SIZE];
-    int random_list_sorted[RANDOM_SIZE];
+    //    int random_list[RANDOM_SIZE];
+    //    int random_list_sorted[RANDOM_SIZE];
+    int *random_list = (int *)malloc(RANDOM_SIZE * sizeof(int));
+    int *random_list_sorted = (int *)malloc(RANDOM_SIZE * sizeof(int));
+
     srand(1);
     for (int i = 0; i < RANDOM_SIZE; ++i) {
         random_list[i] = random_list_sorted[i] = rand();
@@ -51,6 +55,8 @@ BOOST_AUTO_TEST_CASE(random)
     for (int i = 0; i < RANDOM_SIZE; ++i) {
         BOOST_CHECK_EQUAL(random_list[i], random_list_sorted[i]);
     }
+    free(random_list);
+    free(random_list_sorted);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

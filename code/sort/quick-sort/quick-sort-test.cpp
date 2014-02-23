@@ -13,13 +13,23 @@ int normal_list[NORMAL_SIZE] = {5, 1, 4, 2, 8};
 int normal_list_sorted[NORMAL_SIZE] = {1, 2, 4, 5, 8};
 int normal_list_sorted_descend[NORMAL_SIZE] = {8, 5, 4, 2, 1};
 
-const int RANDOM_SIZE = 9999;
+const int RANDOM_SIZE = 200000;
 
 BOOST_AUTO_TEST_SUITE(quick_recursive)
 
 BOOST_AUTO_TEST_CASE(empty)
 {
     qsort_r(empty_list, 0, 0);
+}
+
+BOOST_AUTO_TEST_CASE(two_element)
+{
+  const int NUM = 2;
+  int arr[NUM] = {2, 1};
+
+  qsort_r(arr, 0, NUM);
+  BOOST_CHECK_EQUAL(arr[0], 1);
+  BOOST_CHECK_EQUAL(arr[1], 2);
 }
 
 BOOST_AUTO_TEST_CASE(normal)
@@ -40,8 +50,8 @@ BOOST_AUTO_TEST_CASE(normal_descending)
 
 BOOST_AUTO_TEST_CASE(random)
 {
-    int random_list[RANDOM_SIZE];
-    int random_list_sorted[RANDOM_SIZE];
+    int *random_list = new int[RANDOM_SIZE];
+    int *random_list_sorted = new int[RANDOM_SIZE];
     srand(1);
     for (int i = 0; i < RANDOM_SIZE; ++i) {
         random_list[i] = random_list_sorted[i] = rand();
@@ -51,6 +61,8 @@ BOOST_AUTO_TEST_CASE(random)
     for (int i = 0; i < RANDOM_SIZE; ++i) {
         BOOST_CHECK_EQUAL(random_list[i], random_list_sorted[i]);
     }
+    delete[] random_list;
+    delete[] random_list_sorted;
 }
 
 BOOST_AUTO_TEST_SUITE_END()
