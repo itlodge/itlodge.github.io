@@ -9,8 +9,7 @@ footer: true
 
 My name is Yuanhang Zheng.
 
-My chinese blog is [here](http://cn.zhengyuanhang.com). And I have an old
-chinese blog: [IT足迹](http://www.zhengyuanhang.com)
+My chinese blog is [here](http://cn.zhengyuanhang.com).
 
 Books I read.
 
