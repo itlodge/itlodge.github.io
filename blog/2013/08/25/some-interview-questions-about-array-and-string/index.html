@@ -406,7 +406,7 @@ characters in the string.</p></li>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p><strong>1.2.</strong> Write code to reverse a C-Style String(C-String means that &ldquo;abcd&rdquo; is
+<p><strong>1.2.</strong> Write code to reverse a C-Style String(C-String means that &#8220;abcd&#8221; is
 represented as five characters, including the null character)</p>
 
 <p>The approach I come up with is described as follows.</p>
@@ -415,12 +415,12 @@ represented as five characters, including the null character)</p>
 <li><p>Get the length of the string, which needs iterate the whole string.</p></li>
 <li><p>According to the property of continuing, we can manipulate the string
 from the end. So we can swap the first character with the last character,
-and swap the second character with the last but not least character, &hellip;
+and swap the second character with the last but not least character, &#8230;
 This needs iterate half of the string.</p></li>
 </ol>
 
 
-<p>In sumary, this will need O(1.5n) &ndash;> O(n) time complexity. Here is the code.</p>
+<p>In sumary, this will need O(1.5n) -> O(n) time complexity. Here is the code.</p>
 
 <figure class='code'><figcaption><span> (careerup-1.2.cpp)</span> <a href='/code/careerup-array/careerup-1.2.cpp'>download</a></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -965,10 +965,10 @@ the two string.</p></li>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p><strong>1.5</strong> Write a method to replace all spaces in a string with &lsquo;%20&rsquo;.</p>
+<p><strong>1.5</strong> Write a method to replace all spaces in a string with &#8216;%20&#8217;.</p>
 
 <p>There is a <code>replace</code> method in class <code>std::string</code> , so I can use it
-directly. But it&rsquo;s too slow(O(n<sup>2</sup>)). There is another method with the time
+directly. But it&#8217;s too slow(O(n<sup>2</sup>)). There is another method with the time
 complexity O(n). Count the number of the spaces and resize the string and
 copy the string from tail to head. If encounter the space, replace it with
 <code>%20</code>. Here is the code of the two methods.</p>
@@ -1159,11 +1159,11 @@ copy the string from tail to head. If encounter the space, replace it with
 image is 4 bytes, write a method to rotate the image by 90 degrees  Can you
 do this in place?</p>
 
-<p>The first time I looked at this problem, I think it&rsquo;s very simple and write
+<p>The first time I looked at this problem, I think it&#8217;s very simple and write
 down an equation <code>a[i][j] = a[n - j - 1][i]</code>. When I implemented the program
 using this equation, I found that I was totally <strong>wrong</strong>!</p>
 
-<p>Since you can&rsquo;t request another space to store the matrix that was unmodified,
+<p>Since you can&#8217;t request another space to store the matrix that was unmodified,
 the modified value will affect the value to be changed. So we should think about
 other solutions. One effective solution is to divide the whole matrix into
 <code>N / 2</code> parts and rotate each parts by swapping the values four times.</p>
@@ -1277,7 +1277,7 @@ entire row and column is set to 0.</p>
 
 <p>I made the same mistake as problem <strong>1.6</strong>. I think we should just iterate the
 whole matrix and set its entire row and row to 0 when we met an element that is
-0. But this is <strong>wrong</strong>! It will also affect the elements that haven&rsquo;t been
+0. But this is <strong>wrong</strong>! It will also affect the elements that haven&#8217;t been
 iterated.</p>
 
 <p>One solution is to use another matrix to record the original matrix. But this
@@ -1419,14 +1419,14 @@ entire row or column to 0.</p>
 
 <p><strong>1.8</strong> Assume you have a method isSubstring which checks if one word is a
 substring of another. Given two strings, s1 and s2, write code to check if
-s2 is a rotation of s1 using only one call to isSubstring (i.e., &ldquo;waterbottle&rdquo;
-is a rotation of &ldquo;erbottlewat&rdquo;).</p>
+s2 is a rotation of s1 using only one call to isSubstring (i.e., &#8220;waterbottle&#8221;
+is a rotation of &#8220;erbottlewat&#8221;).</p>
 
-<p>I am not so smart that I can&rsquo;t come up with the method to solve this problem
+<p>I am not so smart that I can&#8217;t come up with the method to solve this problem
 after a long time. The answer amazed me.</p>
 
 <p>Just concatenate <code>s1</code> and check if <code>s2</code> is a substring of it. For example,
-<code>waterbottle</code> is a substring of <code>erbottlewaterbottlewat</code>, so it&rsquo;s a rotation
+<code>waterbottle</code> is a substring of <code>erbottlewaterbottlewat</code>, so it&#8217;s a rotation
 of <code>erbottlewat</code>.</p>
 
 <p>Here is the code.</p>

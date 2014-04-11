@@ -4,7 +4,7 @@
   <title><![CDATA[Yuanhang Zheng]]></title>
   <link href="http://itlodge.github.io/atom.xml" rel="self"/>
   <link href="http://itlodge.github.io/"/>
-  <updated>2014-04-11T08:21:20+00:00</updated>
+  <updated>2014-04-11T08:35:15+00:00</updated>
   <id>http://itlodge.github.io/</id>
   <author>
     <name><![CDATA[Yuanhang Zheng]]></name>
@@ -2637,7 +2637,7 @@ sorted, it requires only O(n) time complexity.</p>
 be sorted more easy is used in shell sort. It will sort the list for several
 times and each time with some of the elements. These elements is divided by
 a fixed <strong>gap</strong> and the gap will decrease until becoming 1. If the gap is 1,
-it&rsquo;s the same as the insert sort. But now it will be more fast than the original
+it&#8217;s the same as the insert sort. But now it will be more fast than the original
 insert sort.</p>
 
 <p>Here is the code.</p>
@@ -3546,7 +3546,7 @@ sorted subarrays and then copy the elements to the original array.</p>
 <h2>Merge using Insert sort</h2>
 
 <p>In the merge process, we can using insert sort to merge the two sorted arrays.
-Since the two arrays is sorted, it&rsquo;s fast to merge them.</p>
+Since the two arrays is sorted, it&#8217;s fast to merge them.</p>
 
 <p>Note this method is <a href="http://en.wikipedia.org/wiki/In-place_algorithm">in-place</a>.</p>
 
@@ -5991,7 +5991,7 @@ other member functions in the member function.</strong></li>
 
 <p>This seems ridiculous. But I prefer. In a member function, there may be
 various kinds of variables, such as memeber variables, global variables
-and local variables. If we don&rsquo;t add some flag to refer to the member
+and local variables. If we don&#8217;t add some flag to refer to the member
 variables, we will confused when we met a variable. Is it a local variable
 or a member variable? For example, there is a statement in a member function.</p>
 
@@ -5999,13 +5999,13 @@ or a member variable? For example, there is a statement in a member function.</p
 </code></pre>
 
 <p>How can you know what this statement exactly means? Which <code>size</code> is the
-class&rsquo;s size? However, if we write this statement as this,</p>
+class&#8217;s size? However, if we write this statement as this,</p>
 
 <pre><code>m_size1 = size2 + 1;
 </code></pre>
 
-<p>we can know that we set the class&rsquo;s size be the value of local variable <code>size</code>
-plus one. This code is readable and it can relieve the code reader&rsquo;s headache.</p>
+<p>we can know that we set the class&#8217;s size be the value of local variable <code>size</code>
+plus one. This code is readable and it can relieve the code reader&#8217;s headache.</p>
 
 <p>For the member functions. When refering to a member function, always use
 <code>this</code>.</p>
@@ -6032,9 +6032,9 @@ always with prefix <code>m</code>.</p>
 
 <p>I used to leave the return type name on the left of a function name. The first
 time I saw some programmers put them in a single line is the
-<a href="http://en.wikipedia.org/wiki/Pintos">Pintos</a> project. I thought it&rsquo;s ugly.
+<a href="http://en.wikipedia.org/wiki/Pintos">Pintos</a> project. I thought it&#8217;s ugly.
 But after I worked on the code of <a href="http://en.wikipedia.org/wiki/Gold_(linker">Gold</a>),
-I changed my mind. I followed the author&rsquo;s style, even in a main function.</p>
+I changed my mind. I followed the author&#8217;s style, even in a main function.</p>
 
 <pre><code>int
 main(int argc, char *argv[]) { }
@@ -6049,7 +6049,7 @@ name. For example,</p>
 get_map(const std::string&amp; name, bool is_global=true) const;
 </code></pre>
 
-<p>If you don&rsquo;t leave the return type name in a single line, the function
+<p>If you don&#8217;t leave the return type name in a single line, the function
 declaration will becomes</p>
 
 <pre><code>std::map&lt;size_t, LinkedList&lt;T&gt; *&gt; * get_map(const std::string&amp; name, bool is_global=true) const;
@@ -6113,7 +6113,7 @@ while (top &gt; 0) {
 ...
 </code></pre>
 
-<p>Now, it&rsquo;s only <strong>3</strong> level of indentations, which looks more beautiful.
+<p>Now, it&#8217;s only <strong>3</strong> level of indentations, which looks more beautiful.
 This is an important skills to make my code more beautiful.</p>
 ]]></content>
   </entry>
@@ -6140,9 +6140,9 @@ an array <code>values</code> of size <code>size</code>.</li>
 CiLinkedList assignment.</li>
 <li><code>~CiLinkedList()</code>, Free all the space requested by the CiLinkedList.</li>
 <li><code>std::ostream&amp; operator&lt;&lt;(std::ostream&amp;, const CiLinkedList&lt;T&gt;&amp;);</code>,
-Output the CiLinkedList in the form <strong>[a, b, c &hellip;]</strong>.</li>
+Output the CiLinkedList in the form <strong>[a, b, c &#8230;]</strong>.</li>
 <li><code>const T&amp; operator[](size_t index)</code>, Access the element of the CiLinkedList,
-but it&rsquo;s not random accessible.</li>
+but it&#8217;s not random accessible.</li>
 <li><code>size_t size()</code>, Return the size of the CiLinkedList.</li>
 <li><code>rm_dup()</code>, Remove duplicate elements int the CiLinkedList.</li>
 </ul>
@@ -6936,11 +6936,11 @@ an array <code>values</code> of size <code>size</code>.</li>
 BiLinkedList assignment.</li>
 <li><code>~BiLinkedList()</code>, Free all the space requested by the BiLinkedList.</li>
 <li><code>std::ostream&amp; operator&lt;&lt;(std::ostream&amp;, const BiLinkedList&lt;T&gt;&amp;);</code>,
-Output the BiLinkedList in the form <strong>[a, b, c &hellip;]</strong>.</li>
+Output the BiLinkedList in the form <strong>[a, b, c &#8230;]</strong>.</li>
 <li><code>void append(const T&amp; value)</code>, Append an element <code>value</code> to the
 BiLinkedList.</li>
 <li><code>const T&amp; operator[](size_t index)</code>, Access the element of the BiLinkedList,
-but it&rsquo;s not random accessible.</li>
+but it&#8217;s not random accessible.</li>
 <li><code>void insert(size_t index, const T&amp; value)</code>, Insert an element <code>value</code>
 in the position <code>index</code>.</li>
 <li><code>void remove(size_t index)</code>, Remove the element in the position <code>index</code>.</li>
@@ -7892,10 +7892,10 @@ an array <code>values</code> of size <code>size</code>.</li>
 assignment.</li>
 <li><code>~LinkedList()</code>, Free all the space requested by the LinkedList.</li>
 <li><code>std::ostream&amp; operator&lt;&lt;(std::ostream&amp;, const LinkedList&lt;T&gt;&amp;);</code>,
-Output the LinkedList in the form <strong>[a, b, c &hellip;]</strong>.</li>
+Output the LinkedList in the form <strong>[a, b, c &#8230;]</strong>.</li>
 <li><code>void append(const T&amp; value)</code>, Append an element <code>value</code> to the LinkedList.</li>
 <li><code>const T&amp; operator[](size_t index)</code>, Access the element of the LinkedList,
-but it&rsquo;s not random accessible.</li>
+but it&#8217;s not random accessible.</li>
 <li><code>void insert(size_t index, const T&amp; value)</code>, Insert an element <code>value</code>
 in the position <code>index</code>.</li>
 <li><code>void remove(size_t index)</code>, Remove the element in the position <code>index</code>.</li>
@@ -9683,7 +9683,7 @@ characters in the string.</p></li>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p><strong>1.2.</strong> Write code to reverse a C-Style String(C-String means that &ldquo;abcd&rdquo; is
+<p><strong>1.2.</strong> Write code to reverse a C-Style String(C-String means that &#8220;abcd&#8221; is
 represented as five characters, including the null character)</p>
 
 <p>The approach I come up with is described as follows.</p>
@@ -9692,12 +9692,12 @@ represented as five characters, including the null character)</p>
 <li><p>Get the length of the string, which needs iterate the whole string.</p></li>
 <li><p>According to the property of continuing, we can manipulate the string
 from the end. So we can swap the first character with the last character,
-and swap the second character with the last but not least character, &hellip;
+and swap the second character with the last but not least character, &#8230;
 This needs iterate half of the string.</p></li>
 </ol>
 
 
-<p>In sumary, this will need O(1.5n) &ndash;> O(n) time complexity. Here is the code.</p>
+<p>In sumary, this will need O(1.5n) -> O(n) time complexity. Here is the code.</p>
 
 <figure class='code'><figcaption><span> (careerup-1.2.cpp)</span> <a href='http://itlodge.github.io/code/careerup-array/careerup-1.2.cpp'>download</a></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -10242,10 +10242,10 @@ the two string.</p></li>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p><strong>1.5</strong> Write a method to replace all spaces in a string with &lsquo;%20&rsquo;.</p>
+<p><strong>1.5</strong> Write a method to replace all spaces in a string with &#8216;%20&#8217;.</p>
 
 <p>There is a <code>replace</code> method in class <code>std::string</code> , so I can use it
-directly. But it&rsquo;s too slow(O(n<sup>2</sup>)). There is another method with the time
+directly. But it&#8217;s too slow(O(n<sup>2</sup>)). There is another method with the time
 complexity O(n). Count the number of the spaces and resize the string and
 copy the string from tail to head. If encounter the space, replace it with
 <code>%20</code>. Here is the code of the two methods.</p>
@@ -10436,11 +10436,11 @@ copy the string from tail to head. If encounter the space, replace it with
 image is 4 bytes, write a method to rotate the image by 90 degrees  Can you
 do this in place?</p>
 
-<p>The first time I looked at this problem, I think it&rsquo;s very simple and write
+<p>The first time I looked at this problem, I think it&#8217;s very simple and write
 down an equation <code>a[i][j] = a[n - j - 1][i]</code>. When I implemented the program
 using this equation, I found that I was totally <strong>wrong</strong>!</p>
 
-<p>Since you can&rsquo;t request another space to store the matrix that was unmodified,
+<p>Since you can&#8217;t request another space to store the matrix that was unmodified,
 the modified value will affect the value to be changed. So we should think about
 other solutions. One effective solution is to divide the whole matrix into
 <code>N / 2</code> parts and rotate each parts by swapping the values four times.</p>
@@ -10554,7 +10554,7 @@ entire row and column is set to 0.</p>
 
 <p>I made the same mistake as problem <strong>1.6</strong>. I think we should just iterate the
 whole matrix and set its entire row and row to 0 when we met an element that is
-0. But this is <strong>wrong</strong>! It will also affect the elements that haven&rsquo;t been
+0. But this is <strong>wrong</strong>! It will also affect the elements that haven&#8217;t been
 iterated.</p>
 
 <p>One solution is to use another matrix to record the original matrix. But this
@@ -10696,14 +10696,14 @@ entire row or column to 0.</p>
 
 <p><strong>1.8</strong> Assume you have a method isSubstring which checks if one word is a
 substring of another. Given two strings, s1 and s2, write code to check if
-s2 is a rotation of s1 using only one call to isSubstring (i.e., &ldquo;waterbottle&rdquo;
-is a rotation of &ldquo;erbottlewat&rdquo;).</p>
+s2 is a rotation of s1 using only one call to isSubstring (i.e., &#8220;waterbottle&#8221;
+is a rotation of &#8220;erbottlewat&#8221;).</p>
 
-<p>I am not so smart that I can&rsquo;t come up with the method to solve this problem
+<p>I am not so smart that I can&#8217;t come up with the method to solve this problem
 after a long time. The answer amazed me.</p>
 
 <p>Just concatenate <code>s1</code> and check if <code>s2</code> is a substring of it. For example,
-<code>waterbottle</code> is a substring of <code>erbottlewaterbottlewat</code>, so it&rsquo;s a rotation
+<code>waterbottle</code> is a substring of <code>erbottlewaterbottlewat</code>, so it&#8217;s a rotation
 of <code>erbottlewat</code>.</p>
 
 <p>Here is the code.</p>
@@ -10807,7 +10807,7 @@ of <code>erbottlewat</code>.</p>
 the virables or the functions in the base class will be hidden if there
 are virables and functions with the same name.</p>
 
-<p>It seems perfect, but it&rsquo;s a pitfall of C++. Consider the following example.</p>
+<p>It seems perfect, but it&#8217;s a pitfall of C++. Consider the following example.</p>
 
 <pre><code>#include &lt;cstdio&gt;
 #include &lt;iostream&gt;
@@ -10857,7 +10857,7 @@ main(int argc, char **argv)
 }
 </code></pre>
 
-<p>This program won&rsquo;t be compiled. It shows the following error:</p>
+<p>This program won&#8217;t be compiled. It shows the following error:</p>
 
 <pre><code>test.cpp:39:16: error: no matching function for call to ‘Student::sleep(int)’
      stu.sleep(1);
@@ -10878,7 +10878,7 @@ hiding of the <code>sleep(const int sec)</code> function!</p>
 <p>So how to solve this problem? There are two methods so far.</p>
 
 <ol>
-<li>Don&rsquo;t hide the names in the base class will using overloading functions.</li>
+<li>Don&#8217;t hide the names in the base class will using overloading functions.</li>
 <li><p>Use <code>using</code> directive to make the certain methods visible.</p>
 
 <pre><code> class Student:public Person {
@@ -10901,7 +10901,7 @@ implement <code>sleep()</code> function in the definition of the class. Why do t
 I have worked in some very large C++ projects and there are many implementation
 in the definition. In fact, this is so-called <strong>implicit inline</strong>. The compiler
 will inline the functions that are implemented in the class definition
-automatically. Therefore, it&rsquo;s good to implement some small functions in the
+automatically. Therefore, it&#8217;s good to implement some small functions in the
 definition of class. And let the large function implement in another file.
 This will make my code more effecient and I will follow this guide in the
 future.</p>
@@ -10916,7 +10916,7 @@ future.</p>
     <content type="html"><![CDATA[<h2>Prepone definitions? Wrong!</h2>
 
 <p>Before C99, you must prepone all the variables&#8217; definitions before any
-statements. But after C99 was released, you can put a variable&rsquo;s definition
+statements. But after C99 was released, you can put a variable&#8217;s definition
 in any place as long as before being used. I think this new feature is
 introduced by learning from C++.</p>
 
@@ -10925,7 +10925,7 @@ old style. I even teach my students that they should use the old style when
 I was a TA of the course <em>Programming with C</em>.</p>
 
 <p>However, now I realize that I was wrong. <strong>We should postpone variables&#8217;</strong>
-<strong>definitions as long as possible</strong>. It&rsquo;s not for coding style, but for the
+<strong>definitions as long as possible</strong>. It&#8217;s not for coding style, but for the
 effeciency of the program.</p>
 
 <p>Consider this program.</p>
@@ -11044,7 +11044,7 @@ for (int i = 0; i &lt; n; i++) {
 
 <p>, which is better?</p>
 
-<p>Let&rsquo;s analysis the performance of them.
+<p>Let&#8217;s analysis the performance of them.
 * The former need 1 construction, n assignments and 1 destruction. But it makes
 the object <code>p</code> in a larger scope, which increase the comprehensibility and
 maintainability of the program.
@@ -11065,16 +11065,16 @@ will be more expensive than assignment.</p>
     <link href="http://itlodge.github.io/blog/2013/08/09/understanding-encapsulation/"/>
     <updated>2013-08-09T21:38:00+00:00</updated>
     <id>http://itlodge.github.io/blog/2013/08/09/understanding-encapsulation</id>
-    <content type="html"><![CDATA[<p>Once I loved <em>C</em> very much and I thought it&rsquo;s the best programming language
+    <content type="html"><![CDATA[<p>Once I loved <em>C</em> very much and I thought it&#8217;s the best programming language
 in the world. I used to argue that <em>C</em> can be used to implement the
 object-oriented design with <code>struct</code>. I used to argue that <code>private</code> and
 <code>public</code> is useless in <em>C++</em>. However, now I know I was wrong.</p>
 
 <h2>Why we need private</h2>
 
-<p>It&rsquo;s related to a very important concept in C++, that is, <strong>encapsulation</strong>.</p>
+<p>It&#8217;s related to a very important concept in C++, that is, <strong>encapsulation</strong>.</p>
 
-<p><strong>Encapsulation is not invisibility. It&rsquo;s maintainability.</strong></p>
+<p><strong>Encapsulation is not invisibility. It&#8217;s maintainability.</strong></p>
 
 <p>Suppose a class is very popular and is used by many projects. For example,
 the <code>string</code> class. If every members in this class is <code>public</code>, the clients
@@ -11087,8 +11087,8 @@ change their codes.</p>
 
 <p>Therefore, <strong>public means unchangable and public means unencapsulated</strong>.</p>
 
-<p>The public member functions should not be changed in the future. Since you don&rsquo;t
-know how your clients will use your class, don&rsquo;t expose the members that may be
+<p>The public member functions should not be changed in the future. Since you don&#8217;t
+know how your clients will use your class, don&#8217;t expose the members that may be
 changed in the future to the clients.</p>
 
 <h2>Prefer non-member non-friend functions to member functions</h2>
@@ -11147,7 +11147,7 @@ private:
 </code></pre>
 
 <p>This is straightforward, especially for those Java and C# programmers. Every
-functions should be in a class and everything is object. It&rsquo;s obvious, right?</p>
+functions should be in a class and everything is object. It&#8217;s obvious, right?</p>
 
 <p>However, e have another option, that is, using the non-member function.</p>
 
@@ -11190,7 +11190,7 @@ friend functions are the only interface that can access the private members.</p>
 <p>In this example, if we add another public member function, we decrease the
 encapsulation of the class since this member function can access the private
 members of the class. But if we use the non-member non-friend function, it
-won&rsquo;t have impact with the class because it&rsquo;s the function outside.</p>
+won&#8217;t have impact with the class because it&#8217;s the function outside.</p>
 
 <p>Does it explain that <em>C++</em> is not so object-oriented? From Java or C#, those
 programmers will say that everything is object and classes are everywhere.
@@ -11199,7 +11199,7 @@ However, they are wrong. Object-oriented princiles state that <strong>data shoul
 functions is more <em>object-oriented</em>.</p>
 
 <p>Until now, I can say that I really understand the meaning of encapsulation and
-why it&rsquo;s so important in object-oriented programming.</p>
+why it&#8217;s so important in object-oriented programming.</p>
 ]]></content>
   </entry>
   
@@ -11259,7 +11259,7 @@ Calling Dog's destructor
 Calling Dog's destructor
 </code></pre>
 
-<p>Now, let&rsquo;s analysis this <em>passing by value</em> process.
+<p>Now, let&#8217;s analysis this <em>passing by value</em> process.
 First, <code>Dog dog;</code> will call the constructor. Then, since the function
 <code>walk_the_dog</code> pass the parameter <code>d</code> by value, it will call the copy
 constructor. Before exiting the function, it will call the destructor of <code>Dog</code>
@@ -11296,7 +11296,7 @@ of functions so that the program need less memory.</p>
 
 <p>The implementation of reference is using the pointer in C. Therefore, it may
 be more effecient to pass the built-in type parameters by value than referece.
-It&rsquo;s true. If the parameter is an object of type <code>char</code>, which occupies
+It&#8217;s true. If the parameter is an object of type <code>char</code>, which occupies
 1 byte. But a pointer ocuppies 4 bytes in a 32-bit machine. So we should prefer
 passing by value when the parameter is of built-in type? No, we should always
 pass the parameters by reference-to-const, since <strong>the compiler will always</strong>
@@ -11327,9 +11327,9 @@ It took me 30 minutes to arrive at <em>Xi zhi men station</em> from where I live
 <p>I planed to take the <em>Shi jiao yan qing s2 line</em> train to the Great Wall
 directly at <em>Beijing bei station</em>, which is near the <em>Xi zhi men station</em>.
 However, when I arrived there, the staff of the station said that the train
-will depart at 11:00am.I watched my smart phone, which showed that it&rsquo;s
+will depart at 11:00am.I watched my smart phone, which showed that it&#8217;s
 8:24am now.So I had to wait for about 2.5 hours if I took this train.Because
-I&#8217;am those one who don&rsquo;t want to stay in a place too long and want to go
+I&#8217;am those one who don&#8217;t want to stay in a place too long and want to go
 somewhere to have a look, I prefer the other type of a tour.Therefore, from
 the staff of the train, I knew that I could take buses to the Great Wall.</p>
 
@@ -11337,7 +11337,7 @@ the staff of the train, I knew that I could take buses to the Great Wall.</p>
 arrive at the <em>Long ze station</em>, then take the <em>878 bus</em>.However, when I
 arrived at the <em>Long ze station</em> and the <em>878 bus station</em>, I found something
 almost shock me.That is, the <em>878 bus</em> only depart at 7:00am-9:00am.But my
-smart phone showed that it&rsquo;s 9:03am.Oh my god!But I didn&rsquo;t give up.I stayed
+smart phone showed that it&#8217;s 9:03am.Oh my god!But I didn&#8217;t give up.I stayed
 there for another 20 minutes.This time, I almost wanted to go back home because
 I looked for 10 minutes to find some bus that can go to the Great Wall and I
 failed.</p>
@@ -11348,13 +11348,13 @@ failed.</p>
 <em>Baidu Map</em>.This time I went back to the <em>Xi er qi station</em>, take the
 <em>Chang ping line train</em> and arrived at the final station <em>Nan shao station</em>.
 When I got out of the station, I was shock again.This place is a remote village
-and I can&rsquo;t find a bus after looking for 10 minutes.So I went back to the
+and I can&#8217;t find a bus after looking for 10 minutes.So I went back to the
 exit of the subway and ask a driver of the <em>black car</em> how much of taking me
 to the Badaling Great Wall.His answer suprised me because he wanted 180 yuan.
-Although I could bargin with him to reduce the price to 100 yuan, but it&rsquo;s
+Although I could bargin with him to reduce the price to 100 yuan, but it&#8217;s
 still very very very expensive.This time I wanted to give up and went away to
-find another bus station.When I got there, I found it&rsquo;s excactly the bus I
-could take to the Great Wall.This is the <em>870 bus</em> and then the bus didn&rsquo;t
+find another bus station.When I got there, I found it&#8217;s excactly the bus I
+could take to the Great Wall.This is the <em>870 bus</em> and then the bus didn&#8217;t
 appear.Fortunately, the bus was coming soon and I got in without thinking.
 That is, <strong>there is a way out for somebody</strong>.</p>
 
@@ -11362,7 +11362,7 @@ That is, <strong>there is a way out for somebody</strong>.</p>
 another bus.This time, I could take <em>919 bus</em> or the <em>879</em> bus and I felt the
 Great Wall was near.After about 5 minutes, the bus comed but there were too
 many people there, so I had to stand in the bus.I thought the bus will arrived
-at the Great Wall no more than 20 minutes, but I never wanted to know that it&rsquo;s
+at the Great Wall no more than 20 minutes, but I never wanted to know that it&#8217;s
 the most painful bus I have ever taken.I standed in the bus for more than 1.5
 hours because of the traffic jam!</p>
 
@@ -11377,13 +11377,13 @@ The photo below shows the <em>North Wall</em>.</p>
 
 <p><img src="http://itlodge.github.io/pictures/13.8.3.north-wall.jpg" title="North Wall" alt="North Wall"></p>
 
-<p>It&rsquo;s obvious that I was on the south wall, and the photo below is a bird&rsquo;s-eye
+<p>It&#8217;s obvious that I was on the south wall, and the photo below is a bird&#8217;s-eye
 view of the north wall.</p>
 
 <p><img src="http://itlodge.github.io/pictures/13.8.3.north-wall-bird-view.jpg" title="North Wall bird view" alt="North Wall bird view"></p>
 
 <p>There is no doubt that I must have someone take a photo for myself.The photo
-below is it, I&rsquo;m not very handsome as you imaged, though.</p>
+below is it, I&#8217;m not very handsome as you imaged, though.</p>
 
 <p><img src="http://itlodge.github.io/pictures/13.8.3.Great-Wall-me.jpg" title="Me" alt="Me"></p>
 
@@ -11391,7 +11391,7 @@ below is it, I&rsquo;m not very handsome as you imaged, though.</p>
 <em>De sheng men xi station</em> directly!And it const me only 4.8 yuan.</p>
 
 <p>In a word, although <em>the Badaling Great Wall</em> is not so <strong>great</strong> as
-<em>the Palace</em>, I was still very happy today, because it&rsquo;s the first time I have
+<em>the Palace</em>, I was still very happy today, because it&#8217;s the first time I have
 a tour <strong>alone</strong>.</p>
 ]]></content>
   </entry>
@@ -11500,7 +11500,7 @@ $8 = {_M_ptr = 0x0}
 (gdb) 
 </code></pre>
 
-<p>But there are another smart pointer that can do this.It&rsquo;s the
+<p>But there are another smart pointer that can do this.It&#8217;s the
 <code>std::tr1::shared_ptr</code>.Mutiple shared_ptr can contain the same object.</p>
 
 <p>The testing program is as follow.</p>
@@ -11556,9 +11556,9 @@ $4 = std::tr1::shared_ptr (count 2, weak 0) 0x602010
 <p>We can see that both of <code>ap1</code> and <code>ap2</code> point to the same object.</p>
 
 <p>The <code>auto_ptr</code> and <code>shared_ptr</code> use <code>delete</code> but not <code>delete[]</code>,
-so they don&rsquo;t support array.But the <code>unique_ptr</code> support.</p>
+so they don&#8217;t support array.But the <code>unique_ptr</code> support.</p>
 
-<p>Sometimes, the resource may be a mutex, and we don&rsquo;t want to remember
+<p>Sometimes, the resource may be a mutex, and we don&#8217;t want to remember
 unlocking the mutex every time we lock it.So a resource management object
 may be:</p>
 
@@ -11742,7 +11742,7 @@ main(int argc, char **argv)
 }
 </code></pre>
 
-<p>It&rsquo;s obviously that the explicit method is safer and the implicit method is
+<p>It&#8217;s obviously that the explicit method is safer and the implicit method is
 more convenient for clients.</p>
 
 <h2>Keep new and delete in the same form</h2>
@@ -11772,7 +11772,7 @@ main(int argc, char **argv)
 </code></pre>
 
 <p>If let me delete the pointer p, I will use this <code>delete p;</code>.But I am wrong.
-I shouldn&rsquo;t look at the left of the pointer, that is, <code>std::string</code>.I should
+I shouldn&#8217;t look at the left of the pointer, that is, <code>std::string</code>.I should
 look at the right of the <code>new</code>, that is, <code>Lines</code>.So, in this case, we
 should use <code>delete []p;</code>.</p>
 
@@ -11803,7 +11803,7 @@ a copy constructor, a copy assignment operator and a destructor for us.</p>
 <li><p>For construtor, it will invoke the corresponding constructor and non-static
 members of its base class.</p></li>
 <li><p>For destructor, it will invoke the corresponding destructor of its base class.
-If its base class&rsquo;s destructor is virtual, the destructor will declare as
+If its base class&#8217;s destructor is virtual, the destructor will declare as
 virtual.</p></li>
 <li><p>For copy constructor and copy assignment operator, they will copy each
 non-static data member from the source object to the target object.</p></li>
@@ -11814,14 +11814,14 @@ non-static data member from the source object to the target object.</p></li>
 will be some trouble with the compiler.Therefore, always define the four
 functions when we define our own class.</p>
 
-<h2>Disallow the use of generated functions you don&rsquo;t want</h2>
+<h2>Disallow the use of generated functions you don&#8217;t want</h2>
 
 <p>Sometimes, we may not want the copy constructor or the copy assignment
-operator because every member may be different with the other object&rsquo;s
+operator because every member may be different with the other object&#8217;s
 members.Preventing the generation of these functions will make the
 program more effecient.</p>
 
-<p>If we don&rsquo;t declare these two functions, the compiler will generate them
+<p>If we don&#8217;t declare these two functions, the compiler will generate them
 for us.</p>
 
 <p>So how can we do?</p>
@@ -11830,11 +11830,11 @@ for us.</p>
 <strong>operator as private and never implement them</strong>.</p>
 
 <p>If we implement them, the members and friends of the class can call them.But
-if we don&rsquo;t implement them, the linker will complain at it.</p>
+if we don&#8217;t implement them, the linker will complain at it.</p>
 
 <p>In order to move the link-time error to the compile time, we should let the
 members and the friends of the class cannot call them.One method is to define
-a base class that can&rsquo;t be copied and inherited by the class that you don&rsquo;t
+a base class that can&#8217;t be copied and inherited by the class that you don&#8217;t
 want it to be copyable.</p>
 
 <pre><code>class Uncopyable {
@@ -11854,7 +11854,7 @@ class Person: private Uncopyable {
 </code></pre>
 
 <p>The copy constructor and copy assignment operator of the class <code>Uncopyable</code>
-are declared as private, so the members and friends of class <code>Person</code> can&rsquo;t
+are declared as private, so the members and friends of class <code>Person</code> can&#8217;t
 call them.</p>
 
 <h2>Declare destructors virtual in polymorphic base classes</h2>
@@ -12056,7 +12056,7 @@ difference.</p>
 <p><strong>When adding a member to a class, remember to update the constructors,</strong>
 <strong>destructor, copy constructor, copy assignment operator</strong>.</p>
 
-<p><strong>Don&rsquo;t miss anyone!</strong></p>
+<p><strong>Don&#8217;t miss anyone!</strong></p>
 
 <p>When a class is a derived class, make sure to call the constructors,
 copy constructor and copy assignment operator of the base class, respectively
@@ -12279,13 +12279,13 @@ puts(say_hello("man"))
 </code></pre>
 
 <p>However, when there are more than one parameters, it will be difficult to
-know which argument goes with which method invocation.So it&rsquo;s recommended
+know which argument goes with which method invocation.So it&#8217;s recommended
 using parentheses in all but the simplest cases.</p>
 
-<p>We can use single-quote or double-quote to create a string.What&rsquo;s the
+<p>We can use single-quote or double-quote to create a string.What&#8217;s the
 difference?</p>
 
-<p>First, single-quoted string can&rsquo;t represent the escape character, and
+<p>First, single-quoted string can&#8217;t represent the escape character, and
 double-quoted string can.</p>
 
 <pre><code>puts '\nabc'
@@ -12455,13 +12455,13 @@ puts i while (i += 1) &lt; 10
 
 <h2>Regular expressions</h2>
 
-<p>&lsquo;/&rsquo;   forward slash</p>
+<p>&#8217;/&#8217;   forward slash</p>
 
-<p>&lsquo;|&rsquo;   pipe</p>
+<p>&#8217;|&#8217;   pipe</p>
 
 <p>The match operator is <code>=~</code>. For example,</p>
 
-<p>line = &ldquo;Perlppp&rdquo;</p>
+<p>line = &#8220;Perlppp&#8221;</p>
 
 <pre><code>if line =~ /Perl|Python/
   puts "match"
@@ -12528,7 +12528,7 @@ is an example.</p>
 animals.each { |animal| puts animal }
 </code></pre>
 
-<p>If we want to print 5 &lsquo;*&rsquo; in C/C++, we will do it in this way.</p>
+<p>If we want to print 5 &#8216;*&#8217; in C/C++, we will do it in this way.</p>
 
 <pre><code>for (int i = 0; i &lt; 5; ++i) {
     printf('*');
@@ -12571,7 +12571,7 @@ char const *str = "Hello";
 * <code>const std::vector&lt;int&gt;::iterator iter</code> is just like <code>T * const iter</code>.
 * <code>std::vector&lt;int&gt;::const_iterator cIter</code> is just like <code>const T *iter</code>.</p>
 
-<p>So, in a loop, if we don&rsquo;t want to modify the data, use <code>const_iterator</code>.</p>
+<p>So, in a loop, if we don&#8217;t want to modify the data, use <code>const_iterator</code>.</p>
 
 <h2>Const member function</h2>
 
@@ -12631,13 +12631,13 @@ argument list.This means the function is a const member function.</p>
 
 <p>Reference to <a href="http://msdn.microsoft.com/en-us/library/6ke686zh.aspx">MSDN</a>,
 <strong>A constant member function cannot modify any non-static members or call any</strong>
-<strong>member functions that aren&rsquo;t constant.</strong>That is, the cons member function
-can&rsquo;t modify the object that it is called.</p>
+<strong>member functions that aren&#8217;t constant.</strong>That is, the cons member function
+can&#8217;t modify the object that it is called.</p>
 
 <p>The above philosophy is called <strong>bitwise constness</strong> or <strong>physical constness</strong>.
 There are another philosophy called <strong>logical constness</strong>.Adherents to this
 philosophy argue that <strong>a const member function might modify some of the bits</strong>
-<strong>in the object on which it&rsquo;s invoked, but only in ways that clients cannot</strong>
+<strong>in the object on which it&#8217;s invoked, but only in ways that clients cannot</strong>
 <strong>detect</strong>.</p>
 
 <p>For example, if we add a new member function <code>length()</code> to the above class.</p>
@@ -12663,7 +12663,7 @@ private:
 </code></pre>
 
 <p>Since member variable <code>len</code> has been modified and the compiler use the
-<strong>bitwise const</strong>, error produces.However, return and object&rsquo;s length seems
+<strong>bitwise const</strong>, error produces.However, return and object&#8217;s length seems
 not modify the object it is called.</p>
 
 <p>To solved this problem, use the <strong>mutable</strong> keyword.It can free non-static
@@ -12687,7 +12687,7 @@ operator[](std::size_t pos)    // Non-const objects use this
 <p><code>static_cast&lt;const Str&amp;&gt;</code>will make <code>*this</code>const and then it can call
 <code>operator[]</code>.Finally, <code>const_cast</code> is used the free the const constraint.</p>
 
-<p>This is all about <code>const</code>, it&rsquo;s an amazing keyword.For readable and efficient
+<p>This is all about <code>const</code>, it&#8217;s an amazing keyword.For readable and efficient
 code, use it anyway.</p>
 ]]></content>
   </entry>

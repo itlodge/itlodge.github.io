@@ -197,7 +197,7 @@ $8 = {_M_ptr = 0x0}
 (gdb) 
 </code></pre>
 
-<p>But there are another smart pointer that can do this.It&rsquo;s the
+<p>But there are another smart pointer that can do this.It&#8217;s the
 <code>std::tr1::shared_ptr</code>.Mutiple shared_ptr can contain the same object.</p>
 
 <p>The testing program is as follow.</p>
@@ -253,9 +253,9 @@ $4 = std::tr1::shared_ptr (count 2, weak 0) 0x602010
 <p>We can see that both of <code>ap1</code> and <code>ap2</code> point to the same object.</p>
 
 <p>The <code>auto_ptr</code> and <code>shared_ptr</code> use <code>delete</code> but not <code>delete[]</code>,
-so they don&rsquo;t support array.But the <code>unique_ptr</code> support.</p>
+so they don&#8217;t support array.But the <code>unique_ptr</code> support.</p>
 
-<p>Sometimes, the resource may be a mutex, and we don&rsquo;t want to remember
+<p>Sometimes, the resource may be a mutex, and we don&#8217;t want to remember
 unlocking the mutex every time we lock it.So a resource management object
 may be:</p>
 
@@ -439,7 +439,7 @@ main(int argc, char **argv)
 }
 </code></pre>
 
-<p>It&rsquo;s obviously that the explicit method is safer and the implicit method is
+<p>It&#8217;s obviously that the explicit method is safer and the implicit method is
 more convenient for clients.</p>
 
 <h2>Keep new and delete in the same form</h2>
@@ -469,7 +469,7 @@ main(int argc, char **argv)
 </code></pre>
 
 <p>If let me delete the pointer p, I will use this <code>delete p;</code>.But I am wrong.
-I shouldn&rsquo;t look at the left of the pointer, that is, <code>std::string</code>.I should
+I shouldn&#8217;t look at the left of the pointer, that is, <code>std::string</code>.I should
 look at the right of the <code>new</code>, that is, <code>Lines</code>.So, in this case, we
 should use <code>delete []p;</code>.</p>
 

@@ -103,7 +103,7 @@ are &hellip;">
 the virables or the functions in the base class will be hidden if there
 are virables and functions with the same name.</p>
 
-<p>It seems perfect, but it&rsquo;s a pitfall of C++. Consider the following example.</p>
+<p>It seems perfect, but it&#8217;s a pitfall of C++. Consider the following example.</p>
 
 <pre><code>#include &lt;cstdio&gt;
 #include &lt;iostream&gt;
@@ -153,7 +153,7 @@ main(int argc, char **argv)
 }
 </code></pre>
 
-<p>This program won&rsquo;t be compiled. It shows the following error:</p>
+<p>This program won&#8217;t be compiled. It shows the following error:</p>
 
 <pre><code>test.cpp:39:16: error: no matching function for call to ‘Student::sleep(int)’
      stu.sleep(1);
@@ -174,7 +174,7 @@ hiding of the <code>sleep(const int sec)</code> function!</p>
 <p>So how to solve this problem? There are two methods so far.</p>
 
 <ol>
-<li>Don&rsquo;t hide the names in the base class will using overloading functions.</li>
+<li>Don&#8217;t hide the names in the base class will using overloading functions.</li>
 <li><p>Use <code>using</code> directive to make the certain methods visible.</p>
 
 <pre><code> class Student:public Person {
@@ -197,7 +197,7 @@ implement <code>sleep()</code> function in the definition of the class. Why do t
 I have worked in some very large C++ projects and there are many implementation
 in the definition. In fact, this is so-called <strong>implicit inline</strong>. The compiler
 will inline the functions that are implemented in the class definition
-automatically. Therefore, it&rsquo;s good to implement some small functions in the
+automatically. Therefore, it&#8217;s good to implement some small functions in the
 definition of class. And let the large function implement in another file.
 This will make my code more effecient and I will follow this guide in the
 future.</p>
