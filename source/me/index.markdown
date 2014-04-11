@@ -18,29 +18,24 @@ Books I read.
     <td>Name</td><td>Author<td>Finish date</td>
   </tr></th>
   <tr>
-    <td>More Effective C++</td>
-    <td>Scott Meyers</td>
-    <td>...</td>
-  </tr>
-  <tr>
-    <td>Effective C++ 2nd</td>
-    <td>Scott Meyers</td>
-    <td>...</td>
-  </tr>
-  <tr>
-    <td>程序员面试宝典</td>
-    <td>欧立奇，刘洋，段韬</td>
-    <td>...</td>
-  </tr>
-  <tr>
     <td>剑指Offer</td>
     <td>何海涛</td>
     <td>...</td>
   </tr>
   <tr>
-    <td>编程之美</td>
-    <td>《编程之美》小组</td>
-    <td>...</td>
+    <td>镜花缘</td>
+    <td>李汝珍</td>
+    <td>2014.4.11</td>
+  </tr>  
+  <tr>
+    <td>纳兰词集</td>
+    <td>纳兰性德</td>
+    <td>2014.4.9</td>
+  </tr>
+  <tr>
+    <td>程序员面试宝典</td>
+    <td>欧立奇，刘洋，段韬</td>
+    <td>2014.3.1</td>
   </tr>
   <tr>
     <td>程序员的自我修养：链接，装载与库</td>
