@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | Yuanhang Zheng]]></title>
   <link href="http://itlodge.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://itlodge.github.io/"/>
-  <updated>2014-05-04T20:25:15+00:00</updated>
+  <updated>2014-05-04T20:43:55+00:00</updated>
   <id>http://itlodge.github.io/</id>
   <author>
     <name><![CDATA[Yuanhang Zheng]]></name>
@@ -39,13 +39,13 @@ puts(say_hello("man"))
 </code></pre>
 
 <p>However, when there are more than one parameters, it will be difficult to
-know which argument goes with which method invocation.So it's recommended
+know which argument goes with which method invocation.So it&rsquo;s recommended
 using parentheses in all but the simplest cases.</p>
 
-<p>We can use single-quote or double-quote to create a string.What's the
+<p>We can use single-quote or double-quote to create a string.What&rsquo;s the
 difference?</p>
 
-<p>First, single-quoted string can't represent the escape character, and
+<p>First, single-quoted string can&rsquo;t represent the escape character, and
 double-quoted string can.</p>
 
 <pre><code>puts '\nabc'
@@ -215,13 +215,13 @@ puts i while (i += 1) &lt; 10
 
 <h2>Regular expressions</h2>
 
-<p>'/'   forward slash</p>
+<p>&lsquo;/&rsquo;   forward slash</p>
 
-<p>'|'   pipe</p>
+<p>&lsquo;|&rsquo;   pipe</p>
 
 <p>The match operator is <code>=~</code>. For example,</p>
 
-<p>line = "Perlppp"</p>
+<p>line = &ldquo;Perlppp&rdquo;</p>
 
 <pre><code>if line =~ /Perl|Python/
   puts "match"
@@ -288,7 +288,7 @@ is an example.</p>
 animals.each { |animal| puts animal }
 </code></pre>
 
-<p>If we want to print 5 '*' in C/C++, we will do it in this way.</p>
+<p>If we want to print 5 &lsquo;*&rsquo; in C/C++, we will do it in this way.</p>
 
 <pre><code>for (int i = 0; i &lt; 5; ++i) {
     printf('*');
@@ -411,11 +411,11 @@ sleep forever.
 :
 </code></pre>
 
-<p>A method's name may be the same in different classes or modules.In this case,
+<p>A method&rsquo;s name may be the same in different classes or modules.In this case,
 <code>ri</code> will list all of them.If you type <code>ri ClassName.method's name</code>, it
-will show only the documentation of the corresponding class's.</p>
+will show only the documentation of the corresponding class&rsquo;s.</p>
 
-<p>More contributions, more reputations.If a class or module hasn't yet documented
+<p>More contributions, more reputations.If a class or module hasn&rsquo;t yet documented
 in RDoc, send an email to <code>suggestions@ruby-doc.org</code> to ask them to add.</p>
 ]]></content>
   </entry>

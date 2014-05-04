@@ -149,7 +149,7 @@ Calling Dog's destructor
 Calling Dog's destructor
 </code></pre>
 
-<p>Now, let&#8217;s analysis this <em>passing by value</em> process.
+<p>Now, let&rsquo;s analysis this <em>passing by value</em> process.
 First, <code>Dog dog;</code> will call the constructor. Then, since the function
 <code>walk_the_dog</code> pass the parameter <code>d</code> by value, it will call the copy
 constructor. Before exiting the function, it will call the destructor of <code>Dog</code>
@@ -186,7 +186,7 @@ of functions so that the program need less memory.</p>
 
 <p>The implementation of reference is using the pointer in C. Therefore, it may
 be more effecient to pass the built-in type parameters by value than referece.
-It&#8217;s true. If the parameter is an object of type <code>char</code>, which occupies
+It&rsquo;s true. If the parameter is an object of type <code>char</code>, which occupies
 1 byte. But a pointer ocuppies 4 bytes in a 32-bit machine. So we should prefer
 passing by value when the parameter is of built-in type? No, we should always
 pass the parameters by reference-to-const, since <strong>the compiler will always</strong>

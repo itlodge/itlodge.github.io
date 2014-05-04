@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Algorithm | Yuanhang Zheng]]></title>
   <link href="http://itlodge.github.io/blog/categories/algorithm/atom.xml" rel="self"/>
   <link href="http://itlodge.github.io/"/>
-  <updated>2014-05-04T20:25:15+00:00</updated>
+  <updated>2014-05-04T20:43:55+00:00</updated>
   <id>http://itlodge.github.io/</id>
   <author>
     <name><![CDATA[Yuanhang Zheng]]></name>
@@ -606,7 +606,7 @@ sorted, it requires only O(n) time complexity.</p>
 be sorted more easy is used in shell sort. It will sort the list for several
 times and each time with some of the elements. These elements is divided by
 a fixed <strong>gap</strong> and the gap will decrease until becoming 1. If the gap is 1,
-it's the same as the insert sort. But now it will be more fast than the original
+it&rsquo;s the same as the insert sort. But now it will be more fast than the original
 insert sort.</p>
 
 <p>Here is the code.</p>
@@ -1507,7 +1507,7 @@ sorted subarrays and then copy the elements to the original array.</p>
 <h2>Merge using Insert sort</h2>
 
 <p>In the merge process, we can using insert sort to merge the two sorted arrays.
-Since the two arrays is sorted, it's fast to merge them.</p>
+Since the two arrays is sorted, it&rsquo;s fast to merge them.</p>
 
 <p>Note this method is <a href="http://en.wikipedia.org/wiki/In-place_algorithm">in-place</a>.</p>
 

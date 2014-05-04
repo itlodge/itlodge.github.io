@@ -426,7 +426,7 @@ characters in the string.</p></li>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p><strong>1.2.</strong> Write code to reverse a C-Style String(C-String means that &#8220;abcd&#8221; is
+<p><strong>1.2.</strong> Write code to reverse a C-Style String(C-String means that &ldquo;abcd&rdquo; is
 represented as five characters, including the null character)</p>
 
 <p>The approach I come up with is described as follows.</p>
@@ -435,12 +435,12 @@ represented as five characters, including the null character)</p>
 <li><p>Get the length of the string, which needs iterate the whole string.</p></li>
 <li><p>According to the property of continuing, we can manipulate the string
 from the end. So we can swap the first character with the last character,
-and swap the second character with the last but not least character, &#8230;
+and swap the second character with the last but not least character, &hellip;
 This needs iterate half of the string.</p></li>
 </ol>
 
 
-<p>In sumary, this will need O(1.5n) -> O(n) time complexity. Here is the code.</p>
+<p>In sumary, this will need O(1.5n) &ndash;> O(n) time complexity. Here is the code.</p>
 
 <figure class='code'><figcaption><span> (careerup-1.2.cpp)</span> <a href='/code/careerup-array/careerup-1.2.cpp'>download</a></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -985,10 +985,10 @@ the two string.</p></li>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p><strong>1.5</strong> Write a method to replace all spaces in a string with &#8216;%20&#8217;.</p>
+<p><strong>1.5</strong> Write a method to replace all spaces in a string with &lsquo;%20&rsquo;.</p>
 
 <p>There is a <code>replace</code> method in class <code>std::string</code> , so I can use it
-directly. But it&#8217;s too slow(O(n<sup>2</sup>)). There is another method with the time
+directly. But it&rsquo;s too slow(O(n<sup>2</sup>)). There is another method with the time
 complexity O(n). Count the number of the spaces and resize the string and
 copy the string from tail to head. If encounter the space, replace it with
 <code>%20</code>. Here is the code of the two methods.</p>
@@ -1179,11 +1179,11 @@ copy the string from tail to head. If encounter the space, replace it with
 image is 4 bytes, write a method to rotate the image by 90 degrees  Can you
 do this in place?</p>
 
-<p>The first time I looked at this problem, I think it&#8217;s very simple and write
+<p>The first time I looked at this problem, I think it&rsquo;s very simple and write
 down an equation <code>a[i][j] = a[n - j - 1][i]</code>. When I implemented the program
 using this equation, I found that I was totally <strong>wrong</strong>!</p>
 
-<p>Since you can&#8217;t request another space to store the matrix that was unmodified,
+<p>Since you can&rsquo;t request another space to store the matrix that was unmodified,
 the modified value will affect the value to be changed. So we should think about
 other solutions. One effective solution is to divide the whole matrix into
 <code>N / 2</code> parts and rotate each parts by swapping the values four times.</p>
@@ -1297,7 +1297,7 @@ entire row and column is set to 0.</p>
 
 <p>I made the same mistake as problem <strong>1.6</strong>. I think we should just iterate the
 whole matrix and set its entire row and row to 0 when we met an element that is
-0. But this is <strong>wrong</strong>! It will also affect the elements that haven&#8217;t been
+0. But this is <strong>wrong</strong>! It will also affect the elements that haven&rsquo;t been
 iterated.</p>
 
 <p>One solution is to use another matrix to record the original matrix. But this
@@ -1439,14 +1439,14 @@ entire row or column to 0.</p>
 
 <p><strong>1.8</strong> Assume you have a method isSubstring which checks if one word is a
 substring of another. Given two strings, s1 and s2, write code to check if
-s2 is a rotation of s1 using only one call to isSubstring (i.e., &#8220;waterbottle&#8221;
-is a rotation of &#8220;erbottlewat&#8221;).</p>
+s2 is a rotation of s1 using only one call to isSubstring (i.e., &ldquo;waterbottle&rdquo;
+is a rotation of &ldquo;erbottlewat&rdquo;).</p>
 
-<p>I am not so smart that I can&#8217;t come up with the method to solve this problem
+<p>I am not so smart that I can&rsquo;t come up with the method to solve this problem
 after a long time. The answer amazed me.</p>
 
 <p>Just concatenate <code>s1</code> and check if <code>s2</code> is a substring of it. For example,
-<code>waterbottle</code> is a substring of <code>erbottlewaterbottlewat</code>, so it&#8217;s a rotation
+<code>waterbottle</code> is a substring of <code>erbottlewaterbottlewat</code>, so it&rsquo;s a rotation
 of <code>erbottlewat</code>.</p>
 
 <p>Here is the code.</p>
@@ -1585,7 +1585,7 @@ of <code>erbottlewat</code>.</p>
 the virables or the functions in the base class will be hidden if there
 are virables and functions with the same name.</p>
 
-<p>It seems perfect, but it&#8217;s a pitfall of C++. Consider the following example.</p>
+<p>It seems perfect, but it&rsquo;s a pitfall of C++. Consider the following example.</p>
 
 <pre><code>#include &lt;cstdio&gt;
 #include &lt;iostream&gt;
@@ -1635,7 +1635,7 @@ main(int argc, char **argv)
 }
 </code></pre>
 
-<p>This program won&#8217;t be compiled. It shows the following error:</p>
+<p>This program won&rsquo;t be compiled. It shows the following error:</p>
 
 <pre><code>test.cpp:39:16: error: no matching function for call to ‘Student::sleep(int)’
      stu.sleep(1);
@@ -1656,7 +1656,7 @@ hiding of the <code>sleep(const int sec)</code> function!</p>
 <p>So how to solve this problem? There are two methods so far.</p>
 
 <ol>
-<li>Don&#8217;t hide the names in the base class will using overloading functions.</li>
+<li>Don&rsquo;t hide the names in the base class will using overloading functions.</li>
 <li><p>Use <code>using</code> directive to make the certain methods visible.</p>
 
 <pre><code> class Student:public Person {
@@ -1679,7 +1679,7 @@ implement <code>sleep()</code> function in the definition of the class. Why do t
 I have worked in some very large C++ projects and there are many implementation
 in the definition. In fact, this is so-called <strong>implicit inline</strong>. The compiler
 will inline the functions that are implemented in the class definition
-automatically. Therefore, it&#8217;s good to implement some small functions in the
+automatically. Therefore, it&rsquo;s good to implement some small functions in the
 definition of class. And let the large function implement in another file.
 This will make my code more effecient and I will follow this guide in the
 future.</p>
@@ -1729,7 +1729,7 @@ future.</p>
 		<h2>Prepone definitions? Wrong!</h2>
 
 <p>Before C99, you must prepone all the variables&#8217; definitions before any
-statements. But after C99 was released, you can put a variable&#8217;s definition
+statements. But after C99 was released, you can put a variable&rsquo;s definition
 in any place as long as before being used. I think this new feature is
 introduced by learning from C++.</p>
 
@@ -1738,7 +1738,7 @@ old style. I even teach my students that they should use the old style when
 I was a TA of the course <em>Programming with C</em>.</p>
 
 <p>However, now I realize that I was wrong. <strong>We should postpone variables&#8217;</strong>
-<strong>definitions as long as possible</strong>. It&#8217;s not for coding style, but for the
+<strong>definitions as long as possible</strong>. It&rsquo;s not for coding style, but for the
 effeciency of the program.</p>
 
 <p>Consider this program.</p>
@@ -1857,7 +1857,7 @@ for (int i = 0; i &lt; n; i++) {
 
 <p>, which is better?</p>
 
-<p>Let&#8217;s analysis the performance of them.
+<p>Let&rsquo;s analysis the performance of them.
 * The former need 1 construction, n assignments and 1 destruction. But it makes
 the object <code>p</code> in a larger scope, which increase the comprehensibility and
 maintainability of the program.

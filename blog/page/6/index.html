@@ -228,7 +228,7 @@ $8 = {_M_ptr = 0x0}
 (gdb) 
 </code></pre>
 
-<p>But there are another smart pointer that can do this.It&#8217;s the
+<p>But there are another smart pointer that can do this.It&rsquo;s the
 <code>std::tr1::shared_ptr</code>.Mutiple shared_ptr can contain the same object.</p>
 
 <p>The testing program is as follow.</p>
@@ -284,9 +284,9 @@ $4 = std::tr1::shared_ptr (count 2, weak 0) 0x602010
 <p>We can see that both of <code>ap1</code> and <code>ap2</code> point to the same object.</p>
 
 <p>The <code>auto_ptr</code> and <code>shared_ptr</code> use <code>delete</code> but not <code>delete[]</code>,
-so they don&#8217;t support array.But the <code>unique_ptr</code> support.</p>
+so they don&rsquo;t support array.But the <code>unique_ptr</code> support.</p>
 
-<p>Sometimes, the resource may be a mutex, and we don&#8217;t want to remember
+<p>Sometimes, the resource may be a mutex, and we don&rsquo;t want to remember
 unlocking the mutex every time we lock it.So a resource management object
 may be:</p>
 
@@ -470,7 +470,7 @@ main(int argc, char **argv)
 }
 </code></pre>
 
-<p>It&#8217;s obviously that the explicit method is safer and the implicit method is
+<p>It&rsquo;s obviously that the explicit method is safer and the implicit method is
 more convenient for clients.</p>
 
 <h2>Keep new and delete in the same form</h2>
@@ -500,7 +500,7 @@ main(int argc, char **argv)
 </code></pre>
 
 <p>If let me delete the pointer p, I will use this <code>delete p;</code>.But I am wrong.
-I shouldn&#8217;t look at the left of the pointer, that is, <code>std::string</code>.I should
+I shouldn&rsquo;t look at the left of the pointer, that is, <code>std::string</code>.I should
 look at the right of the <code>new</code>, that is, <code>Lines</code>.So, in this case, we
 should use <code>delete []p;</code>.</p>
 
@@ -566,7 +566,7 @@ a copy constructor, a copy assignment operator and a destructor for us.</p>
 <li><p>For construtor, it will invoke the corresponding constructor and non-static
 members of its base class.</p></li>
 <li><p>For destructor, it will invoke the corresponding destructor of its base class.
-If its base class&#8217;s destructor is virtual, the destructor will declare as
+If its base class&rsquo;s destructor is virtual, the destructor will declare as
 virtual.</p></li>
 <li><p>For copy constructor and copy assignment operator, they will copy each
 non-static data member from the source object to the target object.</p></li>
@@ -577,14 +577,14 @@ non-static data member from the source object to the target object.</p></li>
 will be some trouble with the compiler.Therefore, always define the four
 functions when we define our own class.</p>
 
-<h2>Disallow the use of generated functions you don&#8217;t want</h2>
+<h2>Disallow the use of generated functions you don&rsquo;t want</h2>
 
 <p>Sometimes, we may not want the copy constructor or the copy assignment
-operator because every member may be different with the other object&#8217;s
+operator because every member may be different with the other object&rsquo;s
 members.Preventing the generation of these functions will make the
 program more effecient.</p>
 
-<p>If we don&#8217;t declare these two functions, the compiler will generate them
+<p>If we don&rsquo;t declare these two functions, the compiler will generate them
 for us.</p>
 
 <p>So how can we do?</p>
@@ -593,11 +593,11 @@ for us.</p>
 <strong>operator as private and never implement them</strong>.</p>
 
 <p>If we implement them, the members and friends of the class can call them.But
-if we don&#8217;t implement them, the linker will complain at it.</p>
+if we don&rsquo;t implement them, the linker will complain at it.</p>
 
 <p>In order to move the link-time error to the compile time, we should let the
 members and the friends of the class cannot call them.One method is to define
-a base class that can&#8217;t be copied and inherited by the class that you don&#8217;t
+a base class that can&rsquo;t be copied and inherited by the class that you don&rsquo;t
 want it to be copyable.</p>
 
 <pre><code>class Uncopyable {
@@ -617,7 +617,7 @@ class Person: private Uncopyable {
 </code></pre>
 
 <p>The copy constructor and copy assignment operator of the class <code>Uncopyable</code>
-are declared as private, so the members and friends of class <code>Person</code> can&#8217;t
+are declared as private, so the members and friends of class <code>Person</code> can&rsquo;t
 call them.</p>
 
 <h2>Declare destructors virtual in polymorphic base classes</h2>
@@ -819,7 +819,7 @@ difference.</p>
 <p><strong>When adding a member to a class, remember to update the constructors,</strong>
 <strong>destructor, copy constructor, copy assignment operator</strong>.</p>
 
-<p><strong>Don&#8217;t miss anyone!</strong></p>
+<p><strong>Don&rsquo;t miss anyone!</strong></p>
 
 <p>When a class is a derived class, make sure to call the constructors,
 copy constructor and copy assignment operator of the base class, respectively

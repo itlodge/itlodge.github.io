@@ -1811,7 +1811,7 @@ other member functions in the member function.</strong></li>
 
 <p>This seems ridiculous. But I prefer. In a member function, there may be
 various kinds of variables, such as memeber variables, global variables
-and local variables. If we don&#8217;t add some flag to refer to the member
+and local variables. If we don&rsquo;t add some flag to refer to the member
 variables, we will confused when we met a variable. Is it a local variable
 or a member variable? For example, there is a statement in a member function.</p>
 
@@ -1819,13 +1819,13 @@ or a member variable? For example, there is a statement in a member function.</p
 </code></pre>
 
 <p>How can you know what this statement exactly means? Which <code>size</code> is the
-class&#8217;s size? However, if we write this statement as this,</p>
+class&rsquo;s size? However, if we write this statement as this,</p>
 
 <pre><code>m_size1 = size2 + 1;
 </code></pre>
 
-<p>we can know that we set the class&#8217;s size be the value of local variable <code>size</code>
-plus one. This code is readable and it can relieve the code reader&#8217;s headache.</p>
+<p>we can know that we set the class&rsquo;s size be the value of local variable <code>size</code>
+plus one. This code is readable and it can relieve the code reader&rsquo;s headache.</p>
 
 <p>For the member functions. When refering to a member function, always use
 <code>this</code>.</p>
@@ -1852,9 +1852,9 @@ always with prefix <code>m</code>.</p>
 
 <p>I used to leave the return type name on the left of a function name. The first
 time I saw some programmers put them in a single line is the
-<a href="http://en.wikipedia.org/wiki/Pintos">Pintos</a> project. I thought it&#8217;s ugly.
+<a href="http://en.wikipedia.org/wiki/Pintos">Pintos</a> project. I thought it&rsquo;s ugly.
 But after I worked on the code of <a href="http://en.wikipedia.org/wiki/Gold_(linker">Gold</a>),
-I changed my mind. I followed the author&#8217;s style, even in a main function.</p>
+I changed my mind. I followed the author&rsquo;s style, even in a main function.</p>
 
 <pre><code>int
 main(int argc, char *argv[]) { }
@@ -1869,7 +1869,7 @@ name. For example,</p>
 get_map(const std::string&amp; name, bool is_global=true) const;
 </code></pre>
 
-<p>If you don&#8217;t leave the return type name in a single line, the function
+<p>If you don&rsquo;t leave the return type name in a single line, the function
 declaration will becomes</p>
 
 <pre><code>std::map&lt;size_t, LinkedList&lt;T&gt; *&gt; * get_map(const std::string&amp; name, bool is_global=true) const;
@@ -1933,7 +1933,7 @@ while (top &gt; 0) {
 ...
 </code></pre>
 
-<p>Now, it&#8217;s only <strong>3</strong> level of indentations, which looks more beautiful.
+<p>Now, it&rsquo;s only <strong>3</strong> level of indentations, which looks more beautiful.
 This is an important skills to make my code more beautiful.</p>
 
 		

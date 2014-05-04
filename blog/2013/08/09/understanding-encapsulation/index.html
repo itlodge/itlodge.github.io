@@ -6,7 +6,7 @@
 	<title>Understanding Encapsulation - Yuanhang Zheng</title>
     <meta name="author" content="Yuanhang Zheng">
     
-	<meta name="description" content="Once I loved C very much and I thought it&#8217;s the best programming language
+	<meta name="description" content="Once I loved C very much and I thought it&rsquo;s the best programming language
 in the world. I used to argue that C can be used to implement the &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -98,16 +98,16 @@ in the world. I used to argue that C can be used to implement the &hellip;">
     <div id="content" class="inner">
         <article class="post">
 	<h2 class="title">Understanding Encapsulation</h2>
-	<div class="entry-content"><p>Once I loved <em>C</em> very much and I thought it&#8217;s the best programming language
+	<div class="entry-content"><p>Once I loved <em>C</em> very much and I thought it&rsquo;s the best programming language
 in the world. I used to argue that <em>C</em> can be used to implement the
 object-oriented design with <code>struct</code>. I used to argue that <code>private</code> and
 <code>public</code> is useless in <em>C++</em>. However, now I know I was wrong.</p>
 
 <h2>Why we need private</h2>
 
-<p>It&#8217;s related to a very important concept in C++, that is, <strong>encapsulation</strong>.</p>
+<p>It&rsquo;s related to a very important concept in C++, that is, <strong>encapsulation</strong>.</p>
 
-<p><strong>Encapsulation is not invisibility. It&#8217;s maintainability.</strong></p>
+<p><strong>Encapsulation is not invisibility. It&rsquo;s maintainability.</strong></p>
 
 <p>Suppose a class is very popular and is used by many projects. For example,
 the <code>string</code> class. If every members in this class is <code>public</code>, the clients
@@ -120,8 +120,8 @@ change their codes.</p>
 
 <p>Therefore, <strong>public means unchangable and public means unencapsulated</strong>.</p>
 
-<p>The public member functions should not be changed in the future. Since you don&#8217;t
-know how your clients will use your class, don&#8217;t expose the members that may be
+<p>The public member functions should not be changed in the future. Since you don&rsquo;t
+know how your clients will use your class, don&rsquo;t expose the members that may be
 changed in the future to the clients.</p>
 
 <h2>Prefer non-member non-friend functions to member functions</h2>
@@ -180,7 +180,7 @@ private:
 </code></pre>
 
 <p>This is straightforward, especially for those Java and C# programmers. Every
-functions should be in a class and everything is object. It&#8217;s obvious, right?</p>
+functions should be in a class and everything is object. It&rsquo;s obvious, right?</p>
 
 <p>However, e have another option, that is, using the non-member function.</p>
 
@@ -223,7 +223,7 @@ friend functions are the only interface that can access the private members.</p>
 <p>In this example, if we add another public member function, we decrease the
 encapsulation of the class since this member function can access the private
 members of the class. But if we use the non-member non-friend function, it
-won&#8217;t have impact with the class because it&#8217;s the function outside.</p>
+won&rsquo;t have impact with the class because it&rsquo;s the function outside.</p>
 
 <p>Does it explain that <em>C++</em> is not so object-oriented? From Java or C#, those
 programmers will say that everything is object and classes are everywhere.
@@ -232,7 +232,7 @@ However, they are wrong. Object-oriented princiles state that <strong>data shoul
 functions is more <em>object-oriented</em>.</p>
 
 <p>Until now, I can say that I really understand the meaning of encapsulation and
-why it&#8217;s so important in object-oriented programming.</p>
+why it&rsquo;s so important in object-oriented programming.</p>
 </div>
 
 <div class="meta">
