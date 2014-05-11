@@ -23,6 +23,16 @@ Books I read.
     <td>...</td>
   </tr>
   <tr>
+    <td>中国哲学简史</td>
+    <td>冯友兰</td>
+    <td>2014.5.10</td>
+  </tr>
+  <tr>
+    <td>大学 中庸 孝经</td>
+    <td>朱熹</td>
+    <td>2014.5.9</td>
+  </tr>
+  <tr>
     <td>从一到无穷大：科学中的事实和臆测</td>
     <td>George Gamow</td>
     <td>2014.5.4</td>
