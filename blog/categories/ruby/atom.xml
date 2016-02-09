@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | Yuanhang Zheng]]></title>
   <link href="http://itlodge.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://itlodge.github.io/"/>
-  <updated>2015-02-24T16:34:51+00:00</updated>
+  <updated>2016-02-09T19:54:37+08:00</updated>
   <id>http://itlodge.github.io/</id>
   <author>
     <name><![CDATA[Yuanhang Zheng]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Some basic Ruby]]></title>
     <link href="http://itlodge.github.io/blog/2013/07/25/some-basic-ruby/"/>
-    <updated>2013-07-25T20:07:00+00:00</updated>
+    <updated>2013-07-25T20:07:00+08:00</updated>
     <id>http://itlodge.github.io/blog/2013/07/25/some-basic-ruby</id>
     <content type="html"><![CDATA[<h2>String and name</h2>
 
@@ -305,7 +305,7 @@ animals.each { |animal| puts animal }
   <entry>
     <title type="html"><![CDATA[Ruby-getting started]]></title>
     <link href="http://itlodge.github.io/blog/2013/06/30/ruby-getting-started/"/>
-    <updated>2013-06-30T22:54:00+00:00</updated>
+    <updated>2013-06-30T22:54:00+08:00</updated>
     <id>http://itlodge.github.io/blog/2013/06/30/ruby-getting-started</id>
     <content type="html"><![CDATA[<h1>Running ruby</h1>
 
