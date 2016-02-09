@@ -9,8 +9,9 @@ footer: true
 
 My name is Yuanhang Zheng.
 
-My chinese blog is [here](http://cn.zhengyuanhang.com).
+My chinese blog is [here](http://yuanhang.gitcafe.io).
 
+<!--
 Books I read.
 
 <table>
@@ -18,9 +19,14 @@ Books I read.
     <td>Name</td><td>Author<td>Finish date</td>
   </tr></th>
   <tr>
-    <td>剑指Offer</td>
-    <td>何海涛</td>
-    <td>...</td>
+    <td>活着</td>
+    <td>余华</td>
+    <td>2014.5.12</td>
+  </tr>
+  <tr>
+    <td>活着</td>
+    <td>余华</td>
+    <td>2014.5.12</td>
   </tr>
   <tr>
     <td>中国哲学简史</td>
@@ -198,3 +204,4 @@ Books I read.
     <td>2013.1.24</td>
   </tr>
 </table>
+-->
